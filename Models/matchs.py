@@ -1,16 +1,18 @@
-class match :
+from players import *
+
+
+
+class Match :
     def __init__(self):
         self.players = player_list
+        self.result = resultat_match
 
-    def append_players_match :
+    def __repr__(self):
+        return []
 
+    def append_players_match(self,liste_joueurs_triée): :
+        liste_joueurs_triés
 
-    def resultat_match(self):
-        print("Déclarez le vainqueur" n/
-        "Joueur 1" + player1 "tapez 1"
-        "Joueur 2" + player2 "tapez 2"
-        "Match Nul, tapez 3
-        )
         resultat = input()
         print resultat
 
