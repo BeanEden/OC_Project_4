@@ -15,15 +15,15 @@ class TournamentView:
                              "1 - bullet"
                              "2 - blitz"
                              "3 - coup rapide")
-        player_list = player_list_select(self)
+        player_list = self.player_list_select
         description = input("Description générale du tournoi")
 
     def player_list_select(self):
         player_count = 0
         player_dictionary = {}
-        while (player_count < 8) :
-            player_count +=1
-            player = input("Enter player ",player_count,"name")
+        while player_count < 8:
+            player_count += 1
+            player = input("Enter player ",player_count, "name")
             search_in_data_base(player)
             player_dictionary["Player ",player_count] = player
 
