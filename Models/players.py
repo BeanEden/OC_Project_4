@@ -1,3 +1,5 @@
+from Models.player_database import *
+
 class Player :
 
     def __init__(self, family_name, first_name, birth_date, gender, rank, score=0):
@@ -37,6 +39,6 @@ class Player :
             "rank": rank,
             "score": 0
         }
+        player_insertion(serialized_player)
         return serialized_player
 
-print(Player.add_a_player())
