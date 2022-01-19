@@ -13,17 +13,23 @@ TIME_CONTROL = {
     2 : "blitz",
     3 : "coup rapide"
 }
+ROUND_NAMES = {
+    "Round 1": "Round 1",
+    "Round 2": "Round 2",
+    "Round 3": "Round 3",
+    "Round 4": "Round 4"
+}
 
 
 class Tournament :
-    def __init__(self, name, place,date, rounds, time_control, players_dictionary, description):
+    def __init__(self, name, place,date,rounds, time_control, players_dictionary, description):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
         self.rounds = rounds
         self.time_control = time_control
-        self.players_list : players_dictionary
+        self.players_dictionary = players_dictionary
         self.description = description
 
     def start_rounds(self):
@@ -35,7 +41,18 @@ class Tournament :
         return validation
 
 
-
+    def tournament_serialization(self):
+            serialized_tournament = {
+            "tournament_name": self.name,
+            "tournament_place": self.place,
+            "tournament_date": self.date,
+            "tournament_turn_number": self.turn_number,
+            "tournament_rounds": self.rounds,
+            "tournament_time_control": self.time_control,
+            "tournament_player_dictionary":self.players_dictionary,
+            "tournament_description": self.description
+        }
+            return serialized_tournament
 
 
 #

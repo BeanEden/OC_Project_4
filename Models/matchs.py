@@ -24,6 +24,5 @@ class MatchView:
         "2 - Joueur 2" + player.name(player2) +
         "3 - Match Nul"
         )
-
         return result
 

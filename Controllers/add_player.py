@@ -21,5 +21,5 @@ def add_a_player():
     serialized_player = player.player_serialization()
     player_insertion(serialized_player)
     return serialized_player
-
-add_a_player()
+#
+# add_a_player()

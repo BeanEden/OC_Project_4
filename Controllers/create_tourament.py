@@ -4,6 +4,7 @@ from Views.tournament import *
 from Models.tournoi import *
 from Controllers.add_player import *
 
+
 def create_a_tournament():
     name = input("Entrez le nom du tournoi :")
     place = input("Entrez le lieu du tournoi :")
@@ -20,8 +21,13 @@ def create_a_tournament():
         date=date,
         time_control=time_control,
         players_dictionary=player_dictionary,
-        description=description
+        description=description,
+        rounds = ROUND_NAMES
     )
+    serialized_tournament = new_tournament.tournament_serialization()
+    tournament_insertion(serialized_tournament)
+    return serialized_tournament
+
 
 def player_dictionary_select():
     player_count = 0
@@ -39,10 +45,12 @@ def player_dictionary_select():
 def player_list_tournoi(dict_player):
     family_name = dict_player["family_name"]
     first_name = dict_player["first_name"]
-    age = dict_player["birth"]
+    age = dict_player["birth_date"]
     rank = dict_player["rank"]
+    gender = dict_player["gender"]
     score = 0
-    new_player = Player(family_name=family_name,first_name=first_name, birth_date=age, rank=rank, score=score)
+    new_player = Player(family_name=family_name,first_name=first_name, birth_date=age, gender=gender, rank=rank, score=score)
     return new_player
+
 
 create_a_tournament()
