@@ -24,3 +24,6 @@ def search_in_data_base(nom) :
 
 def clear_all_database(data_base):
     data_base.truncate()
+
+print_player_data_base(db_players)
+print(search_in_data_base("Joueur 1 test"))

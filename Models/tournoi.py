@@ -16,15 +16,15 @@ TIME_CONTROL = {
 
 
 class Tournament :
-    def __init__(self, name, place,date, rounds, time_control, players_list, description):
+    def __init__(self, name, place,date, rounds, time_control, players_dictionary, description):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
         self.rounds = rounds
-        self.time_control = TIME_CONTROL
+        self.time_control = time_control
         self.players_list : players_dictionary
-        self.description = self.view.description
+        self.description = description
 
     def start_rounds(self):
         self.rounds
@@ -34,27 +34,7 @@ class Tournament :
         validation = input("Créer un nouveau tournoi (y/n) ?")
         return validation
 
-    def create_a_tournament(self):
-        name = input("Entrez le nom du tournoi :")
-        place = input("Entrez le lieu du tournoi :")
-        date = input("Entrez la date du tournoi :")
-        time_control = input("Sélectionnez le mode de contrôle du temps :"
-                             "1 - bullet"
-                             "2 - blitz"
-                             "3 - coup rapide")
-        player_list = self.player_list_select
-        description = input("Description générale du tournoi")
 
-    def player_list_select():
-        player_count = 0
-        player_dictionary = {}
-        while player_count < 8:
-            player_count += 1
-            player = input(("Enter player ", player_count, "name :"))
-            search_in_data_base(player)
-            player_dictionary["Player ",player_count] = player
-        print(player_dictionary)
-        return player_dictionary
 
 
 

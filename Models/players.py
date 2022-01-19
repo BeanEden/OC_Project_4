@@ -1,4 +1,5 @@
 from Models.player_database import *
+import datetime
 
 class Player():
 
@@ -7,6 +8,7 @@ class Player():
         self.first_name = first_name
         self.name = str(self.first_name + self.family_name)
         self.birth_date = birth_date
+        # self.age = date -
         self.gender = gender
         self.rank = rank
         self.score = score
@@ -30,4 +32,7 @@ class Player():
         }
             return serialized_player
 
-    def player
+    def player_serialization_tournament(self):
+            serialized_player_tournament = {
+
+            }
