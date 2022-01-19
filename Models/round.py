@@ -34,12 +34,6 @@ class Round() :
 
         # self.view.confirmation.match()
 
-    print
-
-
-def original_classment(player_list):
-
-
 
 def round_2(self):
     original_classment = sorted(player_list, key=attrgetter('rank'), reverse=True)

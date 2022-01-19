@@ -48,12 +48,11 @@ class Tournament :
             "tournament_rounds": self.rounds,
             "tournament_time_control": self.time_control,
             "tournament_player_dictionary":self.players_dictionary,
-
             "tournament_description": self.description
         }
             return serialized_tournament
 
-    def player_list_serialization(self):
+
 #
 # serialized_turnament = {
 #     "name" : turnament.name,
