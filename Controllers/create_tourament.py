@@ -13,7 +13,7 @@ def create_a_tournament():
                          "1 - bullet"
                          "2 - blitz"
                          "3 - coup rapide")
-    player_dictionary = player_dictionary_select()
+    player_dictionary = Player.player_dictionary_select()
     description = input("Description générale du tournoi")
     # new_tournament = Tournament(
     #     name=name,
@@ -26,6 +26,7 @@ def create_a_tournament():
     # )
 
     new_tournament = Tournament(name, place, date, "rounds", time_control, player_dictionary, description)
+
     serialized_tournament = new_tournament.tournament_serialization()
     tournament_insertion(serialized_tournament)
     serialized_tournament = new_tournament.tournament_serialization()
@@ -33,31 +34,10 @@ def create_a_tournament():
     return serialized_tournament
 
 
-def player_dictionary_select():
-    player_count = 0
-    player_dictionary = {}
-    while player_count < 2:
-        player_count += 1
-        player_name = input(("Enter player ", player_count, "name :"))
-        player = search_in_data_base(player_name)
-        new_player = player_list_tournoi(player)
-        player_key = "Player " + str(player_count)
-        player_dictionary[player_key]=new_player
-    print(player_dictionary)
-    return player_dictionary
 
 
-def player_list_tournoi(dict_player):
-    family_name = dict_player["family_name"]
-    first_name = dict_player["first_name"]
-    name=first_name+" "+family_name
-    age = dict_player["birth_date"]
-    rank = dict_player["rank"]
-    gender = dict_player["gender"]
-    score = 0
-    # new_player = Player(family_name=family_name,first_name=first_name, birth_date=age, gender=gender, rank=rank, score=score)
-    new_player = [name, age, rank, score]
-    return new_player
+
+
 
 
 create_a_tournament()
