@@ -32,8 +32,6 @@ class Tournament :
         self.players_dictionary = players_dictionary
         self.description = description
 
-    def start_rounds(self):
-        self.rounds
 
     def confirmation_creation_tournoi(self):
         """Confirme la création d'un nouveau tournoi"""

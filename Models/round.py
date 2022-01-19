@@ -2,8 +2,8 @@ from players import *
 from matchs import *
 
 
-class Round :
-    def __init__(self):
+class Round() :
+    def __init__(self, match_list):
         self.name = "Round" + str(define_round_number())
         self.matchs_list = matchs_list
         self.start_time = start_time
@@ -15,6 +15,8 @@ class Round :
         self.round_number
         round_number += 1
         return round_number
+
+    def
 
     # def start_round_1(self,player_list):
     #
