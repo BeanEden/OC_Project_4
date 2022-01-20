@@ -1,8 +1,5 @@
 from Models.player_database import *
-from Models.players import *
-from Views.tournament import *
 from Models.tournoi import *
-from Controllers.add_player import *
 
 
 def create_a_tournament():
@@ -13,13 +10,12 @@ def create_a_tournament():
                          "1 - bullet"
                          "2 - blitz"
                          "3 - coup rapide")
-    player_dictionary = Player.player_dictionary_select()
+    player_list = player_dictionary_select()
     description = input("Description générale du tournoi")
-    new_tournament = Tournament(name, place, date, "rounds", time_control, player_dictionary, description)
+    # player_dictionary = player_serialization_tournament(player_dictionary)
+    new_tournament = Tournament(name, place, date, "rounds", time_control, player_list, description)
     serialized_tournament = new_tournament.tournament_serialization()
     tournament_insertion(serialized_tournament)
-
-    # tournament_insertion(serialized_tournament)
     return serialized_tournament
 
 #
@@ -36,7 +32,15 @@ def create_a_tournament():
 
 
 
+def player_serialization_tournament(list):
+    serialized_player_tournament = []
+    for player in list:
+        serialized_player_tournament.append(player.player_serialization())
+    return serialized_player_tournament
 
-
-
-create_a_tournament()
+# player_dictionary_select()
+# # create_a_tournament()
+if __name__ == '__main__':
+    print("player_database.py lancé")
+else :
+    pass

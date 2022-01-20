@@ -24,7 +24,12 @@ class Controller:
         "lance la vue"
         if self.confirmation_creation_tournoi() == "y":
             self.tournament = create_a_tournament(self)
-        # else menu()
+
+
+def tournament_execution :
+    tournament = create_a_tournament()
+
+
 
 
 
