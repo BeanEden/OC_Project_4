@@ -42,6 +42,6 @@ def clear_all_database(data_base):
 
 
 if __name__ == '__main__':
-    print("player_database.py lancé")
+    print("database.py lancé")
 else :
     pass

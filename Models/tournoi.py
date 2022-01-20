@@ -5,7 +5,8 @@
 # réception des résultats
 # répéter jusqu'à ce que les 4 tours soient joués
 
-
+from Models.players import player_dictionary_select
+from Models.database import tournament_insertion
 
 TIME_CONTROL = {
     1 : "bullet",
@@ -21,16 +22,21 @@ ROUND_NAMES = {
 
 
 class Tournament :
-    def __init__(self, name, place,date,rounds, time_control, players_dictionary, description):
+    def __init__(self, name, place,date,rounds, time_control, players_list, description):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
         self.rounds = rounds
         self.time_control = time_control
-        self.players_dictionary = players_dictionary
+        self.players_list = players_list
         self.description = description
 
+    def __repr__(self):
+        return repr([self.name,self.place,self.date,self.rounds, self.time_control, self.players_list, self.description])
+
+    def player_list_tournament(self):
+        return self.players_list
 
     def confirmation_creation_tournoi(self):
         """Confirme la création d'un nouveau tournoi"""
@@ -46,7 +52,7 @@ class Tournament :
             "tournament_turn_number": self.turn_number,
             "tournament_rounds": self.rounds,
             "tournament_time_control": self.time_control,
-            "tournament_player_dictionary":self.players_dictionary,
+            "tournament_player_dictionary":self.players_list,
             "tournament_description": self.description
         }
             return serialized_tournament
@@ -64,7 +70,7 @@ def create_a_tournament():
     # player_list_serialized = player_serialization_tournament(player_list)
     new_tournament = Tournament(name, place, date, "rounds", time_control, player_list, description)
     serialized_tournament = new_tournament.tournament_serialization()
-    tournament_insertion(serialized_tournament)
+    # tournament_insertion(serialized_tournament)
     return new_tournament
 
 #
@@ -100,7 +106,7 @@ def player_serialization_tournament(list):
 #
 #
 if __name__ == '__main__':
-    print("player_database.py lancé")
+    print("database.py lancé")
 else :
     pass
 #

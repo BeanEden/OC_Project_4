@@ -1,4 +1,4 @@
-from Models.player_database import *
+from Models.database import *
 
 
 class Player():
@@ -14,7 +14,13 @@ class Player():
         self.score = 0
 
     def __repr__(self):
-        return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
+        # return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
+        return repr({
+            "name":self.name,
+            "age":self.birth_date,
+            "gender" : self.gender,
+            "rank":self.rank,
+            "score":self.score})
 
     def player_serialization(self):
         serialized_player = {
@@ -40,12 +46,14 @@ class Player():
         # new_player["score"] = 0
         return new_player
 
+    def score_add(self,value):
+        self.score = self.score + value
 
 def player_dictionary_select():
     player_count = 0
     player_dictionary = {}
     player_list_tournament = []
-    while player_count < 2:
+    while player_count < 4:
         player_count += 1
         player_name = input(("Enter player ", player_count, "name :"))
         player = search_player_in_data_base(player_name)
@@ -76,7 +84,6 @@ def add_a_player():
     return serialized_player
 
 
-player_dictionary_select()
 
 if __name__ == '__main__':
     print("players.py exécuté")

@@ -1,4 +1,4 @@
-from Models.player_database import *
+from Models.database import *
 
 class TournamentView:
 

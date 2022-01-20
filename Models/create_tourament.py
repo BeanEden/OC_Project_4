@@ -1,4 +1,4 @@
-from Models.player_database import *
+from Models.database import *
 from Models.tournoi import *
 
 
@@ -41,6 +41,6 @@ def player_serialization_tournament(list):
 # player_dictionary_select()
 # # create_a_tournament()
 if __name__ == '__main__':
-    print("player_database.py lancé")
+    print("database.py lancé")
 else :
     pass
