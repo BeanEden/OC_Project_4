@@ -57,6 +57,7 @@ class Tournament :
         }
             return serialized_tournament
 
+
 def create_a_tournament():
     name = input("Entrez le nom du tournoi :")
     place = input("Entrez le lieu du tournoi :")

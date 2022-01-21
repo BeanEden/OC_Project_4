@@ -33,21 +33,20 @@ class Match :
         return result
 
     def score_attribution(self, result):
-        score = ""
+
         if result == "1" :
             self.joueur_1.score_add(1)
-            score = str(self.joueur_1.name+"wins")
+            self.result = str(self.joueur_1.name+"wins")
         elif result == "2" :
             self.joueur_2.score_add(1)
-            score = str(self.joueur_2.name+"wins")
+            self.result = str(self.joueur_2.name+"wins")
         elif result == "3" :
             self.joueur_1.score_add(0.5)
             self.joueur_2.score_add(0.5)
-            score = "match_nul"
+            self.result = "match_nul"
         else :
-            print("resaisir le resultat")
-            score ="undefined"
-        return score
+            self.result ="undefined"
+        return self.result
 
 if __name__ == '__main__':
     print("matchs.py exécuté")

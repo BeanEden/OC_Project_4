@@ -16,12 +16,7 @@ class Player():
 
     def __repr__(self):
         # return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
-        return repr({
-            "name":self.name,
-            "age":self.birth_date,
-            "gender" : self.gender,
-            "rank":self.rank,
-            "score":self.score})
+        return repr([self.name, self.id, self.rank, self.score])
 
     def id_player(self):
         id_key_one = self.first_name

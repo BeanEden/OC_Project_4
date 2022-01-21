@@ -19,7 +19,7 @@ class Round() :
         self.matches_list = []
 
     def __repr__(self):
-        return repr([self.name, self.player_list, self.matches_list])
+        return repr([self.name, self.matches_list])
 
     def round_player_list(self):
         return self.player_list
@@ -49,10 +49,15 @@ class Round() :
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
         match_list = []
-        for i in range(0,self.matches_number):
+        for i in range(0,self.matches_number,1):
             match_count = i + 1
             match_name = "Match " + str(match_count)
-
+            match_i = Match(match_name, round_classment[i], round_classment[i+1])
+            print(match_i.opponents())
+            match_list.append(match_i)
+        print(match_list)
+        self.matches_list = match_list
+        return self.matches_list
 
     # def start_round_1(self,player_list):
     #
