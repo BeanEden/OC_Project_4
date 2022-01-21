@@ -1,17 +1,10 @@
-
-    # création du tournoi
-# ajout de huit joueurs
-# génération de paires pour le premier tour
-# réception des résultats
-# répéter jusqu'à ce que les 4 tours soient joués
-
 from Models.players import player_dictionary_select
-from Models.database import tournament_insertion
+
 
 TIME_CONTROL = {
-    1 : "bullet",
-    2 : "blitz",
-    3 : "coup rapide"
+    1: "bullet",
+    2: "blitz",
+    3: "coup rapide"
 }
 ROUND_NAMES = {
     "Round 1": "Round 1",
@@ -21,8 +14,8 @@ ROUND_NAMES = {
 }
 
 
-class Tournament :
-    def __init__(self, name, place,date,rounds, time_control, players_list, description):
+class Tournament:
+    def __init__(self, name, place, date, rounds, time_control, players_list, description):
         self.name = name
         self.place = place
         self.date = date
@@ -33,7 +26,15 @@ class Tournament :
         self.description = description
 
     def __repr__(self):
-        return repr([self.name,self.place,self.date,self.rounds, self.time_control, self.players_list, self.description])
+        return repr([
+            self.name,
+            self.place,
+            self.date,
+            self.rounds,
+            self.time_control,
+            self.players_list,
+            self.description
+        ])
 
     def player_list_tournament(self):
         return self.players_list
@@ -43,76 +44,44 @@ class Tournament :
         validation = input("Créer un nouveau tournoi (y/n) ?")
         return validation
 
-
     def tournament_serialization(self):
-            serialized_tournament = {
+        serialized_tournament = {
             "tournament_name": self.name,
             "tournament_place": self.place,
             "tournament_date": self.date,
             "tournament_turn_number": self.turn_number,
             "tournament_rounds": self.rounds,
             "tournament_time_control": self.time_control,
-            "tournament_player_dictionary":self.players_list,
+            "tournament_player_dictionary": self.players_list,
             "tournament_description": self.description
         }
-            return serialized_tournament
+        return serialized_tournament
 
 
 def create_a_tournament():
-    name = input("Entrez le nom du tournoi :")
-    place = input("Entrez le lieu du tournoi :")
-    date = input("Entrez la date du tournoi :")
-    time_control = input("Sélectionnez le mode de contrôle du temps :"
-                         "1 - bullet"
-                         "2 - blitz"
-                         "3 - coup rapide")
+    input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :")
+    name = input("Entrez le nom du tournoi : ")
+    place = input("Entrez le lieu du tournoi : ")
+    date = input("Entrez la date du tournoi : ")
+    time_control = input(("Sélectionnez le mode de contrôle du temps : ",
+                         "1 - bullet ", "2 - blitz ", "3 - coup rapide "))
+    description = input("Description générale du tournoi : ")
     player_list = player_dictionary_select()
-    description = input("Description générale du tournoi")
     # player_list_serialized = player_serialization_tournament(player_list)
     new_tournament = Tournament(name, place, date, "rounds", time_control, player_list, description)
     serialized_tournament = new_tournament.tournament_serialization()
     # tournament_insertion(serialized_tournament)
     return new_tournament
 
-#
-# def tournament_list(self):
-#     name = input("Entrez le nom du tournoi :")
-#     place = input("Entrez le lieu du tournoi :")
-#     date = input("Entrez la date du tournoi :")
-#     time_control = input("Sélectionnez le mode de contrôle du temps :"
-#                          "1 - bullet"
-#                          "2 - blitz"
-#                          "3 - coup rapide")
-#     player_dictionary = Player.player_dictionary_select()
-#     description = input("Description générale du tournoi")
 
-
-
-def player_serialization_tournament(list):
+def player_serialization_tournament(player_list_argument):
     serialized_player_tournament = []
-    for player in list:
+    for player in player_list_argument:
         serialized_player_tournament.append(player.player_serialization())
     return serialized_player_tournament
-#
-# serialized_turnament = {
-#     "name" : turnament.name,
-#     "place" : turnament.place,
-#     "date" : turnament.date,
-#     "turn_number" : turnament.turn_number,
-#     "turns" : turnament.turns,
-#     "time_control" : turnament.TIME_CONTROL
-#     "players" : turnament.players_list
-# }
-#
-#
-#
+
+
 if __name__ == '__main__':
     print("database.py lancé")
-else :
+else:
     pass
-#
-#
-# Tournées (liste des instances des rondes)
-# Joueurs (liste des indices corraspondants aux instances du joueur stockés en mémoire)
-# contrôle du temps (bulllet, blitz ou coup rapide)
-# description (remarques générales u directeur du tournoi)

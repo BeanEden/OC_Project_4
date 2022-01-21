@@ -1,5 +1,6 @@
 from tinydb import TinyDB
 from tinydb import Query
+from Models.players import Player
 
 db_players = TinyDB("db_players.json")
 # players_table = db_players.table("players")
@@ -19,16 +20,24 @@ def print_player_data_base(data_base):
     for player in data_base:
         print(player)
 #
-def search_player_in_data_base(name):
+def search_player_in_data_base(id):
     player = Query()
-    player = db_players.search(player.family_name == name)
+    player = db_players.search(player.player_id == id)
     player = player[-1]
     return player
 
 def clear_all_database(data_base):
     data_base.truncate()
 
-
+def player_instance_creation_from_data_base_tournoi(dict_player):
+    family_name = dict_player["family_name"]
+    first_name = dict_player["first_name"]
+    age = dict_player["birth_date"]
+    rank = dict_player["rank"]
+    gender = dict_player["gender"]
+    new_player = Player(family_name=family_name, first_name=first_name, birth_date=age, gender=gender, rank=rank)
+    # new_player = new_player.player_serialization()
+    return new_player
 
 # print(search_in_data_base("Joueur 1 test"))
 # print_player_data_base(db_players)

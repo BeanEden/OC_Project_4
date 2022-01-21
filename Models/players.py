@@ -1,7 +1,7 @@
 from Models.database import *
 
 
-class Player():
+class Player:
 
     def __init__(self, family_name, first_name, birth_date, gender, rank):
         self.family_name = family_name
@@ -19,6 +19,7 @@ class Player():
         return repr([self.name, self.id, self.rank, self.score])
 
     def id_player(self):
+        """id = firstname + first letter from family_name + day of birth"""
         id_key_one = self.first_name
         id_key_two = self.family_name[0]
         id_key_three = self.birth_date[0:1]
@@ -27,47 +28,34 @@ class Player():
 
     def player_serialization(self):
         serialized_player = {
-        "family_name": self.family_name,
-        "first_name": self.first_name,
-        "birth_date": self.birth_date,
-        "gender": self.gender,
-        "rank": self.rank,
-    }
+            "player_id": self.id,
+            "family_name": self.family_name,
+            "first_name": self.first_name,
+            "birth_date": self.birth_date,
+            "gender": self.gender,
+            "rank": self.rank,
+        }
         return serialized_player
 
-    def player_list_tournoi(dict_player):
-        family_name = dict_player["family_name"]
-        first_name = dict_player["first_name"]
-        name = first_name + " " + family_name
-        age = dict_player["birth_date"]
-        rank = dict_player["rank"]
-        gender = dict_player["gender"]
-        # score = 0
-        new_player = Player(family_name=family_name, first_name=first_name, birth_date=age, gender=gender, rank=rank)
-        # new_player = new_player.player_serialization()
-        # new_player["score"] = 0
-        return new_player
 
-    def score_add(self,value):
+
+    def score_add(self, value):
         self.score = self.score + value
+
 
 def player_dictionary_select():
     player_count = 0
-    player_dictionary = {}
     player_list_tournament = []
     while player_count < 4:
         player_count += 1
-        player_name = input(("Enter player ", player_count, "name :"))
+        player_name = input("Enter player " + str(player_count) + " id :"
+                            "id = firstname + first letter from family_name + day of birth"
+                            "example : Mark Zucchin born on 19/03/1987 -> id = MarkZ19")
         player = search_player_in_data_base(player_name)
-        new_player = Player.player_list_tournoi(player)
+        new_player = player_instance_creation_from_data_base_tournoi(player)
         print("Player added : ")
         print(new_player)
-        # new_player = Player(player)
         player_list_tournament.append(new_player)
-        # player_key = "Player " + str(player_count)
-        # player_dictionary[player_key]=new_player
-    # # print(player_dictionary)
-    # print(player_list_tournament)
     return player_list_tournament
 
 
@@ -75,7 +63,7 @@ def add_a_player():
     """Prompt for adding a player."""
     print("Création d'un nouveau joueur...")
     family_name = input("Nom du joueur : ")
-    first_name = input("Prénom du joueur: ")
+    first_name = input("Prénom du joueur : ")
     birth_date = input("Date de naissance du joueur (DD/MM/YYYY): ")
     gender = input("Genre (F/H): ")
     rank = input("Classement (chiffre positif) : ")
@@ -86,8 +74,7 @@ def add_a_player():
     return serialized_player
 
 
-
 if __name__ == '__main__':
     print("players.py exécuté")
-else :
+else:
     pass
