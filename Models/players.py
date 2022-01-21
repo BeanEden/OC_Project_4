@@ -12,6 +12,7 @@ class Player():
         self.gender = gender
         self.rank = rank
         self.score = 0
+        self.id = self.id_player()
 
     def __repr__(self):
         # return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
@@ -22,6 +23,13 @@ class Player():
             "rank":self.rank,
             "score":self.score})
 
+    def id_player(self):
+        id_key_one = self.first_name
+        id_key_two = self.family_name[0]
+        id_key_three = self.birth_date[0:1]
+        self.id = id_key_one+id_key_two+id_key_three
+        return self.id
+
     def player_serialization(self):
         serialized_player = {
         "family_name": self.family_name,
@@ -31,7 +39,6 @@ class Player():
         "rank": self.rank,
     }
         return serialized_player
-
 
     def player_list_tournoi(dict_player):
         family_name = dict_player["family_name"]

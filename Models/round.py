@@ -16,9 +16,10 @@ class Round() :
         # self.end_time = end_time
         self.player_list = player_list
         self.open = False
+        self.matches_list = []
 
     def __repr__(self):
-        return repr([self.name, self.player_list])
+        return repr([self.name, self.player_list, self.matches_list])
 
     def round_player_list(self):
         return self.player_list
@@ -35,8 +36,14 @@ class Round() :
             print(match_i.opponents())
             match_list.append(match_i)
         print(match_list)
-        return match_list
+        self.matches_list = match_list
+        return self.matches_list
 
+    def round_score(self,round):
+        for i in round:
+            result = i.resultat_match()
+            i.score_attribution(result)
+        return self.matches_list
 
     def round_secondaires(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
@@ -64,18 +71,18 @@ p_quatre = Player("Joueur 4","name ","14/06/25","H",4)
 p_list_test = [p_one,p_deux,p_trois,p_quatre]
 #
 #
-test_d = Round("test",p_list_test)
-# test_pl_d = test_d.player_list
-# number = test_d.matches_number
-# print(number)
+# test_d = Round("test",p_list_test)
+# # test_pl_d = test_d.player_list
+# # number = test_d.matches_number
+# # print(number)
+# #
+# # test_o = Round("testdeux",player_list_test)
+# # test_pl = test_o.player_list
+# # print(test_pl)
+# #
+# test_rd = test_d.round_original()
+# for i in test_rd :
+#     result = i.resultat_match()
+#     i.score_attribution(result)
 #
-# test_o = Round("testdeux",player_list_test)
-# test_pl = test_o.player_list
-# print(test_pl)
-#
-test_rd = test_d.round_original()
-for i in test_rd :
-    result = i.resultat_match()
-    i.score_attribution(result)
-
-print(p_one.score)
+# print(p_one.score)
