@@ -21,7 +21,7 @@ class Round:
     def round_player_list(self):
         return self.player_list
 
-    def round_original(self):
+    def round_one_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         top_half = original_classment[0:self.matches_number]
         bottom_half = original_classment[self.matches_number:self.player_number]
@@ -30,19 +30,19 @@ class Round:
             match_count = i+1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, top_half[i], bottom_half[i])
-            print(match_i.opponents())
+            print(match_i.opponents)
             match_list.append(match_i)
-        print(match_list)
+        # print(match_list)
         self.matches_list = match_list
         return self.matches_list
 
-    def round_score(self, list_match_played_in_round_argument):
+    def round_match_list_method(self, list_match_played_in_round_argument):
         for i in list_match_played_in_round_argument:
             result = i.resultat_match()
             i.score_attribution(result)
         return self.matches_list
 
-    def round_secondaires(self):
+    def secondary_rounds_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
         match_list = []

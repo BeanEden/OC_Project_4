@@ -1,5 +1,5 @@
-from Models.tournoi import Tournament
 from Models.tournoi import create_a_tournament
+from Models.tournoi import Tournament
 from Models.round import Round
 from Models.players import Player
 
@@ -22,27 +22,32 @@ from Models.players import Player
 #         "lance la vue"
 #         if self.confirmation_creation_tournoi() == "y":
 #             self.tournament = create_a_tournament(self)
-round_count = 0
+round_count = 1
+
 
 def tournament_execution():
     tournament = create_a_tournament()
     player_list = tournament.player_list_tournament()
     return player_list
 
-def round_one(player_list):
-    round_name = "Round "+ str(round_count)
+
+def round_one_run_function(player_list):
+    round_name = "Round " + str(round_count)
+    print(round_name + " started...")
     round_one = Round(round_name,player_list)
-    matches_round_one = round_one.round_original()
-    matches_list = round_one.round_score(matches_round_one)
+    matches_round_one = round_one.round_one_method()
+    matches_list = round_one.round_match_list_method(matches_round_one)
     print(round_one)
     return round_one
 
-def round_two(player_list,round_count):
-    round_count += 1
-    round_name = "Round " + str(round_count)
-    round = Round(round_name,player_list)
-    matches_round = round.round_secondaires()
-    matches_list = round.round_score(matches_round)
+
+def secondary_round_run_function(player_list, round_number):
+    round_number += 1
+    round_name = "Round " + str(round_number)
+    print(round_name + " started...")
+    round_ = Round(round_name, player_list)
+    matches_round = round.secondary_rounds_method()
+    matches_list = round.round_match_list_method(matches_round)
     print(round)
     return round
 
@@ -63,11 +68,11 @@ def tournament_execution_test():
     tournament = create_a_tournament()
     player_list = tournament.player_list_tournament()
     round_list = []
-    round_list.append (round_one(player_list))
+    round_list.append (round_one_run_function(player_list))
     round_count = 1
     while round_count <= tournament.turn_number:
         round_count += 1
-        round_played = round_two(player_list, round_count)
+        round_played = secondary_round_run_function(player_list, round_count)
         round_list.append(round_played)
 
 tournament_execution_test()

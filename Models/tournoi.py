@@ -15,12 +15,12 @@ ROUND_NAMES = {
 
 
 class Tournament:
-    def __init__(self, name, place, date, rounds, time_control, players_list, description):
+    def __init__(self, name, place, date, time_control, players_list, description):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
-        self.rounds = rounds
+        self.rounds = "rounds"
         self.time_control = time_control
         self.players_list = players_list
         self.description = description
@@ -38,6 +38,9 @@ class Tournament:
 
     def player_list_tournament(self):
         return self.players_list
+
+    def round_tournament(self):
+        return self.rounds
 
     def confirmation_creation_tournoi(self):
         """Confirme la création d'un nouveau tournoi"""
@@ -63,12 +66,14 @@ def create_a_tournament():
     name = input("Entrez le nom du tournoi : ")
     place = input("Entrez le lieu du tournoi : ")
     date = input("Entrez la date du tournoi : ")
-    time_control = input(("Sélectionnez le mode de contrôle du temps : ",
-                         "1 - bullet ", "2 - blitz ", "3 - coup rapide "))
+    time_control = input("Sélectionnez le mode de contrôle du temps :\n" +
+                         "1 - bullet \n"
+                         "2 - blitz \n"
+                         "3 - coup rapide\n")
     description = input("Description générale du tournoi : ")
     player_list = player_dictionary_select()
     # player_list_serialized = player_serialization_tournament(player_list)
-    new_tournament = Tournament(name, place, date, "rounds", time_control, player_list, description)
+    new_tournament = Tournament(name, place, date, time_control, player_list, description)
     serialized_tournament = new_tournament.tournament_serialization()
     # tournament_insertion(serialized_tournament)
     return new_tournament
