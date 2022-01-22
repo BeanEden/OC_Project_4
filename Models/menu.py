@@ -71,6 +71,28 @@ def print_consulting_player_menu():
           "===================================\n"
           "Enter a choice and press enter : ")
 
+def print_round_menu(round_count):
+      print("===================================\n"
+            "ROUND " + round_count + " MENU\n"
+            "===================================\n"
+            " 1 - Generate matches\n"
+            " 2 - Enter results\n"
+            " 3 - Consult tournament previous rounds\n"
+            " 4 - Exit tournament (to main menu)\n"
+            "===================================\n"
+            "Enter a choice and press enter : ")
+
+def print_enter_result(round_count, matchs_list):
+      print("===================================\n"
+            "ROUND " + round_count + " RESULTS\n"
+            "===================================\n"
+            " 1 - Match - 1 :" + matchs_list[0] + "\n"
+            " 2 - Match - 1 :" + matchs_list[1] + "\n"
+            " 3 - Match - 1 :" + matchs_list[2] + "\n"
+            " 4 - Match - 1 :" + matchs_list[3] + "\n"                                     
+            " 5 - Exit tournament (to main menu)\n"
+            "===================================\n"
+            "Enter a choice and press enter : ")
 
 
     #

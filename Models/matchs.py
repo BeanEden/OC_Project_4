@@ -7,7 +7,7 @@ class Match :
         self.joueur_2 = joueur_2
         # self.opponents = joueur_1 + " vs " + joueur_2
         # self.players = player_list
-        self.result = "score not defined yet"
+        self.result = "result not defined yet"
 
     def __repr__(self):
         return repr([self.name,self.joueur_1,self.joueur_2, self.result])

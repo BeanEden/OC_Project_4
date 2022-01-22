@@ -30,7 +30,7 @@ class Round:
             match_count = i+1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, top_half[i], bottom_half[i])
-            print(match_i.opponents)
+            match_i.opponents()
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
@@ -38,8 +38,7 @@ class Round:
 
     def round_match_list_method(self, list_match_played_in_round_argument):
         for i in list_match_played_in_round_argument:
-            result = i.resultat_match()
-            i.score_attribution(result)
+            i.score_attribution()
         return self.matches_list
 
     def secondary_rounds_method(self):
@@ -50,7 +49,7 @@ class Round:
             match_count = i + 1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, round_classment[i], round_classment[i+1])
-            print(match_i.opponents())
+            match_i.opponents()
             match_list.append(match_i)
         print(match_list)
         self.matches_list = match_list

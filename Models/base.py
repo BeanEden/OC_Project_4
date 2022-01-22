@@ -36,8 +36,6 @@ def round_one_run_function(player_list):
     print(round_name + " started...")
     round_one = Round(round_name,player_list)
     matches_round_one = round_one.round_one_method()
-    matches_list = round_one.round_match_list_method(matches_round_one)
-    print(round_one)
     return round_one
 
 
@@ -74,5 +72,7 @@ def tournament_execution_test():
         round_count += 1
         round_played = secondary_round_run_function(player_list, round_count)
         round_list.append(round_played)
+
+
 
 tournament_execution_test()
