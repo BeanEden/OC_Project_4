@@ -10,7 +10,7 @@ class Match :
         self.result = "result not defined yet"
 
     def __repr__(self):
-        return repr([self.name,self.joueur_1,self.joueur_2, self.result])
+        return repr([self.name, self.joueur_1, self.joueur_2, self.result])
 
     # def show(self):
     #     print("Le ", self.name,"oppose ", self.opponents)
