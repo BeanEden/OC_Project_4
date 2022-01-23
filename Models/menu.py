@@ -66,12 +66,22 @@ def print_consulting_match_menu():
         "===================================\n"
         " 1 - Consult a specific Match table\n"
         " 2 - Whole match database\n"
-        " 3 - Go back to consulting choices"
+        " 3 - Go back to consulting choices\n"
         " 4 - Exit to main menu\n"
         "===================================\n"
         "Enter a choice and press enter :\n")
 
-
+def print_tournament_round_start_menu(round_count):
+    print("===================================\n"
+          "TOURNAMENT MENU - ROUND" + round_count + "\n"
+          "===================================\n"
+          " 1 - Start Round " + round_count + "\n"
+          " 2 - See player list\n"
+          " 3 - See tournament infos\n"
+          " 4 - Update a player infos"
+          " 5 - Exit to main menu\n"
+          "===================================\n"
+          "Enter a choice and press enter :\n")
 
 def print_round_menu(round_count, round_status):
     print("===================================\n"

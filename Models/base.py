@@ -70,7 +70,7 @@ def tournament_execution_test():
     round_list = []
     round_list.append (round_one_run_function(player_list))
     round_count = 1
-    round_menu()
+
     while round_count <= tournament.turn_number:
         round_count += 1
         round_played = secondary_round_run_function(player_list, round_count)

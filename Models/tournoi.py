@@ -20,7 +20,7 @@ class Tournament:
         self.place = place
         self.date = date
         self.turn_number = 4
-        self.rounds = "rounds"
+        self.rounds_list = []
         self.time_control = time_control
         self.players_list = players_list
         self.description = description
@@ -30,7 +30,7 @@ class Tournament:
             self.name,
             self.place,
             self.date,
-            self.rounds,
+            self.rounds_list,
             self.time_control,
             self.players_list,
             self.description
@@ -39,8 +39,9 @@ class Tournament:
     def player_list_tournament(self):
         return self.players_list
 
-    def round_tournament(self):
-        return self.rounds
+    def tournament_append_round(self,round):
+        self.rounds_list = self.rounds_list.append(round)
+        return self.rounds_list
 
     def confirmation_creation_tournoi(self):
         """Confirme la création d'un nouveau tournoi"""

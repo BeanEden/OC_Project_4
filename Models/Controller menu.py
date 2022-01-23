@@ -84,7 +84,28 @@ def tournament_menu():
 #         elif user_input_consulting_match_menu == 3:
 #         print_consulting_menu()
 #     main_menu()
-#
+# while round_count < tourn
+def tournament_round_start_menu(tournament, round_count):
+    print_tournament_round_start_menu(round_count)
+    user_input_tournament_round_start_menu = 0
+    player_list = tournament.player_list_tournament()
+    while user_input_tournament_round_start_menu != 5:
+
+        if user_input_tournament_round_start_menu == 1 and round_count == 1:
+            round_one = round_one_run_function(player_list)
+            tournament.append(round_one)
+            round_menu(round_one, round_count)
+        elif user_input_tournament_round_start_menu == 1 and round_count != 1:
+            round_played = secondary_round_run_function(player_list, round_count)
+            tournament.append(round_played)
+            round_menu(round_played, round_count)
+        elif user_input_tournament_round_start_menu == 2:
+            print(player_list)
+        elif user_input_tournament_round_start_menu == 3:
+            print(tournament)
+        elif user_input_tournament_round_start_menu == 4:
+            print(tournament)
+    main_menu()
 
 def round_menu(round, round_count):
     round_status = round.status
@@ -94,9 +115,9 @@ def round_menu(round, round_count):
     while user_input_round_menu != 5:
         user_input_round_menu= int(input())
         if user_input_round_menu == 1 and round_status == "open":
-
+        print(round.matches_list)
         elif user_input_round_menu == 1 and round_status != "open" :
-
+        print(round.matches_list)
         elif user_input_round_menu == 2:
             select_a_match_for_result()
         elif user_input_round_menu == 3:
