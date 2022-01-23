@@ -48,6 +48,18 @@ def print_consulting_tournament_menu():
         "Enter a choice and press enter :\n")
 
 
+def print_consulting_player_menu():
+    print("===================================\n"
+        "PLAYER CONSULTING MENU\n"
+        "===================================\n"
+        " 1 - Consult a specific player\n"
+        " 2 - Whole player database\n"
+        " 3 - Go back to consulting choices"
+        " 4 - Exit to main menu\n"
+        "===================================\n"
+        "Enter a choice and press enter :\n")
+
+
 def print_consulting_match_menu():
     print("===================================\n"
         "MATCH LIST CONSULTING MENU\n"
@@ -59,17 +71,6 @@ def print_consulting_match_menu():
         "===================================\n"
         "Enter a choice and press enter :\n")
 
-
-def print_consulting_player_menu():
-    print("===================================\n"
-        "PLAYER CONSULTING MENU\n"
-        "===================================\n"
-        " 1 - Consult a specific player\n"
-        " 2 - Whole player database\n"
-        " 3 - Go back to consulting choices"
-        " 4 - Exit to main menu\n"
-        "===================================\n"
-        "Enter a choice and press enter :\n")
 
 
 def print_round_menu(round_count, round_status):
@@ -89,7 +90,7 @@ def print_round_menu(round_count, round_status):
     "Enter a choice and press enter :\n")
 
 
-def print_select_a_match_to_select_result(round_count, matchs_list):
+def print_select_a_match_for_result(round_count, matchs_list):
     print("===================================\n"
     "ROUND " + round_count + " RESULTS\n"
     "===================================\n"
@@ -97,12 +98,12 @@ def print_select_a_match_to_select_result(round_count, matchs_list):
     " 2 - " + matchs_list[1].opponents + matchs_list[1].result + "\n"
     " 3 - " + matchs_list[2].opponents + matchs_list[2].result + "\n"
     " 4 - " + matchs_list[3].opponents + matchs_list[3].result + "\n"                                     
-    " 5 - Exit tournament (to main menu)\n"
+    " 5 - Exit to round_menu\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
 
 
-def print_select_resultat_match(match):
+def print_enter_match_result(match):
     print("===================================\n"
         + match.name + "\n"
         "===================================\n")
@@ -115,6 +116,7 @@ def print_select_resultat_match(match):
         "   1 - " + match.joueur_1.name + " wins \n"
         "   2 - " + match.joueur_2.name + " wins \n"
         "   3 - Match Nul\n"
+        "   4 - Exit to match_select\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
 

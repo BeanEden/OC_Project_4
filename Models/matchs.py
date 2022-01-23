@@ -23,20 +23,15 @@ class Match :
         print(self.name + " : " + joueur_1_name + " vs " + joueur_2_name)
 
 # class MatchView:
-    def resultat_match(self):
-        print("Déclarez le vainqueur :\n"
-            "   1 - " + self.joueur_1.name + "\n"
-            "   2 - " + self.joueur_2.name + "\n"
-            "   3 - Match Nul\n")
-        result = int(input())
-        return result
+#     def resultat_match(self):
+#         print("Déclarez le vainqueur :\n"
+#             "   1 - " + self.joueur_1.name + "\n"
+#             "   2 - " + self.joueur_2.name + "\n"
+#             "   3 - Match Nul\n")
+#         result = int(input())
+#         return result
 
-    def score_attribution(self):
-        result = self.resultat_match()
-        while result != [1, 2, 3]:
-            print("Resaississez le résultat du match : ")
-            self.resultat_match()
-
+    def score_attribution(self, result):
         if result == 1 :
             self.joueur_1.score_add(1)
             self.result = str(self.joueur_1.name+"wins")

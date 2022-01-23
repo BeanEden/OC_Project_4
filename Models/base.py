@@ -65,9 +65,12 @@ p_list_test = [p_one,p_deux,p_trois,p_quatre]
 def tournament_execution_test():
     tournament = create_a_tournament()
     player_list = tournament.player_list_tournament()
+
+
     round_list = []
     round_list.append (round_one_run_function(player_list))
     round_count = 1
+    round_menu()
     while round_count <= tournament.turn_number:
         round_count += 1
         round_played = secondary_round_run_function(player_list, round_count)

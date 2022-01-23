@@ -12,7 +12,7 @@ class Round:
         # self.start_time = start_time
         # self.end_time = end_time
         self.player_list = player_list
-        self.open = False
+        self.status = "open"
         self.matches_list = []
 
     def __repr__(self):
@@ -20,6 +20,14 @@ class Round:
 
     def round_player_list(self):
         return self.player_list
+
+    def round_status_generated(self):
+        self.status = "matches generated"
+        return self.status
+
+    def round_status_closed(self):
+        self.status = "matches generated"
+        return self.status
 
     def round_one_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
