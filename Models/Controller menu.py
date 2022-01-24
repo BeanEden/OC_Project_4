@@ -93,11 +93,14 @@ def tournament_round_start_menu(tournament_played, round_count):
     user_input_tournament_round_start_menu = 0
     player_list = tournament_played.player_list_tournament()
 
+
     while user_input_tournament_round_start_menu != 5:
         user_input_tournament_round_start_menu=int(input())
 
         if user_input_tournament_round_start_menu == 1:
+            if tournament.rounds_list
             round_one = round_creation_run_function(player_list)
+
             tournament_played.tournament_append_round(round_one)
             round_one.round_match_list_definition(round_count)
             round_menu(round_one, tournament_played)
@@ -114,16 +117,16 @@ def tournament_round_start_menu(tournament_played, round_count):
     main_menu()
 
 def round_menu(round_played, tournament_played):
-    round_count = round_played.count
+    round_count_round_menu = round_played.count
     matches_list = round_played.matches_list
-    print_round_menu(round_count)
+    print_round_menu(round_count_round_menu)
     user_input_round_menu = 0
 
     while user_input_round_menu != 5:
         user_input_round_menu = int(input())
 
         if user_input_round_menu == 1:
-            print_match_list(matches_list, round_count)
+            print_match_list(matches_list, round_count_round_menu)
             fake_input = str(input())
             round_menu(round_played, tournament_played)
             # round_menu(round_played, tournament_played)
@@ -140,15 +143,17 @@ def round_menu(round_played, tournament_played):
         elif user_input_round_menu == 4:
             print("function not defined yet")
 
-    if "result not defined yet" in matches_list :
-        print("l'ensemble des résultats n'a pas été sélectionné\n"
-              " le round 1 continue\n")
-        tournament_round_start_menu(tournament_played, round_count)
 
-    else :
-        print("passage au round 2\n")
-        round_count = str(int(round_count) + 1)
-        tournament_round_start_menu(tournament_played, round_count)
+    for match in matches_list :
+        if match.result == "result not defined yet" :
+            print("l'ensemble des résultats n'a pas été sélectionné\n"
+              " le round 1 continue\n")
+            tournament_round_start_menu(tournament_played, round_count_round_menu)
+        else:
+            round_count = str(int(round_count_round_menu) + 1)
+            print("passage au round " + round_count + "\n")
+            tournament_round_start_menu(tournament_played, round_count)
+
 
 
 def select_a_match_for_result(round_played,tournament):
