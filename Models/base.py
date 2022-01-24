@@ -77,5 +77,5 @@ def tournament_execution_test():
         round_list.append(round_played)
 
 
-
-tournament_execution_test()
+#
+# tournament_execution_test()

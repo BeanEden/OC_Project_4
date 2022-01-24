@@ -7,7 +7,7 @@ def print_main_menu():
         " 1 - Start a tournament\n"
         " 2 - Add a player\n"
         " 3 - Update a player\n"
-        " 4 - Consult a tournament / player / matches report"
+        " 4 - Consult a tournament / player / matches report\n"
         " 5 - Exit\n"
         "===================================\n"
         "Enter a choice and press enter :\n")
@@ -42,7 +42,7 @@ def print_consulting_tournament_menu():
         "===================================\n"
         " 1 - Consult a specific Tournament\n"
         " 2 - Whole tournament database\n"
-        " 3 - Go back to consulting choices"
+        " 3 - Go back to consulting choices\n"
         " 4 - Exit to main menu\n"
         "===================================\n"
         "Enter a choice and press enter :\n")
@@ -54,7 +54,7 @@ def print_consulting_player_menu():
         "===================================\n"
         " 1 - Consult a specific player\n"
         " 2 - Whole player database\n"
-        " 3 - Go back to consulting choices"
+        " 3 - Go back to consulting choices\n"
         " 4 - Exit to main menu\n"
         "===================================\n"
         "Enter a choice and press enter :\n")
@@ -73,41 +73,42 @@ def print_consulting_match_menu():
 
 def print_tournament_round_start_menu(round_count):
     print("===================================\n"
-          "TOURNAMENT MENU - ROUND" + round_count + "\n"
+          "TOURNAMENT MENU - ROUND " + str(round_count) + "\n"
           "===================================\n"
-          " 1 - Start Round " + round_count + "\n"
+          " 1 - Start round " + str(round_count) + "\n"
           " 2 - See player list\n"
           " 3 - See tournament infos\n"
-          " 4 - Update a player infos"
+          " 4 - Update a player infos\n"
           " 5 - Exit to main menu\n"
           "===================================\n"
           "Enter a choice and press enter :\n")
 
-def print_round_menu(round_count, round_status):
+def print_round_menu(round_count):
     print("===================================\n"
-        "ROUND " + round_count + " MENU\n"
+        "ROUND " + str(round_count) + " MENU\n"
         "===================================\n")
-    if round_status == "open":
-        print(" 1 - Generate matches\n")
-    else:
-        print(" 1 - See matches list")
+    # if round_status == "open":
+    #     print(" 1 - Generate matches\n")
+    # else:
+    #     print(" 1 - See matches list")
     print(
+    " 1 - See matches list\n"
     " 2 - Enter results\n"
     " 3 - Consult tournament previous rounds\n"
-    " 4 - Update a player"
-    " 5 - Exit tournament (to main menu)\n"
+    " 4 - Update a player\n"
+    " 5 - Exit to tournament menu\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
 
 
 def print_select_a_match_for_result(round_count, matchs_list):
     print("===================================\n"
-    "ROUND " + round_count + " RESULTS\n"
+    "ROUND " + str(round_count) + " RESULTS\n"
     "===================================\n"
-    " 1 - " + matchs_list[0].opponents + matchs_list[0].result + "\n"
-    " 2 - " + matchs_list[1].opponents + matchs_list[1].result + "\n"
-    " 3 - " + matchs_list[2].opponents + matchs_list[2].result + "\n"
-    " 4 - " + matchs_list[3].opponents + matchs_list[3].result + "\n"                                     
+    " 1 - " + str(matchs_list[0].opponents) + str(matchs_list[0].result) + "\n"
+    " 2 - " + str(matchs_list[1].opponents) + str(matchs_list[1].result) + "\n"
+    " 3 - " + str(matchs_list[2].opponents) + str(matchs_list[2].result) + "\n"
+    " 4 - " + str(matchs_list[3].opponents) + str(matchs_list[3].result) + "\n"                                     
     " 5 - Exit to round_menu\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
@@ -119,7 +120,7 @@ def print_enter_match_result(match):
         "===================================\n")
     if match.result != "result not defined yet":
         print("!!!! Result already defined previously !!!! \n"
-        "Previous result selected : " + match.result + "\n"      
+        "Previous result selected : " + str(match.result) + "\n"      
         "Selecting a new result will overwrite the previous one\n")
 
     print("Enter results :\n"
@@ -129,6 +130,25 @@ def print_enter_match_result(match):
         "   4 - Exit to match_select\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
+
+def print_match_list(matchs_list, round_count):
+    print("===================================\n"
+    "ROUND " + str(round_count) + " MATCHES\n"
+    "===================================\n"
+    " 1 - " + str(matchs_list[0]) + "\n"
+    " 2 - " + str(matchs_list[1]) + "\n"
+    " 3 - " + str(matchs_list[2]) + "\n"
+    " 4 - " + str(matchs_list[3]) + "\n"                                     
+    "===================================\n")
+
+def print_player_list(player_list) :
+    print("===================================\n"
+    "PLAYER LIST\n"
+    "===================================\n")
+    print("Player_name - id - rank - score")
+    for players in player_list:
+        print(players)
+    "===================================\n"
 
 
 # def print_match )

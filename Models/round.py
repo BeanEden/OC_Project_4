@@ -14,6 +14,7 @@ class Round:
         self.player_list = player_list
         self.status = "closed"
         self.matches_list = []
+        self.count = name[-1]
 
     def __repr__(self):
         return repr([self.name, self.matches_list])
@@ -40,7 +41,7 @@ class Round:
             match_i = Match(match_name, top_half[i], bottom_half[i])
             match_i.opponents()
             match_list.append(match_i)
-        # print(match_list)
+        print(match_list)
         self.matches_list = match_list
         return self.matches_list
 
@@ -59,7 +60,7 @@ class Round:
             match_i = Match(match_name, round_classment[i], round_classment[i+1])
             match_i.opponents()
             match_list.append(match_i)
-        print(match_list)
+        # print(match_list)
         self.matches_list = match_list
         return self.matches_list
 
