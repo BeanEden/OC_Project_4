@@ -92,49 +92,68 @@ def tournament_round_start_menu(tournament_played, round_count):
     print_tournament_round_start_menu(round_count)
     user_input_tournament_round_start_menu = 0
     player_list = tournament_played.player_list_tournament()
+
     while user_input_tournament_round_start_menu != 5:
         user_input_tournament_round_start_menu=int(input())
-        if user_input_tournament_round_start_menu == 1 and round_count == 1:
-            round_one = round_one_run_function(player_list)
+
+        if user_input_tournament_round_start_menu == 1:
+            round_one = round_creation_run_function(player_list)
             tournament_played.tournament_append_round(round_one)
+            round_one.round_match_list_definition(round_count)
             round_menu(round_one, tournament_played)
-        elif user_input_tournament_round_start_menu == 1 and round_count != 1:
-            round_played = secondary_round_run_function(player_list, round_count)
-            tournament_played.tournament_append_round(round_played)
-            round_menu(round_played, tournament_played)
+
         elif user_input_tournament_round_start_menu == 2:
             print_player_list(player_list)
             tournament_round_start_menu(tournament_played, round_count)
         elif user_input_tournament_round_start_menu == 3:
             print(tournament_played)
+            tournament_round_start_menu(tournament_played, round_count)
         elif user_input_tournament_round_start_menu == 4:
             print(tournament_played)
+            tournament_round_start_menu(tournament_played, round_count)
     main_menu()
 
 def round_menu(round_played, tournament_played):
     round_count = round_played.count
+    matches_list = round_played.matches_list
     print_round_menu(round_count)
     user_input_round_menu = 0
-    matches_list = round_played.round_one_method()
+
     while user_input_round_menu != 5:
-        user_input_round_menu= int(input())
+        user_input_round_menu = int(input())
+
         if user_input_round_menu == 1:
             print_match_list(matches_list, round_count)
+            fake_input = str(input())
+            round_menu(round_played, tournament_played)
             # round_menu(round_played, tournament_played)
         # elif user_input_round_menu == 1 and round_status != "open" :
         #     print(round_played.matches_list)
+
         elif user_input_round_menu == 2:
-            select_a_match_for_result(round_count, matches_list)
+            select_a_match_for_result(round_played, tournament_played)
             round_menu(round_played, tournament_played)
+
         elif user_input_round_menu == 3:
             print(tournament_played.rounds_list)
+
         elif user_input_round_menu == 4:
             print("function not defined yet")
-    tournament_round_start_menu(tournament_played, round_count)
+
+    if "result not defined yet" in matches_list :
+        print("l'ensemble des résultats n'a pas été sélectionné\n"
+              " le round 1 continue\n")
+        tournament_round_start_menu(tournament_played, round_count)
+
+    else :
+        print("passage au round 2\n")
+        round_count = str(int(round_count) + 1)
+        tournament_round_start_menu(tournament_played, round_count)
+
 
 def select_a_match_for_result(round_played,tournament):
     round_count = round_played.count
-    matches_list = round_played.round_one_method()
+    matches_list = round_played.matches_list
     print_select_a_match_for_result(round_count, matches_list)
     user_input_select_a_match_for_result = 0
     while user_input_select_a_match_for_result != 5:

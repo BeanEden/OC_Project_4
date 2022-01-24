@@ -41,7 +41,7 @@ class Round:
             match_i = Match(match_name, top_half[i], bottom_half[i])
             match_i.opponents()
             match_list.append(match_i)
-        print(match_list)
+        # print(match_list)
         self.matches_list = match_list
         return self.matches_list
 
@@ -62,6 +62,14 @@ class Round:
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
+        return self.matches_list
+
+    def round_match_list_definition(self, round_count):
+        matches_list = []
+        if round_count == 1:
+            self.matches_list = self.round_one_method()
+        else:
+            self.matches_list = self.secondary_rounds_method()
         return self.matches_list
 
     # def start_round_1(self,player_list):

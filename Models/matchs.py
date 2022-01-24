@@ -20,7 +20,7 @@ class Match :
     def opponents(self):
         joueur_1_name = self.joueur_1.name
         joueur_2_name = self.joueur_2.name
-        print(self.name + " : " + joueur_1_name + " vs " + joueur_2_name)
+        print(str(self.name + " : " + joueur_1_name + " vs " + joueur_2_name))
 
 # class MatchView:
 #     def resultat_match(self):
@@ -34,10 +34,10 @@ class Match :
     def score_attribution(self, result):
         if result == 1 :
             self.joueur_1.score_add(1)
-            self.result = str(self.joueur_1.name+"wins")
+            self.result = str(self.joueur_1.name+" wins")
         elif result == 2 :
             self.joueur_2.score_add(1)
-            self.result = str(self.joueur_2.name+"wins")
+            self.result = str(self.joueur_2.name+" wins")
         elif result == 3 :
             self.joueur_1.score_add(0.5)
             self.joueur_2.score_add(0.5)

@@ -40,8 +40,8 @@ class Tournament:
         return self.players_list
 
     def tournament_append_round(self, round_played):
-        self.rounds_list = self.rounds_list.append(round_played)
-        return self.rounds_list
+        self.rounds_list.append(round_played)
+        # return self.rounds_list
     #
     # def confirmation_creation_tournoi(self):
     #     """Confirme la création d'un nouveau tournoi"""

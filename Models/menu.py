@@ -92,7 +92,7 @@ def print_round_menu(round_count):
     # else:
     #     print(" 1 - See matches list")
     print(
-    " 1 - See matches list\n"
+    " 1 - See detailed matches list\n"
     " 2 - Enter results\n"
     " 3 - Consult tournament previous rounds\n"
     " 4 - Update a player\n"
@@ -135,11 +135,13 @@ def print_match_list(matchs_list, round_count):
     print("===================================\n"
     "ROUND " + str(round_count) + " MATCHES\n"
     "===================================\n"
+    "Match name - player : name - id - rank - score - match result\n"
     " 1 - " + str(matchs_list[0]) + "\n"
     " 2 - " + str(matchs_list[1]) + "\n"
     " 3 - " + str(matchs_list[2]) + "\n"
     " 4 - " + str(matchs_list[3]) + "\n"                                     
-    "===================================\n")
+    "===================================\n"
+    "Press a touch to go back to round menu\n")
 
 def print_player_list(player_list) :
     print("===================================\n"
