@@ -1,5 +1,6 @@
 from Models.menu import *
 from Models.base import *
+from Models.players import add_a_player
 
 
 def main_menu():
@@ -11,7 +12,8 @@ def main_menu():
         if user_input == 1:
             tournament_menu()
         elif user_input == 2:
-            print("Executing menu item 2")
+            add_a_player()
+            main_menu()
         elif user_input == 3:
             print("Executing menu item 3")
         elif user_input == 4:
@@ -24,7 +26,8 @@ def tournament_menu():
     while user_input_tournament_menu != 3:
         user_input_tournament_menu = int(input())
         if user_input_tournament_menu == 1:
-            tournament_execution_test()
+            tournament_created_played = create_a_tournament()
+            tournament_round_start_menu(tournament_created_played,1)
         elif user_input_tournament_menu == 2 :
             print("using an already existing")
     main_menu()

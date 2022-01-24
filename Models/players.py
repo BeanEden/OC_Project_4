@@ -65,7 +65,6 @@ def add_a_player():
     birth_date = input("Date de naissance du joueur (DD/MM/YYYY): ")
     gender = input("Genre (F/H): ")
     rank = input("Classement (chiffre positif) : ")
-
     player = Player(family_name, first_name, birth_date, gender, rank)
     print(player.name + " a bien été enregistré(e). id = " + player.id)
     serialized_player = player.player_serialization()

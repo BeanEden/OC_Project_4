@@ -12,7 +12,7 @@ class Round:
         # self.start_time = start_time
         # self.end_time = end_time
         self.player_list = player_list
-        self.status = "open"
+        self.status = "closed"
         self.matches_list = []
 
     def __repr__(self):
