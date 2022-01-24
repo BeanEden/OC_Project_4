@@ -12,7 +12,7 @@ class Round:
         # self.start_time = start_time
         # self.end_time = end_time
         self.player_list = player_list
-        self.status = "closed"
+        self.status = "open"
         self.matches_list = []
         self.count = name[-1]
 
@@ -71,6 +71,14 @@ class Round:
         else:
             self.matches_list = self.secondary_rounds_method()
         return self.matches_list
+
+    def round_check(self):
+        for match in self.matches_list:
+            if match.result == "result not defined yet":
+                self.status = "open"
+            else :
+                self.status = "complete"
+        return self.status
 
     # def start_round_1(self,player_list):
     #

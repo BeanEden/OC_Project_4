@@ -24,6 +24,7 @@ class Tournament:
         self.time_control = time_control
         self.players_list = players_list
         self.description = description
+        self.last_round = ""
 
     def __repr__(self):
         return repr([
@@ -61,6 +62,12 @@ class Tournament:
         }
         return serialized_tournament
 
+    def tournament_last_round(self):
+        if len(self.rounds_list) != 0:
+            self.last_round = self.rounds_list[-1]
+        else :
+            self.last_round = None
+        return self.last_round
 
 def create_a_tournament():
     input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :")

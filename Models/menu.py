@@ -113,6 +113,17 @@ def print_select_a_match_for_result(round_count, matchs_list):
     "===================================\n"
     "Enter a choice and press enter :\n")
 
+def print_round_complete(round_count, matchs_list, next_round_count):
+    print("===================================\n"
+        "ROUND " + str(round_count) + " COMPLETE\n"
+        "===================================\n"
+        + str(matchs_list[0]) + "\n"
+        + str(matchs_list[1]) + "\n"
+        + str(matchs_list[2]) + "\n"
+        + str(matchs_list[3]) + "\n"
+        "===================================\n"
+        "Press a touch to continue to round " + next_round_count + "\n")
+
 
 def print_enter_match_result(match):
     print("===================================\n"
