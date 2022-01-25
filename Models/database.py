@@ -22,16 +22,31 @@ def print_player_data_base(data_base):
 #
 def search_player_in_data_base(id):
     player = Query()
-    player = db_players.search(player.player_id == id)
-    player = player[-1]
+    try:
+        player = db_players.search(player.player_id == str(id))
+        player = player[-1]
+    except IndexError:
+        print("No such item in the database")
+        player = None
     return player
 
 def clear_all_database(data_base):
     data_base.truncate()
 
+def update_player_field(database, player_id, field_changed, new_input):
+    player = Query()
+    database.update({field_changed:new_input}, player.id == player_id)
 
+def player_check_removal(serialized_player, database):
+    query = Query()
+    search_field = "player_id"
+    check = serialized_player[search_field]
+    try:
+        database.remove(query.player_id == check)
+    except None:
+        print("player not in the database")
 # # print(search_in_data_base("Joueur 1 test"))
-print_player_data_base(db_players)
+
 # player_name = input(("Enter player ", player_count, "name :"))
 #             player = search_in_data_base(player_name)
 #             # new_player = Player.player_list_tournoi(player)

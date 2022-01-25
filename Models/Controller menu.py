@@ -6,10 +6,8 @@ from operator import *
 def main_menu():
     print_main_menu()
     user_input = 0
-    while user_input != range(1, 5):
-        user_input = int(input())
-        print("Enter an available choice and press enter :\n")
     while user_input != 5:
+        user_input = int(input())
         if user_input == 1:
             tournament_menu()
         elif user_input == 2:

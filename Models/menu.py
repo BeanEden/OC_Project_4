@@ -142,6 +142,7 @@ def print_enter_match_result(match):
     "===================================\n"
     "Enter a choice and press enter :\n")
 
+
 def print_match_list(matchs_list, round_count):
     print("===================================\n"
     "ROUND " + str(round_count) + " MATCHES\n"
@@ -153,6 +154,7 @@ def print_match_list(matchs_list, round_count):
     " 4 - " + str(matchs_list[3]) + "\n"                                     
     "===================================\n"
     "Press a key to go back to round menu\n")
+
 
 def print_player_list(player_list) :
     print("===================================\n"

@@ -72,10 +72,10 @@ class Tournament:
         return self.last_round
 
 def create_a_tournament():
-    input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :")
-    name = input("Entrez le nom du tournoi : ")
-    place = input("Entrez le lieu du tournoi : ")
-    date = input("Entrez la date du tournoi : ")
+    input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :\n")
+    name = input("Entrez le nom du tournoi :\n")
+    place = input("Entrez le lieu du tournoi : \n")
+    date = input("Entrez la date du tournoi : \n")
     time_control = input("Sélectionnez le mode de contrôle du temps :\n" +
                          "1 - bullet \n"
                          "2 - blitz \n"

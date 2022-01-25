@@ -59,12 +59,12 @@ def player_dictionary_select():
 
 def add_a_player():
     """Prompt for adding a player."""
-    print("Création d'un nouveau joueur...")
-    family_name = input("Nom du joueur : ")
-    first_name = input("Prénom du joueur : ")
-    birth_date = input("Date de naissance du joueur (DD/MM/YYYY): ")
-    gender = input("Genre (F/H): ")
-    rank = input("Classement (chiffre positif) : ")
+    print("Création d'un nouveau joueur...\n")
+    family_name = input("Nom du joueur : \n")
+    first_name = input("Prénom du joueur : \n")
+    birth_date = input("Date de naissance du joueur (DD/MM/YYYY): \n")
+    gender = input("Genre (F/H): \n")
+    rank = input("Classement (chiffre positif) : \n")
     player = Player(family_name, first_name, birth_date, gender, rank)
     print(player.name + " a bien été enregistré(e). id = " + player.id)
     serialized_player = player.player_serialization()
