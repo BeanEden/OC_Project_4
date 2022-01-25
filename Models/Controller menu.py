@@ -1,6 +1,5 @@
 from Models.menu import *
-from Models.base import *
-from Models.players import add_a_player
+from Models.creation import *
 from operator import *
 
 def main_menu():
@@ -100,7 +99,7 @@ def tournament_round_start_menu(tournament_played, round_count_number):
         while user_input_tournament_round_start_menu != 5:
             if user_input_tournament_round_start_menu == 1:
                 if tournament_played.tournament_last_round() is None :
-                    round_one = round_creation_run_function(player_list,round_count_number)
+                    round_one = round_creation_run_function(player_list,round_count_number,tournament_played)
                     tournament_played.tournament_append_round(round_one)
                     round_one.round_match_list_definition(round_count_number)
                     round_menu(round_one, tournament_played)
@@ -109,7 +108,7 @@ def tournament_round_start_menu(tournament_played, round_count_number):
                     if last_round.status == "open":
                         round_menu(last_round, tournament_played)
                     else :
-                        new_round = round_creation_run_function(player_list,round_count_number)
+                        new_round = round_creation_run_function(player_list,round_count_number,tournament_played)
                         tournament_played.tournament_append_round(new_round)
                         new_round.round_match_list_definition(round_count_number)
                         round_menu(new_round, tournament_played)

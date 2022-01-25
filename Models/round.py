@@ -2,15 +2,16 @@
 from Models.matchs import Match
 from operator import *
 from Models.database import *
+import datetime
 
 class Round:
     def __init__(self, name, player_list, tournament):
         self.name = name
         self.player_number = len(player_list)
         self.matches_number = int(self.player_number / 2)
-        # self.matchs_list = matchs_list
-        # self.start_time = start_time
-        # self.end_time = end_time
+        self.start_time = datetime. datetime. now()
+        self.end_time = "unfinished"
+        self.round_duration = ""
         self.player_list = player_list
         self.status = "open"
         self.matches_list = []
@@ -31,8 +32,20 @@ class Round:
             "round_name": self.name,
             "matches_list": self.matches_list,
             "players_list": self.player_list,
+            "start_time": self.start_time,
+            "end_time" : self.end_time,
             "id_key": self.id,
         }
+
+    def round_time_over(self):
+        if self.status != "over":
+            self.end_time = datetime. datetime. now()
+        return self.end_time
+
+    def round_duration(self):
+        if self.end_time != "unfinished" :
+            self.round_duration = int(self.end_time) - int(self.start_time)
+        return self.round_duration
 
     def round_database_update(self):
         database_check_removal(self.serialized_form, db_rounds)
@@ -54,7 +67,7 @@ class Round:
         for i in range(0, self.matches_number):
             match_count = i+1
             match_name = "Match " + str(match_count)
-            match_i = Match(match_name, top_half[i], bottom_half[i])
+            match_i = Match(match_name, top_half[i], bottom_half[i], self)
             print(match_i.opponents)
             match_list.append(match_i)
         # print(match_list)
@@ -73,7 +86,7 @@ class Round:
         for i in range(0, self.matches_number, 1):
             match_count = i + 1
             match_name = "Match " + str(match_count)
-            match_i = Match(match_name, round_classment[i], round_classment[i+1])
+            match_i = Match(match_name, round_classment[i], round_classment[i + 1], self)
             print(match_i.opponents)
             match_list.append(match_i)
         # print(match_list)
@@ -95,36 +108,3 @@ class Round:
             else :
                 self.status = "complete"
         return self.status
-
-    # def start_round_1(self,player_list):
-    #
-    #
-#     # def tri_player(list):
-# player_list_test = [['Prenom*Joueur 1 test', '25/01/2022', 'H', '1', 0],
-#                    ['Prenom 4Joueur 4 test', '25/04/2022', 'F', '4', 0],
-#                    ['Prenom 5Joueur 5 test', '25/05/2022', 'F', '5', 0],
-#                    ['Prenom 6Joueur 6 test', '25/06/2022', 'H', '6', 0]]
-#
-# p_one = Player("Joueur 1","name ","14/06/25","H",1)
-# p_deux = Player("Joueur 2","name ","14/06/25","H",2)
-# p_trois = Player("Joueur 3","name ","14/06/25","H",3)
-# p_quatre = Player("Joueur 4","name ","14/06/25","H",4)
-#
-# p_list_test = [p_one,p_deux,p_trois,p_quatre]
-# #
-#
-# test_d = Round("test",p_list_test)
-# # test_pl_d = test_d.player_list
-# # number = test_d.matches_number
-# # print(number)
-# #
-# # test_o = Round("testdeux",player_list_test)
-# # test_pl = test_o.player_list
-# # print(test_pl)
-# #
-# test_rd = test_d.round_original()
-# for i in test_rd :
-#     result = i.resultat_match()
-#     i.score_attribution(result)
-#
-# print(p_one.score)

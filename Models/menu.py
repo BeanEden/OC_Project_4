@@ -2,7 +2,7 @@
 
 def print_main_menu():
     print("===================================\n"
-        "MENU\n"
+        "MAIN MENU\n"
         "===================================\n"
         " 1 - Start a tournament\n"
         " 2 - Add a player\n"
