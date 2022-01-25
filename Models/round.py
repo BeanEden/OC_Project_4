@@ -1,10 +1,10 @@
 # from Models.players import Player
 from Models.matchs import Match
 from operator import *
-
+from Models.database import *
 
 class Round:
-    def __init__(self, name, player_list):
+    def __init__(self, name, player_list, tournament):
         self.name = name
         self.player_number = len(player_list)
         self.matches_number = int(self.player_number / 2)
@@ -15,12 +15,28 @@ class Round:
         self.status = "open"
         self.matches_list = []
         self.count = name[-1]
+        self.tournament_name = tournament.id
+        self.id = self.name[0] + self.count + " " + tournament.id
+        self.serialized_form = self.round_serialization()
 
     def __repr__(self):
         return repr([self.name, self.matches_list])
 
     def round_player_list(self):
         return self.player_list
+
+    def round_serialization(self):
+        serialized_round = {
+            "tournament_id": self.tournament_name,
+            "round_name": self.name,
+            "matches_list": self.matches_list,
+            "players_list": self.player_list,
+            "id_key": self.id,
+        }
+
+    def round_database_update(self):
+        database_check_removal(self.serialized_form, db_rounds)
+        database_item_insertion(self.serialized_form, db_rounds)
 
     def round_status_generated(self):
         self.status = "matches generated"

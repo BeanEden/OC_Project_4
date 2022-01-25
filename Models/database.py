@@ -7,8 +7,10 @@ db_players = TinyDB("db_players.json")
 # players_table.truncate()	# clear the table first
 # players_table.insert_multiple(serialized_players)
 db_tournament = TinyDB("db_tournament.json")
+db_rounds = TinyDB("db_rounds.json")
+db_matches = TinyDB("db_matches.json")
 
-def database_insertion(serialized_item, database):
+def database_item_insertion(serialized_item, database):
     database.insert(serialized_item)
 
 def tournament_insertion(new_tournament):
@@ -37,14 +39,14 @@ def update_player_field(database, player_id, field_changed, new_input):
     player = Query()
     database.update({field_changed:new_input}, player.id == player_id)
 
-def player_check_removal(serialized_player, database):
+def database_check_removal(serialized_item, database):
     query = Query()
-    search_field = "player_id"
-    check = serialized_player[search_field]
+    search_field = "id_key"
+    check = serialized_item[search_field]
     try:
-        database.remove(query.player_id == check)
+        database.remove(query.id_key == check)
     except None:
-        print("player not in the database")
+        print("item_id not found in the database")
 # # print(search_in_data_base("Joueur 1 test"))
 
 # player_name = input(("Enter player ", player_count, "name :"))

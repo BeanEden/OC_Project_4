@@ -1,5 +1,6 @@
 from Models.players import player_dictionary_select
 from operator import *
+from Models.database import *
 
 TIME_CONTROL = {
     1: "bullet",
@@ -25,6 +26,8 @@ class Tournament:
         self.players_list = players_list
         self.description = description
         self.last_round = ""
+        self.serialized_form = self.tournament_serialization()
+        self.id = name+date
 
     def __repr__(self):
         return repr([
@@ -34,7 +37,8 @@ class Tournament:
             self.rounds_list,
             self.time_control,
             self.players_list,
-            self.description
+            self.description,
+            self.id
         ])
 
     def player_list_tournament(self):
@@ -60,7 +64,8 @@ class Tournament:
             "tournament_rounds": self.rounds_list,
             "tournament_time_control": self.time_control,
             "tournament_player_dictionary": self.players_list,
-            "tournament_description": self.description
+            "tournament_description": self.description,
+            "id_key": self.id
         }
         return serialized_tournament
 
@@ -70,6 +75,12 @@ class Tournament:
         else :
             self.last_round = None
         return self.last_round
+
+    def tournament_database_update(self):
+        database_check_removal(self.serialized_form, db_tournament)
+        database_item_insertion(self.serialized_form, db_tournament)
+
+
 
 def create_a_tournament():
     input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :\n")

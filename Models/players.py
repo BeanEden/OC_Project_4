@@ -29,7 +29,7 @@ class Player:
 
     def player_serialization(self):
         serialized_player = {
-            "player_id": self.id,
+            "id_key": self.id,
             "family_name": self.family_name,
             "first_name": self.first_name,
             "birth_date": self.birth_date,
@@ -42,8 +42,8 @@ class Player:
         self.score = self.score + value
 
     def player_database_update(self):
-        player_check_removal(self.serialized_form, db_players)
-        database_insertion(self.serialized_form, db_players)
+        database_check_removal(self.serialized_form, db_players)
+        database_item_insertion(self.serialized_form, db_players)
 
 
 

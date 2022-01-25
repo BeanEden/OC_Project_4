@@ -31,24 +31,24 @@ def tournament_execution():
     return player_list
 
 
-def round_creation_run_function(player_list, round_count_number):
+def round_creation_run_function(player_list, round_count_number, tournament_played):
     round_name = "Round " + str(round_count_number)
     print(round_name + " started...")
-    round_one = Round(round_name, player_list)
+    round_one = Round(round_name, player_list, tournament_played)
     # matches_round_one = round_one.round_one_method()
     return round_one
 
 
-def secondary_round_run_function(player_list, round_number):
+def secondary_round_run_function(player_list, round_number, tournament_played):
     round_name = "Round " + str(round_number)
     print(round_name + " started...")
-    round_ = Round(round_name, player_list)
-    matches_round = round.secondary_rounds_method()
-    matches_list = round.round_match_list_method(matches_round)
+    round_played = Round(round_name, player_list)
+    matches_round = round_played.secondary_rounds_method()
+    matches_list = round_played.round_match_list_method(matches_round)
     print(round)
     return round
 
-def match_list(self, round_count):
+def match_list(round_played, round_count):
     matches_list = []
     if round_count == 1:
         matches_list = round_played.round_one_method()
