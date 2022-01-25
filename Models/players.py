@@ -13,6 +13,7 @@ class Player:
         self.rank = rank
         self.score = 0
         self.id = self.id_player()
+        self.serialized_form = self.player_serialization()
 
     def __repr__(self):
         # return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
@@ -39,6 +40,11 @@ class Player:
 
     def score_add(self, value):
         self.score = self.score + value
+
+    def player_database_update(self):
+        player_check_removal(self.serialized_form, db_players)
+        database_insertion(self.serialized_form, db_players)
+
 
 
 def player_dictionary_select():
@@ -80,6 +86,7 @@ def player_instance_creation_from_data_base_tournoi(dict_player):
     new_player = Player(family_name=family_name, first_name=first_name, birth_date=age, gender=gender, rank=rank)
     # new_player = new_player.player_serialization()
     return new_player
+
 
 # add_a_player()
 

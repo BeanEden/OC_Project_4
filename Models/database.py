@@ -8,8 +8,8 @@ db_players = TinyDB("db_players.json")
 # players_table.insert_multiple(serialized_players)
 db_tournament = TinyDB("db_tournament.json")
 
-def player_insertion(serialized_players):
-    db_players.insert(serialized_players)
+def database_insertion(serialized_item, database):
+    database.insert(serialized_item)
 
 def tournament_insertion(new_tournament):
     db_tournament.insert(new_tournament)
