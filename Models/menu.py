@@ -48,6 +48,7 @@ def print_consulting_tournament_menu():
         "Enter a choice and press enter :\n")
 
 
+
 def print_consulting_player_menu():
     print("===================================\n"
         "PLAYER CONSULTING MENU\n"
@@ -105,10 +106,10 @@ def print_select_a_match_for_result(round_count, matchs_list):
     print("===================================\n"
     "ROUND " + str(round_count) + " RESULTS\n"
     "===================================\n"
-    " 1 - " + str(matchs_list[0].opponents) + str(matchs_list[0].result) + "\n"
-    " 2 - " + str(matchs_list[1].opponents) + str(matchs_list[1].result) + "\n"
-    " 3 - " + str(matchs_list[2].opponents) + str(matchs_list[2].result) + "\n"
-    " 4 - " + str(matchs_list[3].opponents) + str(matchs_list[3].result) + "\n"                                     
+    " 1 - " + str(matchs_list[0].opponents) + " - " + str(matchs_list[0].result) + "\n"
+    " 2 - " + str(matchs_list[1].opponents) + " - " + str(matchs_list[1].result) + "\n"
+    " 3 - " + str(matchs_list[2].opponents) + " - " + str(matchs_list[2].result) + "\n"
+    " 4 - " + str(matchs_list[3].opponents) + " - " + str(matchs_list[3].result) + "\n"                                     
     " 5 - Exit to round_menu\n"
     "===================================\n"
     "Enter a choice and press enter :\n")
@@ -121,8 +122,7 @@ def print_round_complete(round_count, matchs_list, next_round_count):
         + str(matchs_list[1]) + "\n"
         + str(matchs_list[2]) + "\n"
         + str(matchs_list[3]) + "\n"
-        "===================================\n"
-        "Press a touch to continue to round " + next_round_count + "\n")
+        "===================================\n")
 
 
 def print_enter_match_result(match):
@@ -152,7 +152,7 @@ def print_match_list(matchs_list, round_count):
     " 3 - " + str(matchs_list[2]) + "\n"
     " 4 - " + str(matchs_list[3]) + "\n"                                     
     "===================================\n"
-    "Press a touch to go back to round menu\n")
+    "Press a key to go back to round menu\n")
 
 def print_player_list(player_list) :
     print("===================================\n"
@@ -162,6 +162,38 @@ def print_player_list(player_list) :
     for players in player_list:
         print(players)
     "===================================\n"
+
+def print_tournament_over_menu(tournament_played):
+    print("===================================\n"
+    "TOURNAMENT " + tournament_played.name + "OVER\n"
+    "===================================\n")
+    "1 - See player list"
+    "2 - See round list"
+    "3 - See match list"
+    "4 - See tournament details"
+    "5 - Update a player"
+    "6 - Go back to main menu"
+    "===================================\n"
+
+def print_player_list_order_select():
+    print("===================================\n"
+    "PLAYERS LIST ORDER CHOICE\n"
+    "===================================\n"
+    "1 - Alphabetical order player list (on family_name)"
+    "2 - Rank order"
+    "3 - Go back to previous menu"
+    "===================================\n"
+    "Enter an available choice and press enter :\n")
+
+
+def print_player_list_by_order(players_list, order_choice):
+    "===================================\n"
+    "PLAYERS LIST " + order_choice + "\n"
+    "===================================\n"
+    for player in players_list:
+        print(player)
+    "===================================\n"
+    "Press a key to go back to tournament consulting menu\n"
 
 
 # def print_match )

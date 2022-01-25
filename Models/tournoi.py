@@ -1,5 +1,5 @@
 from Models.players import player_dictionary_select
-
+from operator import *
 
 TIME_CONTROL = {
     1: "bullet",
@@ -39,6 +39,8 @@ class Tournament:
 
     def player_list_tournament(self):
         return self.players_list
+
+
 
     def tournament_append_round(self, round_played):
         self.rounds_list.append(round_played)

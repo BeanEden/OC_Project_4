@@ -1,14 +1,15 @@
 from Models.menu import *
 from Models.base import *
 from Models.players import add_a_player
-
+from operator import *
 
 def main_menu():
     print_main_menu()
     user_input = 0
-
-    while user_input != 5:
+    while user_input != range(1, 5):
         user_input = int(input())
+        print("Enter an available choice and press enter :\n")
+    while user_input != 5:
         if user_input == 1:
             tournament_menu()
         elif user_input == 2:
@@ -90,15 +91,15 @@ def tournament_menu():
 # while round_count < tourn
 def tournament_round_start_menu(tournament_played, round_count_number):
 
-    while round_count_number < tournament_played.turn_number:
+    while int(round_count_number) <= int(tournament_played.turn_number):
         print_tournament_round_start_menu(round_count_number)
         user_input_tournament_round_start_menu = 0
         player_list = tournament_played.player_list_tournament()
 
-
+        while user_input_tournament_round_start_menu != [1,2,3,4,5]:
+            user_input_tournament_round_start_menu = int(input())
+            print("Enter an available choice and press enter :\n")
         while user_input_tournament_round_start_menu != 5:
-            user_input_tournament_round_start_menu=int(input())
-
             if user_input_tournament_round_start_menu == 1:
                 if tournament_played.tournament_last_round() is None :
                     round_one = round_creation_run_function(player_list,round_count_number)
@@ -193,16 +194,48 @@ def enter_match_result(match, round_played, tournament):
     print_enter_match_result(match)
     user_input_enter_match_result = 0
     while user_input_enter_match_result != 4:
-        user_input_round_menu = int(input())
-        if user_input_round_menu == 1:
+        user_input_enter_match_result = int(input())
+        if user_input_enter_match_result == 1:
             match.score_attribution(1)
             user_input_enter_match_result = 4
-        elif user_input_round_menu == 2:
+        elif user_input_enter_match_result == 2:
             match.score_attribution(2)
             user_input_enter_match_result = 4
-        elif user_input_round_menu == 3:
+        elif user_input_enter_match_result == 3:
             match.score_attribution(3)
             user_input_enter_match_result = 4
     select_a_match_for_result(round_played, tournament)
 
 main_menu()
+
+def tournament_over_menu(tournament_played):
+    print_tournament_over_menu(tournament_played)
+    user_input_tournament_over_menu = 0
+    while user_input_tournament_over_menu != 5:
+        user_input_tournament_over_menu = int(input())
+        if user_input_tournament_over_menu == 1:
+            player_list_argument = tournament_played.player_list_tournament
+            previous_tournament_argument = tournament_over_menu(tournament_played)
+            player_list_order_select_menu(player_list_argument, previous_tournament_argument)
+
+
+def player_list_tournament_rank(players_list):
+    player_rank_order = sorted(players_list, key=attrgetter('rank'), reverse=True)
+    return player_rank_order
+
+def player_list_tournament_alphabetical(players_list):
+    player_alphabetical_order = sorted(players_list, key=attrgetter('name'), reverse=False)
+    return player_alphabetical_order
+
+def player_list_order_select_menu(player_list, previous_select_menu):
+    print_player_list_order_select()
+    user_input_player_list_order_select = 0
+    while user_input_player_list_order_select != 4:
+        user_input_player_list_order_select = int(input())
+        if user_input_player_list_order_select == 1:
+            player_list_ordered = player_list_tournament_alphabetical(player_list)
+            print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
+        elif user_input_player_list_order_select == 2:
+            player_list_ordered = player_list_tournament_rank(player_list)
+            print_player_list_by_order(player_list_ordered, "RANK ORDER")
+    back = previous_select_menu

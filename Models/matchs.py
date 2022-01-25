@@ -8,6 +8,7 @@ class Match :
         # self.opponents = joueur_1 + " vs " + joueur_2
         # self.players = player_list
         self.result = "result not defined yet"
+        self.opponents = self.opponents_function()
 
     def __repr__(self):
         return repr([self.name, self.joueur_1, self.joueur_2, self.result])
@@ -17,10 +18,11 @@ class Match :
 
     # def result(self,score):
     #     if score = 1 :
-    def opponents(self):
+    def opponents_function(self):
         joueur_1_name = self.joueur_1.name
         joueur_2_name = self.joueur_2.name
-        print(str(self.name + " : " + joueur_1_name + " vs " + joueur_2_name))
+        opponents = str(self.name + " : " + joueur_1_name + " vs " + joueur_2_name)
+        return opponents
 
 # class MatchView:
 #     def resultat_match(self):

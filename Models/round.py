@@ -39,7 +39,7 @@ class Round:
             match_count = i+1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, top_half[i], bottom_half[i])
-            match_i.opponents()
+            print(match_i.opponents)
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
@@ -58,7 +58,7 @@ class Round:
             match_count = i + 1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, round_classment[i], round_classment[i+1])
-            match_i.opponents()
+            print(match_i.opponents)
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
