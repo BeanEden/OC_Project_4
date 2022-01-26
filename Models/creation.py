@@ -65,7 +65,7 @@ def secondary_round_run_function(player_list, round_number, tournament_played):
     print(round_name + " started...")
     round_played = Round(round_name, player_list,tournament_played)
     matches_round = round_played.secondary_rounds_method()
-    matches_list = round_played.round_match_list_method(matches_round)
+    # matches_list = round_played.round_match_list_method(matches_round)
     return round_played
 
 
@@ -162,8 +162,6 @@ def item_add_database(item_list, database):
         database_item_insertion(item.serialization, database)
     # database_item_insertion(item.serialized_form, database)
     # return serialized_item_list
-
-
 
 
 def round_add_database(tournament):

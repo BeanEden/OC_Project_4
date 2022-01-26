@@ -16,7 +16,6 @@ class Player:
         self.serialization = self.player_serialization()
 
     def __repr__(self):
-        # return repr([self.name, self.birth_date, self.gender, self.rank, self.score])
         return repr([self.name, self.id, self.rank, self.score])
 
     def id_player(self):

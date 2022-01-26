@@ -157,7 +157,7 @@ def round_menu(round_played, tournament_played):
     if round_played.status == "complete" :
         next_round_count = str(int(round_count_round_menu) + 1)
         round_played.round_score_attribution()
-        print_round_complete(round_count_round_menu, matches_list,next_round_count)
+        print_round_complete(round_count_round_menu, matches_list)
         tournament_round_start_menu(tournament_played, next_round_count)
 
     else:

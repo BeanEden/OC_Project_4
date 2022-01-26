@@ -23,9 +23,6 @@ class Round:
     def __repr__(self):
         return repr([self.name, self.matches_list])
 
-    def round_player_list(self):
-        return self.player_list
-
     def round_serialization(self):
         serialized_round = {
             "tournament_id": self.tournament_name,
@@ -52,14 +49,6 @@ class Round:
         database_check_removal(self.serialized_form, db_rounds)
         database_item_insertion(self.serialized_form, db_rounds)
 
-    def round_status_generated(self):
-        self.status = "matches generated"
-        return self.status
-
-    def round_status_closed(self):
-        self.status = "matches generated"
-        return self.status
-
     def round_one_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         top_half = original_classment[0:self.matches_number]
@@ -73,11 +62,6 @@ class Round:
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
-        return self.matches_list
-
-    def round_match_list_method(self, list_match_played_in_round_argument):
-        for i in list_match_played_in_round_argument:
-            i.score_attribution()
         return self.matches_list
 
     def secondary_rounds_method(self):
@@ -95,7 +79,6 @@ class Round:
         return self.matches_list
 
     def round_match_list_definition(self, round_count):
-        matches_list = []
         if round_count == 1:
             self.matches_list = self.round_one_method()
         else:

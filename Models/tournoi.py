@@ -27,7 +27,6 @@ class Tournament:
         self.id = self.name + self.date
         self.serialized_form = self.tournament_serialization()
 
-
     def __repr__(self):
         return repr([
             self.name,
@@ -40,10 +39,8 @@ class Tournament:
             self.id
         ])
 
-
     def tournament_append_round(self, round_played):
         self.rounds_list.append(round_played)
-
 
     def tournament_serialization(self):
         serialized_tournament = {
@@ -62,7 +59,7 @@ class Tournament:
     def tournament_last_round(self):
         if len(self.rounds_list) != 0:
             self.last_round = self.rounds_list[-1]
-        else :
+        else:
             self.last_round = None
         return self.last_round
 
