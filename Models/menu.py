@@ -135,8 +135,8 @@ def print_enter_match_result(match):
         "Selecting a new result will overwrite the previous one\n")
 
     print("Enter results :\n"
-        "   1 - " + match.joueur_1.name + " wins \n"
-        "   2 - " + match.joueur_2.name + " wins \n"
+        "   1 - " + match.player_one.name + " wins \n"
+        "   2 - " + match.player_two.name + " wins \n"
         "   3 - Match Nul\n"
         "   4 - Exit to match_select\n"
     "===================================\n"

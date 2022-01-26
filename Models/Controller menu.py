@@ -87,16 +87,16 @@ def tournament_menu():
 #     main_menu()
 # while round_count < tourn
 def tournament_round_start_menu(tournament_played, round_count_number):
-
+    # tournament_add_database(tournament_played)
     while int(round_count_number) <= int(tournament_played.turn_number):
         print_tournament_round_start_menu(round_count_number)
         user_input_tournament_round_start_menu = 0
-        player_list = tournament_played.player_list_tournament()
-
-        while user_input_tournament_round_start_menu != [1,2,3,4,5]:
-            user_input_tournament_round_start_menu = int(input())
-            print("Enter an available choice and press enter :\n")
+        player_list = tournament_played.players_list
+        print(player_list)
+        item_list = item_list_serialization(player_list, "Player ", db_players)
+        print(item_list)
         while user_input_tournament_round_start_menu != 5:
+            user_input_tournament_round_start_menu = int(input())
             if user_input_tournament_round_start_menu == 1:
                 if tournament_played.tournament_last_round() is None :
                     round_one = round_creation_run_function(player_list,round_count_number,tournament_played)
@@ -143,9 +143,6 @@ def round_menu(round_played, tournament_played):
             print_match_list(matches_list, round_count_round_menu)
             fake_input = str(input())
             round_menu(round_played, tournament_played)
-            # round_menu(round_played, tournament_played)
-        # elif user_input_round_menu == 1 and round_status != "open" :
-        #     print(round_played.matches_list)
 
         elif user_input_round_menu == 2:
             select_a_match_for_result(round_played, tournament_played)
@@ -159,6 +156,7 @@ def round_menu(round_played, tournament_played):
 
     if round_played.status == "complete" :
         next_round_count = str(int(round_count_round_menu) + 1)
+        round_played.round_score_attribution()
         print_round_complete(round_count_round_menu, matches_list,next_round_count)
         tournament_round_start_menu(tournament_played, next_round_count)
 
@@ -166,8 +164,6 @@ def round_menu(round_played, tournament_played):
         print("l'ensemble des résultats n'a pas été sélectionné\n"
               " le round 1 continue\n")
         tournament_round_start_menu(tournament_played, round_count_round_menu)
-
-
 
 
 def select_a_match_for_result(round_played,tournament):
@@ -187,34 +183,35 @@ def select_a_match_for_result(round_played,tournament):
             enter_match_result(matches_list[3], round_played,tournament)
     round_menu(round_played, tournament)
 
+
 def enter_match_result(match, round_played, tournament):
     print_enter_match_result(match)
     user_input_enter_match_result = 0
     while user_input_enter_match_result != 4:
         user_input_enter_match_result = int(input())
         if user_input_enter_match_result == 1:
-            match.score_attribution(1)
+            match.result_attribution(1)
             user_input_enter_match_result = 4
         elif user_input_enter_match_result == 2:
-            match.score_attribution(2)
+            match.result_attribution(2)
             user_input_enter_match_result = 4
         elif user_input_enter_match_result == 3:
-            match.score_attribution(3)
+            match.result_attribution(3)
             user_input_enter_match_result = 4
     select_a_match_for_result(round_played, tournament)
 
-main_menu()
 
 def tournament_over_menu(tournament_played):
+    tournament_add_database(tournament_played)
     print_tournament_over_menu(tournament_played)
     user_input_tournament_over_menu = 0
-    while user_input_tournament_over_menu != 5:
+    while user_input_tournament_over_menu != 6:
         user_input_tournament_over_menu = int(input())
         if user_input_tournament_over_menu == 1:
             player_list_argument = tournament_played.player_list_tournament
             previous_tournament_argument = tournament_over_menu(tournament_played)
             player_list_order_select_menu(player_list_argument, previous_tournament_argument)
-
+    main_menu()
 
 def player_list_tournament_rank(players_list):
     player_rank_order = sorted(players_list, key=attrgetter('rank'), reverse=True)
@@ -236,3 +233,5 @@ def player_list_order_select_menu(player_list, previous_select_menu):
             player_list_ordered = player_list_tournament_rank(player_list)
             print_player_list_by_order(player_list_ordered, "RANK ORDER")
     back = previous_select_menu
+
+main_menu()

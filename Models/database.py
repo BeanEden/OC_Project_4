@@ -13,12 +13,12 @@ def database_item_insertion(serialized_item, database):
 #
 def search_player_in_data_base(id_key,database):
     query = Query()
+    item = database.search(query.id_key == str(id_key))
     try:
-        item = database.search(query.id_key == str(id))
         item = item[-1]
     except IndexError:
         print("No such item in the database")
-        item = None
+        item = "a"
     return item
 
 
@@ -28,7 +28,7 @@ def database_check_removal(serialized_item, database):
     check = serialized_item[search_field]
     try:
         database.remove(query.id_key == check)
-    except None:
+    except :
         print("item_id not found in the database")
 
 
@@ -48,7 +48,7 @@ def clear_all_database(data_base):
 
 
 print_player_data_base(db_players)
-
+print(search_player_in_data_base("hhrth", db_players))
 
 if __name__ == '__main__':
     print("database.py lancé")

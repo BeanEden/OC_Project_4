@@ -36,6 +36,7 @@ class Round:
             "end_time" : self.end_time,
             "id_key": self.id,
         }
+        return serialized_round
 
     def round_time_over(self):
         if self.status != "over":
@@ -108,3 +109,8 @@ class Round:
             else :
                 self.status = "complete"
         return self.status
+
+    def round_score_attribution(self):
+        for i in self.matches_list:
+            i.score_attribution()
+

@@ -24,8 +24,9 @@ class Tournament:
         self.players_list = players_list
         self.description = description
         self.last_round = ""
+        self.id = self.name + self.date
         self.serialized_form = self.tournament_serialization()
-        self.id = name+date
+
 
     def __repr__(self):
         return repr([
