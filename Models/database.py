@@ -7,6 +7,8 @@ db_tournament = TinyDB("db_tournament.json")
 db_rounds = TinyDB("db_rounds.json")
 db_matches = TinyDB("db_matches.json")
 
+
+
 def database_item_insertion(serialized_item, database):
     database_check_removal(serialized_item,database)
     database.insert(serialized_item)
@@ -57,9 +59,8 @@ def print_dictionary(serialized_item):
 def clear_all_database(data_base):
     data_base.truncate()
 
-
-# print_player_data_base(db_players)
-print(search_player_in_data_base("hhrth", db_players))
+# clear_all_database(db_players)
+print_data_base(db_players)
 
 if __name__ == '__main__':
     print("database.py lancé")

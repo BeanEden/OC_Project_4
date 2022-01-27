@@ -14,6 +14,7 @@ class Player:
         self.score = 0
         self.id = self.id_player()
         self.serialized_form = self.player_serialization()
+        self.opponents_list = []
 
     def __repr__(self):
         return repr([self.name, self.id, self.rank, self.score])
@@ -39,6 +40,11 @@ class Player:
 
     def score_add(self, value):
         self.score = self.score + value
+
+    def opponents_add(self, opponent):
+        self.opponents_list.append(opponent)
+        return self.opponents_list
+
 
     def player_database_update(self):
         database_check_removal(self.serialized_form, db_players)

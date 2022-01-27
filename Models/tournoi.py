@@ -5,12 +5,6 @@ TIME_CONTROL = {
     2: "blitz",
     3: "coup rapide"
 }
-ROUND_NAMES = {
-    "Round 1": "Round 1",
-    "Round 2": "Round 2",
-    "Round 3": "Round 3",
-    "Round 4": "Round 4"
-}
 
 
 class Tournament:
@@ -27,6 +21,8 @@ class Tournament:
         self.id = self.name + self.date
         self.serialized_form = self.tournament_serialization()
         self.serialized_round_list = {}
+        self.match_list = []
+        self.opponents_list = []
 
     def __repr__(self):
         return repr([
@@ -42,6 +38,14 @@ class Tournament:
 
     def tournament_append_round(self, round_played):
         self.rounds_list.append(round_played)
+        for match in round_played.matches_list:
+            self.match_list.append(match)
+            self.opponents_list.append(match.pair_up)
+            self.opponents_list.append(match.pair_up_reverse)
+            print(self.opponents_list)
+        # self.rounds_dictionary[round_played.name] = round_played
+        # player_list_serialization(self.round_played, "Round ", db_rounds)
+        database_item_insertion(round_played.serialized_form, db_rounds)
         # self.serialized_round_list[round_played.name] = round_played
         # return self.serialized_round_list
 
@@ -73,7 +77,6 @@ class Tournament:
     #     }
     #     return serialized_tournament
 
-
     def tournament_last_round(self):
         if len(self.rounds_list) != 0:
             self.last_round = self.rounds_list[-1]
@@ -85,7 +88,13 @@ class Tournament:
         database_check_removal(self.serialized_form, db_tournament)
         database_item_insertion(self.serialized_form, db_tournament)
 
-    def
+    def match_list(self):
+        match_list = []
+        for rounds in self.rounds_list:
+            for matches in rounds.matches_list:
+                match_list.append(matches)
+        return match_list
+
     # def tournament_round_list_serialized(self):
 
 

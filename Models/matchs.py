@@ -9,9 +9,11 @@ class Match:
         self.result = "result not defined yet"
         self.score = 0
         self.opponents = str(self.name + " : " + self.player_one.name + " vs " + self.player_two.name)
+        self.pair_up = [player_one.name,player_two.name]
+        self.pair_up_reverse = [player_two.name,player_one.name]
         self.round = round_played.name
         self.tournament_name = round_played.tournament_name
-        self.id = self.name[0] + self.name[-1] + self.round[0:1] + " " + self.tournament_name
+        self.id = self.name[0] + self.name[-1] + "R" + str(round_played.count) + " " + self.tournament_name
         self.serialized_form = self.match_serialization()
 
     def __repr__(self):

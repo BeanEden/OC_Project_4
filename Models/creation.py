@@ -4,7 +4,16 @@ from Models.round import Round
 from Models.players import Player
 from Models.matchs import Match
 from Models.database import *
+player_one = Player("p1","p1","04/05/2014","gender","1")
+player_two = Player("p2","p2","04/05/2014","gender","2")
+player_three = Player("p3","p3","04/05/2014","gender","3")
+player_four = Player("p4","p4","04/05/2014","gender","4")
+player_five = Player("p5","p5","04/05/2014","gender","5")
+player_six = Player("p6","p6","04/05/2014","gender","6")
+player_seven = Player("p7","p7","04/05/2014","gender","7")
+player_eight = Player("p8","p8","04/05/2014","gender","8")
 
+players_list = [player_one,player_two,player_three,player_four,player_five,player_six,player_seven,player_eight]
 
 def create_a_tournament():
     input("Création d'un nouveau tournoi, appuyez sur une touche pour continuer :\n")
@@ -16,8 +25,8 @@ def create_a_tournament():
                          "2 - blitz \n"
                          "3 - coup rapide\n")
     description = input("Description générale du tournoi : ")
-    player_list = player_dictionary_select()
-    new_tournament = Tournament(name, place, date, time_control, description,player_list)
+    # player_list = player_dictionary_select()
+    new_tournament = Tournament(name, place, date, time_control, description, players_list)
     return new_tournament
 
 
@@ -41,11 +50,12 @@ def player_dictionary_select():
     player_list_tournament = []
     while player_count < 8:
         player_count += 1
-        player ="a"
+        player = "a"
         while player == "a":
-            user_input_player_id_key = input("Enter player " + str(player_count) + " id :\n"
-                                "id = firstname + first letter from family_name + day of birth"
-                                "example : Mark Zuck born on 09/03/1987 -> id = MarkZ09\n")
+            user_input_player_id_key = input(
+                "Enter player " + str(player_count) + " id :\n"
+                "id = firstname + first letter from family_name + day of birth"
+                "example : Mark Zuck born on 09/03/1987 -> id = MarkZ09\n")
             player = search_player_in_data_base(user_input_player_id_key, db_players)
         new_player = player_instance_creation_from_data_base(player)
         print("Player added : " + str(new_player))
@@ -53,14 +63,14 @@ def player_dictionary_select():
     return player_list_tournament
 
 
-def round_creation_run_function(player_list, round_count_number, tournament_played):
+def round_creation_run_function(round_count_number, tournament_played):
     round_name = "Round " + str(round_count_number)
     print(round_name + " started...")
     round_one = Round(round_name, tournament_played)
     return round_one
 
 
-def secondary_round_run_function(player_list, round_number, tournament_played):
+def secondary_round_run_function(round_number, tournament_played):
     round_name = "Round " + str(round_number)
     print(round_name + " started...")
     round_played = Round(round_name, tournament_played)
@@ -130,14 +140,15 @@ def tournament_instance_creation_from_database(dict_tournament):
 
 def tournament_add_database(tournament):
     saved_tournament = tournament
+    database_item_insertion(saved_tournament.serialized_form, db_rounds)
 
-    player_list = saved_tournament.players_list
-    serialized_players = item_list_add_database(player_list,db_players)
-    serialized_player_list = player_list_serialization(serialized_players, "Player ", db_players)
-    saved_tournament.players_list = serialized_player_list
-
-    round_list = saved_tournament.rounds_list
-    serialized_rounds = round_add_database(round_list)
+    # player_list = saved_tournament.players_list
+    # serialized_players = item_list_add_database(player_list,db_players)
+    # serialized_player_list = player_list_serialization(serialized_players, "Player ", db_players)
+    # saved_tournament.players_list = serialized_player_list
+    #
+    # round_list = saved_tournament.rounds_list
+    # serialized_rounds = round_add_database(round_list)
 
 def item_list_add_database(item_list, database):
     serialized_item_list = []
@@ -171,7 +182,6 @@ def round_add_database(rounds_list):
 #         serialized_item_dictionary[(str_item_name + str(item_count))] = items
 #         item_count += 1
 #     return serialized_item_dictionary
-
 
 
 

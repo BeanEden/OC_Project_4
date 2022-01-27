@@ -19,8 +19,10 @@ class Round:
         # self.matches_list = self.round_match_list_definition(self.count)
         self.matches_list = []
         self.id = self.name[0] + self.count + " " + tournament.id
+        self.matches_list_serialized = []
         self.serialized_form = self.round_serialization()
-        self.matches_list_serialized = self.round_match_list_serialized()
+        self.tournament = tournament
+
 
     def __repr__(self):
         return repr([self.name, self.matches_list])
@@ -41,10 +43,10 @@ class Round:
         serialized_round = {
             "tournament_id": self.tournament_name,
             "round_name": self.name,
-            "matches_list": player_list_serialization(self.matches_list, "Match ", db_matches),
-            "players_list": player_list_serialization(self.player_list, "Player ",db_players),
-            "start_time": self.start_time,
-            "end_time" : self.end_time,
+            "matches_list": self.matches_list,
+            "players_list": player_list_serialization(self.player_list, "Player ", db_players),
+            "start_time": str(self.start_time),
+            "end_time": self.end_time,
             "id_key": self.id,
         }
         return serialized_round
@@ -64,6 +66,7 @@ class Round:
         database_check_removal(self.serialized_form, db_rounds)
         database_item_insertion(self.serialized_form, db_rounds)
 
+
     def round_one_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         top_half = original_classment[0:self.matches_number]
@@ -73,25 +76,74 @@ class Round:
             match_count = i+1
             match_name = "Match " + str(match_count)
             match_i = Match(match_name, top_half[i], bottom_half[i], self)
-            print(match_i.opponents)
+            # print(match_i.opponents)
             match_list.append(match_i)
         # print(match_list)
         self.matches_list = match_list
+        player_list_serialization(self.matches_list, "Match ", db_matches)
         return self.matches_list
+
+    # def secondary_rounds_method(self):
+    #     original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
+    #     round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
+    #     # print(round_classment)
+    #     match_list = []
+    #     occurence = self.tournament.opponents_list[0]
+    #     # opponents_list = self.tournament.opponents_list
+    #     # # # tournament_list =
+    #     # # # for match in tournament_list:
+    #     # # #     opponents_list.append(match)
+    #     # print(opponents_list)
+    #     for i in range(0, self.matches_number, 1):
+    #         match_count = i + 1
+    #         match_name = "Match " + str(match_count)
+    #         match_i = Match(match_name, round_classment[i], round_classment[i + 1], self)
+    #         print(match_i.opponents)
+    #         match_list.append(match_i)
+    #     self.matches_list = match_list
+    #     player_list_serialization(self.matches_list, "Match ", db_matches)
+    #     return self.matches_list
+
+
 
     def secondary_rounds_method(self):
         original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)
         round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
+        # print(round_classment)
+        opponents_list = self.tournament.opponents_list
+        # # tournament_list =
+        # # for match in tournament_list:
+        # #     opponents_list.append(match)
+        # print(opponents_list)
         match_list = []
         for i in range(0, self.matches_number, 1):
             match_count = i + 1
             match_name = "Match " + str(match_count)
+            index_used = []
+            occurence = opponents_list[0]
+            while occurence in opponents_list:
+                index_pone = 0
+                while index_pone in index_used:
+                    index_pone += 1
+                    index_used.append(index_pone)
+                # player_one = round_classment[index_pone]
+                index_ptwo = index_pone + 1
+                # player_two = round_classment[index_ptwo]
+                match_i = Match(match_name, round_classment[index_pone], round_classment[index_ptwo], self)
+                occurence = match_i.opponents
             match_i = Match(match_name, round_classment[i], round_classment[i + 1], self)
             print(match_i.opponents)
             match_list.append(match_i)
-        # print(match_list)
         self.matches_list = match_list
+        player_list_serialization(self.matches_list, "Match ", db_matches)
         return self.matches_list
+
+
+
+
+
+
+
 
     def round_match_list_definition(self, round_count):
         if round_count == 1:
@@ -112,9 +164,5 @@ class Round:
         for i in self.matches_list:
             i.score_attribution()
 
-    def round_match_list_serialized(self):
-        serialized_matches_list = player_list_serialization(self.matches_list,"Match ", db_matches)
-        return serialized_matches_list
 
-    def add_serialized_round(self):
-        for match in self.matches_list :
+
