@@ -173,14 +173,7 @@ def round_add_database(rounds_list):
 #     return serialized_item_dictionary
 
 
-def player_list_serialization(item_list, str_item_name, database):
-    serialized_item_dictionary = {}
-    item_count = 1
-    for item in item_list:
-        serialized_item_dictionary[(str_item_name + str(item_count))] = item.serialized_form
-        database_item_insertion(item.serialized_form, database)
-        item_count += 1
-    return serialized_item_dictionary
+
 
 
 # def item_add_database(item_list, database):

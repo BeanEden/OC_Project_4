@@ -13,28 +13,42 @@ class Round:
         self.start_time = datetime. datetime. now()
         self.end_time = "unfinished"
         self.round_duration = ""
-
         self.status = "open"
-        self.matches_list = []
         self.count = name[-1]
         self.tournament_name = tournament.id
+        # self.matches_list = self.round_match_list_definition(self.count)
+        self.matches_list = []
         self.id = self.name[0] + self.count + " " + tournament.id
         self.serialized_form = self.round_serialization()
+        self.matches_list_serialized = self.round_match_list_serialized()
 
     def __repr__(self):
         return repr([self.name, self.matches_list])
+
+    # def round_serialization(self):
+    #     serialized_round = {
+    #         "tournament_id": self.tournament_name,
+    #         "round_name": self.name,
+    #         "matches_list": self.matches_list,
+    #         "players_list": self.player_list,
+    #         "start_time": self.start_time,
+    #         "end_time" : self.end_time,
+    #         "id_key": self.id,
+    #     }
+    #     return serialized_round
 
     def round_serialization(self):
         serialized_round = {
             "tournament_id": self.tournament_name,
             "round_name": self.name,
-            "matches_list": self.matches_list,
-            "players_list": self.player_list,
+            "matches_list": player_list_serialization(self.matches_list, "Match ", db_matches),
+            "players_list": player_list_serialization(self.player_list, "Player ",db_players),
             "start_time": self.start_time,
             "end_time" : self.end_time,
             "id_key": self.id,
         }
         return serialized_round
+
 
     def round_time_over(self):
         if self.status != "over":
@@ -98,3 +112,9 @@ class Round:
         for i in self.matches_list:
             i.score_attribution()
 
+    def round_match_list_serialized(self):
+        serialized_matches_list = player_list_serialization(self.matches_list,"Match ", db_matches)
+        return serialized_matches_list
+
+    def add_serialized_round(self):
+        for match in self.matches_list :
