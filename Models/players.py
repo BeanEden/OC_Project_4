@@ -41,8 +41,8 @@ class Player:
         self.score = self.score + value
 
     def player_database_update(self):
-        database_check_removal(self.serialization, db_players)
-        database_item_insertion(self.serialization, db_players)
+        database_check_removal(self.serialized_form, db_players)
+        database_item_insertion(self.serialized_form, db_players)
 
 
 

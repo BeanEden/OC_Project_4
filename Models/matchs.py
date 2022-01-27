@@ -22,8 +22,8 @@ class Match:
             "tournament_id": self.tournament_name,
             "round_name": self.round,
             "match_name": self.name,
-            "player_1": self.player_one,
-            "player_2": self.player_two,
+            "player_one": self.player_one.serialized_form,
+            "player_two": self.player_two.serialized_form,
             "result": self.result,
             "id_key": self.id,
         }

@@ -92,9 +92,9 @@ def tournament_round_start_menu(tournament_played, round_count_number):
         print_tournament_round_start_menu(round_count_number)
         user_input_tournament_round_start_menu = 0
         player_list = tournament_played.players_list
-        print(player_list)
-        item_list = item_list_serialization(player_list, "Player ", db_players)
-        print(item_list)
+        # print(player_list)
+        # item_list = item_list_serialization(player_list, "Player ", db_players)
+        # print(item_list)
         while user_input_tournament_round_start_menu != 5:
             user_input_tournament_round_start_menu = int(input())
             if user_input_tournament_round_start_menu == 1:

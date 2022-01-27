@@ -5,14 +5,15 @@ from Models.database import *
 import datetime
 
 class Round:
-    def __init__(self, name, player_list, tournament):
+    def __init__(self, name, tournament):
         self.name = name
-        self.player_number = len(player_list)
+        self.player_list = tournament.players_list
+        self.player_number = len(self.player_list)
         self.matches_number = int(self.player_number / 2)
         self.start_time = datetime. datetime. now()
         self.end_time = "unfinished"
         self.round_duration = ""
-        self.player_list = player_list
+
         self.status = "open"
         self.matches_list = []
         self.count = name[-1]
