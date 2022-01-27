@@ -118,23 +118,48 @@ def tournament_instance_creation_from_database(dict_tournament):
     return new_tournament
 
 
-def tournament_add_database(tournament):
-    # serialized_player_list = item_list_add_database(tournament.players_list, db_players)
-    # tournament.players_list = serialized_player_list
-    tournament.players_list = item_list_add_database(tournament.players_list, db_players)
-    # serialized_round_list = round_add_database(tournament)
-    # tournament.rounds_list = serialized_round_list
-    tournament.rounds_list = round_add_database(tournament)
-    # database_item_insertion(tournament.serialized_form, db_tournament)
-    return print(tournament.serialized_form)
+# def tournament_add_database(tournament):
+#     # serialized_player_list = item_list_add_database(tournament.players_list, db_players)
+#     # tournament.players_list = serialized_player_list
+#     tournament.players_list = item_list_add_database(tournament.players_list, db_players)
+#     # serialized_round_list = round_add_database(tournament)
+#     # tournament.rounds_list = serialized_round_list
+#     tournament.rounds_list = round_add_database(tournament)
+#     # database_item_insertion(tournament.serialized_form, db_tournament)
+#     return print(tournament.serialized_form)
 
+def tournament_add_database(tournament):
+    saved_tournament = tournament
+
+    player_list = saved_tournament.players_list
+    serialized_players = item_list_add_database(player_list,db_players)
+    serialized_player_list = player_list_serialization(serialized_players, "Player ")
+    saved_tournament.players_list = serialized_player_list
+
+    round_list = saved_tournament.rounds_list
+    serialized_rounds = round_add_database(round_list)
 
 def item_list_add_database(item_list, database):
     serialized_item_list = []
     for item in item_list:
         serialized_item_list.append(item.serialized_form)
-        # database_item_insertion(item.serialized_form, database)
+        database_item_insertion(item.serialized_form, database)
     return serialized_item_list
+
+
+def round_add_database(rounds_list):
+    serialized_rounds_list = []
+    for i in rounds_list:
+        match_list = i.matches_list
+        serialized_matches_list = {}
+        for match in match_list :
+            match = match.serialized_form
+            serialized_item = item_list_add_database(match, db_matches)
+            serialized_matches_list = player_list_serialization(serialized_item, "Match ")
+        i.matches_list = serialized_matches_list
+        database_item_insertion(i.matches_list, db_rounds)
+        serialized_rounds_list.append(i.serialized_form)
+    return serialized_rounds_list
 
 # from list to dict (example, from player list serialization to dict serialized)
 # def item_list_serialization(item_list, str_item_name):
@@ -146,29 +171,21 @@ def item_list_add_database(item_list, database):
 #     return serialized_item_dictionary
 
 
-def item_list_serialization(item_list, str_item_name, database):
+def player_list_serialization(item_list, str_item_name):
     serialized_item_dictionary = {}
     item_count = 1
     for item in item_list:
-        serialized_item_dictionary[(str_item_name + str(item_count))] = item.serialization
-        database_item_insertion(item.serialization, database)
+        serialized_item_dictionary[(str_item_name + str(item_count))] = item.serialized_form
+        # database_item_insertion(item.serialized_form, database)
         item_count += 1
     return serialized_item_dictionary
 
 
-def item_add_database(item_list, database):
-    # serialized_item_list = {}
-    for item in item_list:
-        database_item_insertion(item.serialization, database)
-    # database_item_insertion(item.serialized_form, database)
-    # return serialized_item_list
+# def item_add_database(item_list, database):
+#     # serialized_item_list = {}
+#     for item in item_list:
+#         database_item_insertion(item.serialization, database)
+#     # database_item_insertion(item.serialized_form, database)
+#     # return serialized_item_list
 
 
-def round_add_database(tournament):
-    serialized_rounds_list = []
-    for i in tournament.rounds_list:
-        serialized_matches_list = item_list_add_database(i.matches_list, db_matches)
-        i.matches_list = serialized_matches_list
-        database_item_insertion(i.serialized_form, db_rounds)
-        serialized_rounds_list.append(i.serialized_form)
-    return serialized_rounds_list

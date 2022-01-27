@@ -37,17 +37,17 @@ def update_player_field(database, player_id, field_changed, new_input):
     player = Query()
     database.update({field_changed:new_input}, player.id == player_id)
 
-def print_player_data_base(data_base):
+def print_data_base(data_base):
     # lambda x : print(x),full_table
     # return mise_en_forme
-    for player in data_base:
-        print(player)
+    for item in data_base:
+        print(item)
 
 def clear_all_database(data_base):
     data_base.truncate()
 
 
-print_player_data_base(db_players)
+# print_player_data_base(db_players)
 print(search_player_in_data_base("hhrth", db_players))
 
 if __name__ == '__main__':

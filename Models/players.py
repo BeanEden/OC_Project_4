@@ -13,7 +13,7 @@ class Player:
         self.rank = rank
         self.score = 0
         self.id = self.id_player()
-        self.serialization = self.player_serialization()
+        self.serialized_form = self.player_serialization()
 
     def __repr__(self):
         return repr([self.name, self.id, self.rank, self.score])

@@ -89,7 +89,7 @@ class Round:
         for match in self.matches_list:
             if match.result == "result not defined yet":
                 self.status = "open"
-            else :
+            else:
                 self.status = "complete"
         return self.status
 
