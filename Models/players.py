@@ -41,14 +41,10 @@ class Player:
     def score_add(self, value):
         self.score = self.score + value
 
-    def opponents_add(self, opponent):
+    def opponent_add(self, opponent):
         self.opponents_list.append(opponent)
         return self.opponents_list
 
-
-    def player_database_update(self):
-        database_check_removal(self.serialized_form, db_players)
-        database_item_insertion(self.serialized_form, db_players)
 
 
 

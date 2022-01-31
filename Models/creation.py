@@ -47,7 +47,7 @@ def add_a_player():
 
 def player_dictionary_select():
     player_count = 0
-    player_list_tournament = []
+    player_list_tournament = {}
     while player_count < 8:
         player_count += 1
         player = "a"
@@ -59,7 +59,7 @@ def player_dictionary_select():
             player = search_player_in_data_base(user_input_player_id_key, db_players)
         new_player = player_instance_creation_from_data_base(player)
         print("Player added : " + str(new_player))
-        player_list_tournament.append(new_player)
+        player_list_tournament[player_count] = new_player.id
     return player_list_tournament
 
 

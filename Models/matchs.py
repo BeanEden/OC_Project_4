@@ -26,7 +26,7 @@ class Match:
             "match_name": self.name,
             "player_one": self.player_one.serialized_form,
             "player_two": self.player_two.serialized_form,
-            "result": self.result,
+            "result": self.score,
             "id_key": self.id,
         }
         return serialized_match
@@ -55,6 +55,8 @@ class Match:
         elif self.score == 3:
             self.player_one.score_add(0.5)
             self.player_two.score_add(0.5)
+        self.player_one.opponent_add(self.player_two)
+        self.player_two.opponent_add(self.player_one)
 
 
 if __name__ == '__main__':

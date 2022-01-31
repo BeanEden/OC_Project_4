@@ -12,7 +12,7 @@ db_matches = TinyDB("db_matches.json")
 def database_item_insertion(serialized_item, database):
     database_check_removal(serialized_item,database)
     database.insert(serialized_item)
-#
+
 def search_player_in_data_base(id_key,database):
     query = Query()
     item = database.search(query.id_key == str(id_key))
@@ -22,7 +22,6 @@ def search_player_in_data_base(id_key,database):
         print("No such item in the database")
         item = "a"
     return item
-
 
 def database_check_removal(serialized_item, database):
     query = Query()

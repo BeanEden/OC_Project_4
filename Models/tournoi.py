@@ -13,7 +13,7 @@ class Tournament:
         self.place = place
         self.date = date
         self.turn_number = 4
-        self.rounds_list = []
+        self.rounds_list = {}
         self.time_control = time_control
         self.players_list = players_list
         self.description = description
@@ -37,17 +37,8 @@ class Tournament:
         ])
 
     def tournament_append_round(self, round_played):
-        self.rounds_list.append(round_played)
-        for match in round_played.matches_list:
-            self.match_list.append(match)
-            self.opponents_list.append(match.pair_up)
-            self.opponents_list.append(match.pair_up_reverse)
-            print(self.opponents_list)
-        # self.rounds_dictionary[round_played.name] = round_played
-        # player_list_serialization(self.round_played, "Round ", db_rounds)
-        database_item_insertion(round_played.serialized_form, db_rounds)
-        # self.serialized_round_list[round_played.name] = round_played
-        # return self.serialized_round_list
+        self.rounds_list["Round " + str(round_played.count)] = round_played.id
+
 
     def tournament_serialization(self):
         serialized_tournament = {
@@ -55,7 +46,7 @@ class Tournament:
             "tournament_place": self.place,
             "tournament_date": self.date,
             "tournament_turn_number": self.turn_number,
-            "tournament_rounds": player_list_serialization(self.rounds_list, "Round ",db_rounds),
+            "tournament_rounds": self.rounds_list,
             "tournament_time_control": self.time_control,
             "tournament_description": self.description,
             "tournament_player_dictionary": player_list_serialization(self.players_list, "Player ",db_players),
@@ -76,6 +67,9 @@ class Tournament:
     #         "id_key": self.id
     #     }
     #     return serialized_tournament
+    # def tournament_serialized(self):
+    #     for players in self.players_list:
+
 
     def tournament_last_round(self):
         if len(self.rounds_list) != 0:
