@@ -67,17 +67,18 @@ class Round:
     def secondary_rounds_method(self, player_list_instances):
         original_classment = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
         round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
-        # print(round_classment)
         match_list = []
-        # occurence = self.tournament.opponents_list[0]
-        # # opponents_list = self.tournament.opponents_list
-        # # # tournament_list =
-        # # # for match in tournament_list:
-        # # #     opponents_list.append(match)
-        # print(opponents_list)
         for i in range(0, self.matches_number, 1):
             match_count = i + 1
             match_name = "Match " + str(match_count)
+            player_one_rank = i
+            while round_classment[player_one_rank] in match_list:
+                player_one_rank += 1
+            player_two_rank = player_one_rank + 1
+            match_i = Match(match_name, round_classment[player_one_rank], round_classment[player_two_rank], self)
+            check = round_two_player_check(match_i)
+            while check == "already happened":
+                player_two_rank += 1
             match_i = Match(match_name, round_classment[i], round_classment[i + 1], self)
             database_item_insertion(match_i.serialized_form, db_matches)
             match_list.append(match_i)
@@ -99,9 +100,14 @@ class Round:
                 self.status = "complete"
         return self.status
 
-
-
-
+def round_two_player_check(match):
+    query = Query()
+    item = db_matches.search(query.tournament_id == str(match.tournament_name) and (
+                query.player_one == str(match.player_one.id) or query.player_two == str(match.player_two.id)))
+    if match.player_two.id in item:
+        return "already happened"
+    else:
+        return "new"
 
     # def secondary_rounds_method(self):
     #     original_classment = sorted(self.player_list, key=attrgetter('rank'), reverse=True)

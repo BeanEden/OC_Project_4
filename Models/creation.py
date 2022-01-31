@@ -105,9 +105,15 @@ def player_instance_creation_from_data_base(dict_player):
 
 def match_instance_creation_from_data_base(dict_match, round_of_the_match):
     name = dict_match["match_name"]
-    player_one_creation = player_instance_creation_from_data_base(search_player_in_data_base(dict_match["player_one"],db_players))
-    player_two_creation = player_instance_creation_from_data_base(search_player_in_data_base(dict_match["player_two"],db_players))
-    new_match = Match(name, player_one_creation, player_two_creation, round_of_the_match)
+
+    p_one_id = dict_match["player_one"]
+    player_one_creation = search_player_in_data_base(p_one_id,db_players)
+    player_one = player_instance_creation_from_data_base(player_one_creation)
+
+    p_two_id = dict_match["player_two"]
+    player_two_creation = search_player_in_data_base(p_two_id,db_players)
+    player_two = player_instance_creation_from_data_base(player_two_creation)
+    new_match = Match(name, player_one, player_two, round_of_the_match)
     new_match.score = dict_match["result"]
     return new_match
 
@@ -175,3 +181,11 @@ def player_list_score_generator(tournament):
         player_score_generator(player_one, tournament)
         player_list.append(player_one)
     return player_list
+
+def round_two_player_check(match):
+    query = Query()
+    item = db_matches.search(query.tournament_id == str(match.tournament_name) and (query.player_one == str(match.player_one.id) or query.player_two == str(match.player_two.id)))
+    if match.player_two.id in item:
+        return "already happened"
+    else:
+        return "new"
