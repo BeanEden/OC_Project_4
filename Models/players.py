@@ -12,20 +12,12 @@ class Player:
         self.gender = gender
         self.rank = rank
         self.score = 0
-        self.id = self.id_player()
+        self.id = self.first_name + self.family_name[0] + self.birth_date[0:2]
         self.serialized_form = self.player_serialization()
         self.opponents_list = []
 
     def __repr__(self):
         return repr([self.name, self.id, self.rank, self.score])
-
-    def id_player(self):
-        """id = firstname + first letter from family_name + day of birth"""
-        id_key_one = self.first_name
-        id_key_two = self.family_name[0]
-        id_key_three = self.birth_date[0:2]
-        self.id = id_key_one+id_key_two+id_key_three
-        return self.id
 
     def player_serialization(self):
         serialized_player = {
@@ -45,16 +37,6 @@ class Player:
         self.opponents_list.append(opponent)
         return self.opponents_list
 
-
-
-
-
-
-
-
-
-
-# add_a_player()
 
 if __name__ == '__main__':
     print("players.py exécuté")

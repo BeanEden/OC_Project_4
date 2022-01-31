@@ -87,32 +87,43 @@ def tournament_menu():
 #     main_menu()
 # while round_count < tourn
 def tournament_round_start_menu(tournament_played, round_count_number):
-    tournament_add_database(tournament_played)
     while int(round_count_number) <= int(tournament_played.turn_number):
         print_tournament_round_start_menu(round_count_number)
         user_input_tournament_round_start_menu = 0
-        player_list = tournament_played.players_list
+        player_list = players_list_round_creation(tournament_played)
         while user_input_tournament_round_start_menu != 5:
             user_input_tournament_round_start_menu = int(input())
             if user_input_tournament_round_start_menu == 1:
-                if tournament_played.tournament_last_round() is None :
-                    round_one = round_creation_run_function(round_count_number,tournament_played)
+                if tournament_played.tournament_last_round() is None:
+                    round_one = round_creation_run_function(round_count_number, tournament_played)
                     tournament_played.tournament_append_round(round_one)
-                    round_one.round_match_list_definition(round_count_number)
+                    round_one.round_match_list_definition(round_count_number, player_list)
+                    print_data_base(db_players)
+                    print_data_base(db_matches)
                     round_menu(round_one, tournament_played)
-                else :
-                    last_round = tournament_played.last_round
-                    if last_round.status == "open":
-                        round_menu(last_round, tournament_played)
-                    else :
-                        new_round = round_creation_run_function(round_count_number,tournament_played)
+                else:
+                    last_round = tournament_played.tournament_last_round()
+                    if last_round["end_time"] != "unfinished":
+                        new_round = round_creation_run_function(round_count_number, tournament_played)
                         tournament_played.tournament_append_round(new_round)
-                        new_round.round_match_list_definition(round_count_number)
+                        new_round.round_match_list_definition(round_count_number, player_list)
+                        print(db_players)
+                        print(db_matches)
                         round_menu(new_round, tournament_played)
+                    else:
+                        continue_round = round_instance_creation_from_data_base(last_round, tournament_played)
+                        round_menu(continue_round, tournament_played)
 
             elif user_input_tournament_round_start_menu == 2:
-                print_player_list(player_list)
-                tournament_round_start_menu(tournament_played, round_count_number)
+                if round_count_number == 0:
+                    print_player_list(player_list)
+                    fake_input = str(input())
+                    tournament_round_start_menu(tournament_played, round_count_number)
+                else:
+                    player_list = player_list_score_generator(tournament_played)
+                    print_player_list(player_list)
+                    fake_input = str(input())
+                    tournament_round_start_menu(tournament_played, round_count_number)
             elif user_input_tournament_round_start_menu == 3:
                 print(tournament_played)
                 tournament_round_start_menu(tournament_played, round_count_number)
@@ -124,7 +135,7 @@ def tournament_round_start_menu(tournament_played, round_count_number):
 
 def round_menu(round_played, tournament_played):
     round_count_round_menu = round_played.count
-    matches_list = round_played.matches_list
+    matches_list = match_list_generator(tournament_played, round_played)
     print_round_menu(round_count_round_menu)
     user_input_round_menu = 0
     round_played.round_check()
@@ -156,16 +167,17 @@ def round_menu(round_played, tournament_played):
         round_played.round_score_attribution()
         print_round_complete(round_count_round_menu, matches_list)
         tournament_round_start_menu(tournament_played, next_round_count)
+        database_item_insertion(round_played.serialized_form, db_rounds)
 
     else:
         print("l'ensemble des résultats n'a pas été sélectionné\n"
               " le round en cours continue\n")
         tournament_round_start_menu(tournament_played, round_count_round_menu)
-
+        database_item_insertion(round_played.serialized_form, db_rounds)
 
 def select_a_match_for_result(round_played,tournament):
     round_count = round_played.count
-    matches_list = round_played.matches_list
+    matches_list = match_list_generator(tournament, round_played)
     print_select_a_match_for_result(round_count, matches_list)
     user_input_select_a_match_for_result = 0
     while user_input_select_a_match_for_result != 5:
@@ -178,6 +190,7 @@ def select_a_match_for_result(round_played,tournament):
             enter_match_result(matches_list[2], round_played, tournament)
         elif user_input_select_a_match_for_result == 4:
             enter_match_result(matches_list[3], round_played, tournament)
+    player_list_serialization(matches_list, db_matches)
     round_menu(round_played, tournament)
 
 
@@ -195,11 +208,12 @@ def enter_match_result(match, round_played, tournament):
         elif user_input_enter_match_result == 3:
             match.result_attribution(3)
             user_input_enter_match_result = 4
+    database_item_insertion(match.serialized_form, db_matches)
     select_a_match_for_result(round_played, tournament)
 
 
 def tournament_over_menu(tournament_played):
-    tournament_add_database(tournament_played)
+
     print_tournament_over_menu(tournament_played)
     user_input_tournament_over_menu = 0
     while user_input_tournament_over_menu != 6:

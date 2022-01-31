@@ -182,7 +182,8 @@ def print_player_list(player_list):
     print("Player_name - id - rank - score")
     for players in player_list:
         print(players)
-    print("===================================\n")
+    print("===================================\n"
+        "Press a key to go back to round menu\n")
 
 
 def print_tournament_over_menu(tournament_played):

@@ -32,13 +32,10 @@ def database_check_removal(serialized_item, database):
     except :
         print("item_id not found in the database")
 
-def player_list_serialization(item_list, str_item_name, database):
+def player_list_serialization(item_list, database):
     serialized_item_dictionary = {}
-    item_count = 1
     for item in item_list:
-        serialized_item_dictionary[(str_item_name + str(item_count))] = item.serialized_form
         database_item_insertion(item.serialized_form, database)
-        item_count += 1
     return serialized_item_dictionary
 
 def update_player_field(database, player_id, field_changed, new_input):
