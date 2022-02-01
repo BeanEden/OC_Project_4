@@ -72,25 +72,35 @@ def print_consulting_menu():
         "===================================\n"
         "CONSULTING MENU\n"
         "===================================\n"
-        " 1 - Tournament\n"
-        " 2 - Match list\n"
-        " 3 - Player\n"
-        " 4 - Exit\n"
+        " 1 - Player\n"
+        " 2 - Tournament\n"
+        " 3 - Round\n"
+        " 4 - Match\n"
+        " 5 - Exit\n"
         "===================================\n"
         "Enter a choice and press enter :\n")
 
+
+def print_consulting_tournament_menu():
+    print("===================================\n"
+          "TOURNAMENT CONSULTING MENU\n"
+          "===================================\n"
+          " 1 - Consult a specific tournament\n"
+          " 2 - Whole tournament database\n"
+          " 3 - Exit to main menu\n"
+          "===================================\n"
+          "Enter a choice and press enter :\n")
 
 def print_consulting_item_menu(item):
     print("===================================\n"
           + item.upper() + " CONSULTING MENU\n"
           "===================================\n"
           " 1 - Consult a specific " + item + "\n"
-          " 2 - Whole " + item + " database\n"
-          " 3 - Go back to consulting choices\n"
+          " 2 - Consult a specific tournament " + item + " database\n"                                    
+          " 3 - Whole " + item + " database\n"
           " 4 - Exit to main menu\n"
           "===================================\n"
           "Enter a choice and press enter :\n")
-
 
 def print_tournament_round_start_menu(round_count):
     print("===================================\n"
@@ -203,7 +213,8 @@ def print_tournament_over_menu(tournament_played):
         "4 - See tournament details\n"
         "5 - Update a player\n"
         "6 - Go back to main menu\n"
-        "===================================\n")
+        "===================================\n"
+        "Enter an available choice and press enter :\n")
 
 
 def print_player_list_order_select():
@@ -229,7 +240,47 @@ def print_player_list_by_order(players_list, order_choice):
         "===================================\n"
         "Press a key to go back to tournament consulting menu\n")
 
+def print_tournament_list_database(tournament_list):
+    print(
+        "===================================\n"
+        "TOURNAMENT LIST\n"
+        "===================================\n")
+    print("Player_name - id - rank - score")
+    for tournament in tournament_list:
+        print(tournament)
+    print("===================================\n"
+        "Press a key to go back to round menu\n")
 
+
+def print_match_list_database(match_list):
+    print(
+        "===================================\n"
+        "MATCH LIST\n"
+        "===================================\n")
+    print("Player_name - id - rank - score")
+    for match in match_list:
+        print(match)
+    print("===================================\n"
+        "Press a key to go back to round menu\n")
+
+def print_round_list_database(round_list):
+    print(
+        "===================================\n"
+        "ROUND LIST\n"
+        "===================================\n")
+    print("Player_name - id - rank - score")
+    for round in round_list:
+        print(round)
+    print("===================================\n"
+          "Press a key to go back to round menu\n")
+
+
+def print_load_specific_item(item):
+    print("===================================\n"
+          + item.upper() + " LOAD\n"
+          "===================================\n"
+          "Enter " + item + " id and press enter :\n"
+          "Enter exit() to go back :\n")
 # def print_match )
     #
     # @staticmethod

@@ -39,8 +39,8 @@ def player_list_serialization(item_list, database):
     return serialized_item_dictionary
 
 def update_player_field(database, player_id, field_changed, new_input):
-    player = Query()
-    database.update({field_changed:new_input}, player.id == player_id)
+    query = Query()
+    database.update({field_changed: new_input}, query.id_key == str(player_id))
 
 def print_data_base(data_base):
     # lambda x : print(x),full_table

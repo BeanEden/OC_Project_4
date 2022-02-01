@@ -29,7 +29,7 @@ def main_menu():
         elif user_input == 3:
             update_player_select_menu()
         elif user_input == 4:
-            print_consulting_menu()
+            consulting_menu()
 
 
 def tournament_menu():
@@ -60,48 +60,92 @@ def load_a_tournament_menu():
     round_count = round_count[-1]
     tournament_round_start_menu(new_tournament, round_count)
 
-# # def consulting_menu():
-# #     print_consulting_menu()
-# #     user_input_consulting_menu = 0
-# #     while user_input_consulting_menu != 4:
-# #         user_input_consulting_menu = int(input())
-# #         if user_input_consulting_menu == 1:
-# #         consulting_tournament_menu()
-# #         elif user_input_consulting_menu == 2:
-# #         consulting_player_menu()
-# #         elif user_input_consulting_menu == 3:
-# #         consulting_match_menu()
-# #     main_menu()
+def consulting_menu():
+    print_consulting_menu()
+    user_input_consulting_menu = 0
+    while user_input_consulting_menu != 4:
+        user_input_consulting_menu = int(input())
+        if user_input_consulting_menu == 1:
+            consulting_specific_menu("Player", db_players)
+        elif user_input_consulting_menu == 2:
+            consulting_tournament_menu()
+        elif user_input_consulting_menu == 3:
+            consulting_specific_menu("Round", db_rounds)
+        elif user_input_consulting_menu == 4:
+            consulting_specific_menu("Match", db_matches)
+    main_menu()
 #
 #
-# def consulting_tournament_menu():
-#     print_consulting_tournament_menu()
-#     user_input_consulting_tournament_menu = 0
-#     while user_input_consulting_tournament_menu != 4:
-# #         user_input_consulting_tournament_menu = int(input())
-# #         if user_input_consulting_tournament_menu == 1:
-# #
-# #         elif user_input_consulting_tournament_menu == 2:
-# #
-# #         elif user_input_consulting_tournament_menu == 3:
-# #         print_consulting_menu()
-# #     main_menu()
-#
-#
-# def consulting_player_menu():
-#     print_consulting_player_menu()
-#     user_input_consulting_player_menu = 0
-#     while user_input_consulting_player_menu != 4:
-# #         user_input_consulting_player_menu = int(input())
-# #         if user_input_consulting_player_menu == 1:
-# #
-# #         elif user_input_consulting_player_menu == 2:
-# #
-# #         elif user_input_consulting_player_menu == 3:
-# #         print_consulting_menu()
-# #     main_menu()
-#
-#
+def consulting_tournament_menu():
+    print_consulting_tournament_menu()
+    user_input_consulting_tournament_menu = 0
+    while user_input_consulting_tournament_menu != 3:
+        user_input_consulting_tournament_menu = int(input())
+        if user_input_consulting_tournament_menu == 1:
+            specific_tournament_load()
+        elif user_input_consulting_tournament_menu == 2:
+            print_data_base(db_tournament)
+            print("Press a key to go back to round menu\n")
+            fake_input = input()
+            consulting_menu()
+    consulting_menu()
+
+def specific_tournament_load():
+    print_load_a_tournament()
+    tournament = "a"
+    while tournament == "a":
+        user_input_load_tournament_menu = input()
+        tournament = search_player_in_data_base(user_input_load_tournament_menu, db_tournament)
+    print(tournament)
+    print("Press a key to go back to round menu\n")
+    fake_input = input()
+    consulting_menu()
+
+
+def consulting_specific_menu(item, database):
+    print_consulting_item_menu(item)
+    user_input_consulting_player_menu = 0
+    while user_input_consulting_player_menu != 4:
+        user_input_consulting_player_menu = int(input())
+        if user_input_consulting_player_menu == 1:
+            specific_item_load(item, database)
+        elif user_input_consulting_player_menu == 2:
+            specific_tournament_item_load(database)
+        elif user_input_consulting_player_menu == 3:
+            print_data_base(database)
+            print("Press a key to go back to round menu\n")
+            fake_input = input()
+            consulting_menu()
+
+    consulting_menu()
+#         print_consulting_menu()
+#     main_menu()
+
+
+def specific_item_load(item, database):
+    print_load_specific_item(item)
+    item_searched = "a"
+    while item_searched == "a":
+        user_input_load_item = input()
+        specific_item = search_player_in_data_base(user_input_load_item, database)
+        print(specific_item)
+        print("Press a key to go back to round menu\n")
+        fake_input = input()
+        consulting_menu()
+
+def specific_tournament_item_load(database):
+    print_load_a_tournament()
+    query = Query()
+    tournament = "a"
+    while tournament == "a":
+        user_input_load_tournament_menu = input()
+        item = database.search(query.tournament_id == str(user_input_load_tournament_menu))
+        print_data_base(item)
+        print("Press a key to go back to round menu\n")
+        fake_input = input()
+        consulting_menu()
+
+#def consulting_load_a_tournament(item):
 # def consulting_match_menu():
 #     print_consulting_match_menu()
 #     user_input_consulting_match_menu = 0
@@ -310,7 +354,7 @@ def player_list_order_select_menu(player_list, previous_select_menu):
 def update_player_select_menu():
     print_update_select()
     player = "a"
-    user_input_player_id_key = input()
+    user_input_player_id_key = 0
     while player == "a":
         user_input_player_id_key = input()
         if user_input_player_id_key == "exit()":
@@ -327,7 +371,7 @@ def player_update_field_menu(player_id):
         if user_input == 1:
             player_field_update_screen("family_name", player_id, "family_name")
         elif user_input == 2:
-            player_field_update_screen("first_name",player_id, "first_name")
+            player_field_update_screen("first_name", player_id, "first_name")
         elif user_input == 3:
             player_field_update_screen("birth_date", player_id, "birth_date (DD/MM/YYYY)")
         elif user_input == 4:
@@ -339,9 +383,12 @@ def player_update_field_menu(player_id):
 def player_field_update_screen(field, player_id, field_detail):
         print_update_field(field, field_detail)
         user_input = str(input())
-        update_player_field(db_players, player_id,field, user_input)
-        print(field + " updated to " + user_input + "\n"
+        update_player_field(db_players, player_id, field, user_input)
+        print(str(player_id) + " " + field + " updated to " + user_input + "\n"
                       "Enter a key to continue...")
+        print(player_id)
+        # player = search_player_in_data_base(str(player_id), db_players)
+        # print(player)
         fake_input = input()
         player_update_field_menu(player_id)
 
