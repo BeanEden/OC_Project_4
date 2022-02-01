@@ -40,6 +40,7 @@ class Tournament:
 
     def tournament_serialization(self):
         serialized_tournament = {
+            "id_key": self.id,
             "tournament_name": self.name,
             "tournament_place": self.place,
             "tournament_date": self.date,
@@ -48,7 +49,6 @@ class Tournament:
             "tournament_time_control": self.time_control,
             "tournament_description": self.description,
             "tournament_player_dictionary": self.players_list,
-            "id_key": self.id
         }
         return serialized_tournament
 

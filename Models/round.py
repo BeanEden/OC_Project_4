@@ -28,19 +28,21 @@ class Round:
 
     def round_serialization(self):
         serialized_round = {
+            "id_key": self.id,
             "tournament_id": self.tournament_name,
             "round_name": self.name,
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
             "start_time": str(self.start_time),
-            "end_time": str(self.round_time_over()),
-            "id_key": self.id,
+            "end_time": str(self.round_time_over())
         }
         return serialized_round
 
     def round_time_over(self):
         if self.status != "over":
             self.end_time = datetime. datetime. now()
+        else:
+            self.end_time = "unfinished"
         return self.end_time
 
     def round_duration(self):

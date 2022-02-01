@@ -19,13 +19,13 @@ class Match:
 
     def match_serialization(self):
         serialized_match = {
+            "id_key": self.id,
             "tournament_id": self.tournament_name,
             "round_name": self.round,
             "match_name": self.name,
             "player_one": self.player_one.id,
             "player_two": self.player_two.id,
-            "result": self.score,
-            "id_key": self.id,
+            "result": self.score
         }
         return serialized_match
 

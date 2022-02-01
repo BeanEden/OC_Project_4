@@ -5,6 +5,8 @@ from Models.players import Player
 from Models.matchs import Match
 from Models.database import *
 from operator import *
+from Models.View import *
+
 player_one = Player("p1","p1","04/05/2014","gender","1")
 player_two = Player("p2","p2","04/05/2014","gender","2")
 player_three = Player("p3","p3","04/05/2014","gender","3")
@@ -206,7 +208,7 @@ def secondary_rounds_method(round_played, player_list_instances):
     round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
     match_list = []
     match_count = 0
-    for i in range(0, round_played.matches_number, 1):
+    while match_count < round_played.matches_number :
         player_one = round_classment[0]
         player_one_opponents_list = opponents_list_construction(player_one.id, round_played.tournament_name)
         player_two_rank = round_classment.index(player_one) + 1
@@ -221,7 +223,6 @@ def secondary_rounds_method(round_played, player_list_instances):
         match_i = Match(match_name, player_one, player_two, round_played, 0)
         database_item_insertion(match_i.serialized_form, db_matches)
         match_list.append(match_i)
-        print(match_i.opponents)
     round_played.matches_list = match_list
     return match_list
 
@@ -238,3 +239,11 @@ def round_one_method(round_played, player_list_instances):
         match_list.append(match_i)
     round_played.matches_list = match_list
     return match_list
+
+def print_all_round_complete(tournament):
+    for rounds in tournament.rounds_list :
+        previous_round = search_player_in_data_base(rounds, db_rounds)
+        previous_round = round_instance_creation_from_data_base(previous_round,tournament)
+        match_list = match_list_generator
+        round_count = previous_round.count
+        print_round_complete(round_count,match_list)

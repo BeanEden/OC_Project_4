@@ -35,9 +35,15 @@ def print_update_player_menu():
         " 3 - birth_date\n"
         " 4 - gender\n"
         " 5 - rank\n"
-        " 6 - Exit to previous menu \n"
+        " 6 - Exit to main menu \n"
         "===================================\n"
         "Enter a choice and press enter :\n")
+
+def print_update_field(field, field_detail):
+    print("===================================\n"
+        "UPDATE PLAYER " + field + " MENU\n"
+        "===================================\n"
+        "Enter the new " + field_detail + " and press enter :\n")
 
 
 def print_tournament_menu():
@@ -189,14 +195,14 @@ def print_player_list(player_list):
 def print_tournament_over_menu(tournament_played):
     print(
         "===================================\n"
-        "TOURNAMENT " + tournament_played.name + "OVER\n"
+        "TOURNAMENT " + tournament_played.name + " OVER\n"
         "===================================\n"
-        "1 - See player list"
-        "2 - See round list"
-        "3 - See match list"
-        "4 - See tournament details"
-        "5 - Update a player"
-        "6 - Go back to main menu"
+        "1 - See player list\n"
+        "2 - See round list\n"
+        "3 - See match list\n"
+        "4 - See tournament details\n"
+        "5 - Update a player\n"
+        "6 - Go back to main menu\n"
         "===================================\n")
 
 
@@ -205,9 +211,9 @@ def print_player_list_order_select():
         "===================================\n"
         "PLAYERS LIST ORDER CHOICE\n"
         "===================================\n"
-        "1 - Alphabetical order player list (on family_name)"
-        "2 - Rank order"
-        "3 - Go back to previous menu"
+        "1 - Alphabetical order player list (on family_name)\n"
+        "2 - Rank order\n"
+        "3 - Go back to previous menu\n"
         "===================================\n"
         "Enter an available choice and press enter :\n")
 
