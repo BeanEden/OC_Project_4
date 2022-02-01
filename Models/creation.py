@@ -114,14 +114,14 @@ def match_instance_creation_from_data_base(dict_match, round_of_the_match):
     p_two_id = dict_match["player_two"]
     player_two_creation = search_player_in_data_base(p_two_id,db_players)
     player_two = player_instance_creation_from_data_base(player_two_creation)
-    new_match = Match(name, player_one, player_two, round_of_the_match)
-    new_match.score = dict_match["result"]
+    score = dict_match["result"]
+    new_match = Match(name, player_one, player_two, round_of_the_match, score)
     return new_match
 
 
 def round_instance_creation_from_data_base(dict_round, tournament):
     name = dict_round["round_name"]
-    player_list = dict_round["player_list"]
+    # player_list = dict_round["player_list"]
     new_round = Round(name, tournament)
     new_round.start_time = dict_round["start_time"]
     if dict_round["end_time"] != "unifinished":
@@ -138,15 +138,14 @@ def tournament_instance_creation_from_database(dict_tournament):
     date = dict_tournament["tournament_date"]
     time_control = dict_tournament["tournament_time_control"]
     description = dict_tournament["tournament_description"]
-    player_list = []
-    for player in dict_tournament["tournament_player_dictionary"]:
-        player_list.append(player_instance_creation_from_data_base(player))
+    player_list = dict_tournament["tournament_player_dictionary"]
+    # for player in :
+    #     player_list.append(player_instance_creation_from_data_base(player))
     new_tournament = Tournament(name, place, date, time_control, player_list, description)
     round_list = []
-    for i in dict_tournament["tournament_rounds"]:
-        new_tournament.rounds_list.append(round_instance_creation_from_data_base(i, new_tournament))
+    # for i in dict_tournament["tournament_rounds"]:
+    #     new_tournament.rounds_list.append(round_instance_creation_from_data_base(i, new_tournament))
     return new_tournament
-
 
 def match_list_generator(tournament, round_played):
     query = Query()
@@ -155,6 +154,7 @@ def match_list_generator(tournament, round_played):
     for match in item :
         match = match_instance_creation_from_data_base(match, round_played)
         match_list.append(match)
+    match_list = sorted(match_list, key=attrgetter('name'), reverse=False)
     return match_list
 
 def player_score_generator(player, tournament):
@@ -195,7 +195,7 @@ def opponents_list_construction(player_id, tournament_id):
     return opponents_list
 
 def round_match_list_definition(round_played, player_list):
-    if round_played.count == 1:
+    if int(round_played.count) == 1:
         round_played.matches_list = round_one_method(round_played,player_list)
     else:
         round_played.matches_list = secondary_rounds_method(round_played, player_list)
@@ -207,10 +207,8 @@ def secondary_rounds_method(round_played, player_list_instances):
     match_list = []
     match_count = 0
     for i in range(0, round_played.matches_number, 1):
-        print(round_classment)
         player_one = round_classment[0]
         player_one_opponents_list = opponents_list_construction(player_one.id, round_played.tournament_name)
-        print(player_one_opponents_list)
         player_two_rank = round_classment.index(player_one) + 1
         player_two = round_classment[player_two_rank]
         while player_two.id in player_one_opponents_list:
@@ -220,7 +218,7 @@ def secondary_rounds_method(round_played, player_list_instances):
         round_classment.remove(player_two)
         match_count += 1
         match_name = "Match " + str(match_count)
-        match_i = Match(match_name, player_one, player_two, round_played)
+        match_i = Match(match_name, player_one, player_two, round_played, 0)
         database_item_insertion(match_i.serialized_form, db_matches)
         match_list.append(match_i)
         print(match_i.opponents)
@@ -235,7 +233,7 @@ def round_one_method(round_played, player_list_instances):
     for i in range(0, round_played.matches_number):
         match_count = i+1
         match_name = "Match " + str(match_count)
-        match_i = Match(match_name, top_half[i], bottom_half[i], round_played)
+        match_i = Match(match_name, top_half[i], bottom_half[i], round_played, 0)
         database_item_insertion(match_i.serialized_form, db_matches)
         match_list.append(match_i)
     round_played.matches_list = match_list

@@ -33,7 +33,7 @@ class Round:
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
             "start_time": str(self.start_time),
-            "end_time": self.end_time,
+            "end_time": str(self.round_time_over()),
             "id_key": self.id,
         }
         return serialized_round
@@ -48,8 +48,8 @@ class Round:
             self.round_duration = int(self.end_time) - int(self.start_time)
         return self.round_duration
 
-    def round_check(self):
-        for match in self.matches_list:
+    def round_check(self, matches_list):
+        for match in matches_list:
             if match.result == "result not defined yet":
                 self.status = "open"
             else:

@@ -56,7 +56,7 @@ def clear_all_database(data_base):
     data_base.truncate()
 
 # clear_all_database(db_players)
-print_data_base(db_players)
+# print_data_base(db_players)
 
 if __name__ == '__main__':
     print("database.py lancé")
