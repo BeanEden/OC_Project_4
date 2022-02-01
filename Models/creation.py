@@ -4,6 +4,7 @@ from Models.round import Round
 from Models.players import Player
 from Models.matchs import Match
 from Models.database import *
+from operator import *
 player_one = Player("p1","p1","04/05/2014","gender","1")
 player_two = Player("p2","p2","04/05/2014","gender","2")
 player_three = Player("p3","p3","04/05/2014","gender","3")
@@ -182,10 +183,76 @@ def player_list_score_generator(tournament):
         player_list.append(player_one)
     return player_list
 
-def round_two_player_check(match):
+def opponents_list_construction(player_id, tournament_id):
     query = Query()
-    item = db_matches.search(query.tournament_id == str(match.tournament_name) and (query.player_one == str(match.player_one.id) or query.player_two == str(match.player_two.id)))
-    if match.player_two.id in item:
-        return "already happened"
+    item = db_matches.search(query.tournament_id == str(tournament_id) and (query.player_one == str(player_id)))
+    item_two = db_matches.search(query.tournament_id == str(tournament_id) and (query.player_two == str(player_id)))
+    opponents_list = []
+    for match in item :
+        opponents_list.append(match["player_two"])
+    for match in item_two:
+        opponents_list.append(match["player_one"])
+    return opponents_list
+
+# def secondary_rounds_method(round_played, player_list_instances):
+#     original_classment = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+#     round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
+#     print(round_classment)
+#     match_list = []
+#     for i in range(0, round_played.matches_number, 1):
+#         match_count = i + 1
+#         match_name = "Match " + str(match_count)
+#         used_player = []
+#         player_one = ""
+#         player_two = ""
+#         player_one_rank = i
+#         while player_one_rank not in used_player:
+#             used_player.append(player_one_rank)
+#             player_one = round_classment[player_one_rank]
+#             player_one_opponents_list = opponents_list_construction(player_one.id, round_played.tournament_name)
+#             player_two_rank = player_one_rank + 1
+#             player_two = round_classment[player_two_rank]
+#             while player_two in player_one_opponents_list:
+#                 player_two_rank += 1
+#                 player_two = round_classment[player_two_rank]
+#             used_player.append(player_two_rank)
+#             print(used_player)
+#             player_one_rank += 1
+#         match_i = Match(match_name, player_one, player_two, round_played)
+#         database_item_insertion(match_i.serialized_form, db_matches)
+#         match_list.append(match_i)
+#     round_played.matches_list = match_list
+#     return match_list
+
+def round_match_list_definition(round_played, player_list):
+    if round_played.count == 1:
+        round_played.matches_list = round_played.round_one_method(player_list)
     else:
-        return "new"
+        round_played.matches_list = secondary_rounds_method(round_played, player_list)
+    return round_played.matches_list
+
+def secondary_rounds_method(round_played, player_list_instances):
+    original_classment = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+    round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
+    match_list = []
+    match_count = 0
+    for i in range(0, round_played.matches_number, 1):
+        print(round_classment)
+        player_one = round_classment[0]
+        player_one_opponents_list = opponents_list_construction(player_one.id, round_played.tournament_name)
+        print(player_one_opponents_list)
+        player_two_rank = round_classment.index(player_one) + 1
+        player_two = round_classment[player_two_rank]
+        while player_two.id in player_one_opponents_list:
+            player_two_rank += 1
+            player_two = round_classment[player_two_rank]
+        round_classment.remove(player_one)
+        round_classment.remove(player_two)
+        match_count += 1
+        match_name = "Match " + str(match_count)
+        match_i = Match(match_name, player_one, player_two, round_played)
+        database_item_insertion(match_i.serialized_form, db_matches)
+        match_list.append(match_i)
+        print(match_i.opponents)
+    round_played.matches_list = match_list
+    return match_list
