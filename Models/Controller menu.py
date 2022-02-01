@@ -110,7 +110,10 @@ def consulting_specific_menu(item, database):
         if user_input_consulting_player_menu == 1:
             specific_item_load(item, database)
         elif user_input_consulting_player_menu == 2:
-            specific_tournament_item_load(database)
+            if item == "Player":
+                specific_tournament_players_load()
+            else:
+                specific_tournament_item_load(database)
         elif user_input_consulting_player_menu == 3:
             print_data_base(database)
             print("Press a key to go back to round menu\n")
@@ -144,6 +147,20 @@ def specific_tournament_item_load(database):
         print("Press a key to go back to round menu\n")
         fake_input = input()
         consulting_menu()
+
+def specific_tournament_players_load():
+    print_load_a_tournament()
+    tournament = "a"
+    while tournament == "a":
+        user_input_load_tournament_menu = input()
+        tournament = search_player_in_data_base(user_input_load_tournament_menu, db_tournament)
+        players_list = tournament["tournament_player_dictionary"]
+        for item in players_list.values():
+            print(search_player_in_data_base(item, db_players))
+    print("Press a key to go back to round menu\n")
+    fake_input = input()
+    consulting_menu()
+
 
 #def consulting_load_a_tournament(item):
 # def consulting_match_menu():
