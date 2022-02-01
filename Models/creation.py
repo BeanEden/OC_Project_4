@@ -194,39 +194,9 @@ def opponents_list_construction(player_id, tournament_id):
         opponents_list.append(match["player_one"])
     return opponents_list
 
-# def secondary_rounds_method(round_played, player_list_instances):
-#     original_classment = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
-#     round_classment = sorted(original_classment, key=attrgetter('score'), reverse=True)
-#     print(round_classment)
-#     match_list = []
-#     for i in range(0, round_played.matches_number, 1):
-#         match_count = i + 1
-#         match_name = "Match " + str(match_count)
-#         used_player = []
-#         player_one = ""
-#         player_two = ""
-#         player_one_rank = i
-#         while player_one_rank not in used_player:
-#             used_player.append(player_one_rank)
-#             player_one = round_classment[player_one_rank]
-#             player_one_opponents_list = opponents_list_construction(player_one.id, round_played.tournament_name)
-#             player_two_rank = player_one_rank + 1
-#             player_two = round_classment[player_two_rank]
-#             while player_two in player_one_opponents_list:
-#                 player_two_rank += 1
-#                 player_two = round_classment[player_two_rank]
-#             used_player.append(player_two_rank)
-#             print(used_player)
-#             player_one_rank += 1
-#         match_i = Match(match_name, player_one, player_two, round_played)
-#         database_item_insertion(match_i.serialized_form, db_matches)
-#         match_list.append(match_i)
-#     round_played.matches_list = match_list
-#     return match_list
-
 def round_match_list_definition(round_played, player_list):
     if round_played.count == 1:
-        round_played.matches_list = round_played.round_one_method(player_list)
+        round_played.matches_list = round_one_method(round_played,player_list)
     else:
         round_played.matches_list = secondary_rounds_method(round_played, player_list)
     return round_played.matches_list
@@ -254,5 +224,19 @@ def secondary_rounds_method(round_played, player_list_instances):
         database_item_insertion(match_i.serialized_form, db_matches)
         match_list.append(match_i)
         print(match_i.opponents)
+    round_played.matches_list = match_list
+    return match_list
+
+def round_one_method(round_played, player_list_instances):
+    original_classment = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+    top_half = original_classment[0:round_played.matches_number]
+    bottom_half = original_classment[round_played.matches_number:round_played.player_number]
+    match_list = []
+    for i in range(0, round_played.matches_number):
+        match_count = i+1
+        match_name = "Match " + str(match_count)
+        match_i = Match(match_name, top_half[i], bottom_half[i], round_played)
+        database_item_insertion(match_i.serialized_form, db_matches)
+        match_list.append(match_i)
     round_played.matches_list = match_list
     return match_list

@@ -2,11 +2,20 @@ from Models.View import *
 from Models.creation import *
 from operator import *
 
+# def ValueError :
+#     try
+#     except ValueError():
+#         user_input = 0
+#     return user_input
+
 def main_menu():
     print_main_menu()
     user_input = 0
     while user_input != 5:
-        user_input = int(input())
+        try:
+            user_input = int(input())
+        except ValueError:
+            main_menu()
         if user_input == 1:
             tournament_menu()
         elif user_input == 2:
@@ -22,7 +31,10 @@ def tournament_menu():
     print_tournament_menu()
     user_input_tournament_menu = 0
     while user_input_tournament_menu != 3:
-        user_input_tournament_menu = int(input())
+        try:
+            user_input_tournament_menu = int(input())
+        except ValueError:
+            tournament_menu()
         if user_input_tournament_menu == 1:
             tournament_created_played = create_a_tournament()
             tournament_round_start_menu(tournament_created_played,1)
@@ -92,12 +104,15 @@ def tournament_round_start_menu(tournament_played, round_count_number):
         user_input_tournament_round_start_menu = 0
         player_list = players_list_round_creation(tournament_played)
         while user_input_tournament_round_start_menu != 5:
-            user_input_tournament_round_start_menu = int(input())
+            try:
+                user_input_tournament_round_start_menu = int(input())
+            except ValueError:
+                tournament_round_start_menu(tournament_played,round_count_number)
             if user_input_tournament_round_start_menu == 1:
                 if tournament_played.tournament_last_round() is None:
                     round_one = round_creation_run_function(round_count_number, tournament_played)
                     tournament_played.tournament_append_round(round_one)
-                    round_one.round_match_list_definition(round_count_number, player_list)
+                    round_match_list_definition(round_one, player_list)
                     print_data_base(db_players)
                     print_data_base(db_matches)
                     round_menu(round_one, tournament_played)
@@ -106,9 +121,7 @@ def tournament_round_start_menu(tournament_played, round_count_number):
                     if last_round["end_time"] != "unfinished":
                         new_round = round_creation_run_function(round_count_number, tournament_played)
                         tournament_played.tournament_append_round(new_round)
-                        new_round.round_match_list_definition(round_count_number, player_list)
-                        print(db_players)
-                        print(db_matches)
+                        round_match_list_definition(new_round, player_list)
                         round_menu(new_round, tournament_played)
                     else:
                         continue_round = round_instance_creation_from_data_base(last_round, tournament_played)
@@ -145,8 +158,10 @@ def round_menu(round_played, tournament_played):
     else:
         pass
     while user_input_round_menu != 5:
-        user_input_round_menu = int(input())
-
+        try:
+            user_input_round_menu = int(input())
+        except ValueError:
+            round_menu(round_played, tournament_played)
         if user_input_round_menu == 1:
             print_match_list(matches_list, round_count_round_menu)
             fake_input = str(input())
@@ -175,13 +190,17 @@ def round_menu(round_played, tournament_played):
         tournament_round_start_menu(tournament_played, round_count_round_menu)
         database_item_insertion(round_played.serialized_form, db_rounds)
 
+
 def select_a_match_for_result(round_played,tournament):
     round_count = round_played.count
     matches_list = match_list_generator(tournament, round_played)
     print_select_a_match_for_result(round_count, matches_list)
     user_input_select_a_match_for_result = 0
     while user_input_select_a_match_for_result != 5:
-        user_input_select_a_match_for_result = int(input())
+        try:
+            user_input_select_a_match_for_result = int(input())
+        except ValueError:
+            select_a_match_for_result(round_played,tournament)
         if user_input_select_a_match_for_result == 1:
             enter_match_result(matches_list[0], round_played, tournament)
         elif user_input_select_a_match_for_result == 2:
@@ -198,7 +217,10 @@ def enter_match_result(match, round_played, tournament):
     print_enter_match_result(match)
     user_input_enter_match_result = 0
     while user_input_enter_match_result != 4:
-        user_input_enter_match_result = int(input())
+        try :
+            user_input_enter_match_result = int(input())
+        except ValueError:
+            enter_match_result(match, round_played, tournament)
         if user_input_enter_match_result == 1:
             match.result_attribution(1)
             user_input_enter_match_result = 4
@@ -213,11 +235,13 @@ def enter_match_result(match, round_played, tournament):
 
 
 def tournament_over_menu(tournament_played):
-
     print_tournament_over_menu(tournament_played)
     user_input_tournament_over_menu = 0
     while user_input_tournament_over_menu != 6:
-        user_input_tournament_over_menu = int(input())
+        try :
+            user_input_tournament_over_menu = int(input())
+        except ValueError:
+            tournament_over_menu(tournament_played)
         if user_input_tournament_over_menu == 1:
             player_list_argument = tournament_played.player_list_tournament
             previous_tournament_argument = tournament_over_menu(tournament_played)

@@ -7,7 +7,7 @@ class Match:
         self.player_one = player_one
         self.player_two = player_two
         self.score = 0
-        self.result = self.result_view()
+        self.result = "result not defined yet"
         self.opponents = str(self.name + " : " + self.player_one.name + " vs " + self.player_two.name)
         self.round = round_played.name
         self.tournament_name = round_played.tournament_name
