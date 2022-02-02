@@ -49,9 +49,10 @@ class Tournament:
         return serialized_tournament
 
     def tournament_append_round(self, round_played):
-        self.rounds_list.append(round_played.id)
-        # db_tournament.database_item_insertion(self.serialized_form)
-
+        if round_played.id in self.rounds_list:
+            pass
+        else :
+            self.rounds_list.append(round_played.id)
 
 if __name__ == '__main__':
     print("tournament.py executed")

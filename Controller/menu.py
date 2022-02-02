@@ -113,7 +113,7 @@ class Controller:
             if user_input_consulting_tournament_menu == 1:
                 self.specific_tournament_load()
             elif user_input_consulting_tournament_menu == 2:
-                print_data_base(db_tournament)
+                print_data_base(db_tournament.get_all())
                 print("Press a key to go back to round menu\n")
                 input()
                 self.consulting_menu()
@@ -170,7 +170,7 @@ class Controller:
         tournament = "item not found"
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
-            item = database.search(query.tournament_id == str(user_input_load_tournament_menu))
+            item = database.search_in_data_base(query.tournament_id == str(user_input_load_tournament_menu))
             print_data_base(item)
             print("Press a key to go back to round menu\n")
             input()

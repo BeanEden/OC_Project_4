@@ -6,7 +6,7 @@ class Match:
         self.score = score
         self.result = self.result_attribution()
         self.opponents = str(self.name + " : " + self.player_one.name + " vs " + self.player_two.name)
-        self.round = round_played.name
+        self.round = round_played.id
         self.tournament_name = round_played.tournament_name
         self.id = self.name[0] + self.name[-1] + "R" + str(round_played.count) + " " + self.tournament_name
         self.serialized_form = self.match_serialization()
@@ -18,7 +18,7 @@ class Match:
         serialized_match = {
             "id_key": self.id,
             "tournament_id": self.tournament_name,
-            "round_name": self.round,
+            "round_id": self.round,
             "match_name": self.name,
             "player_one": self.player_one.id,
             "player_two": self.player_two.id,

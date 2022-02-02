@@ -127,7 +127,7 @@ class ItemCreation:
 
     def match_list_generator(self, tournament, round_played):
         match_list = []
-        item = db_matches.query_2("tournament_id", tournament.id, "round_name", round_played.name)
+        item = db_matches.query_2("tournament_id", tournament.id, "round_id", round_played.id)
         print(item)
         for match in item:
             match = self.match_instance_creation_from_data_base(match, round_played)
@@ -159,15 +159,30 @@ class ItemCreation:
             player_list.append(player_one_instance)
         return player_list
 
+    # def opponents_list_construction(self, player_id, tournament_id):
+    #     # item = db_matches.query_2("tournament_id", tournament_id, "player_one", player_id)
+    #     item = db_matches.query_2("player_one", player_id, "tournament_id", tournament_id)
+    #     # item_two = db_matches.query_2("tournament_id", tournament_id, "player_two", player_id)
+    #     item_two = db_matches.query_2("player_two", player_id, "tournament_id", tournament_id)
+    #     opponents_list = []
+    #     for match in item:
+    #         opponents_list.append(match["player_two"])
+    #     for match in item_two:
+    #         opponents_list.append(match["player_one"])
+    #     return opponents_list
+
     def opponents_list_construction(self, player_id, tournament_id):
-        item = db_matches.query_2("tournament_id", tournament_id,"player_one", player_id)
-        item_two = db_matches.query_2("tournament_id", tournament_id, "player_otwo", player_id)
+        item = db_matches.search_in_data_base_bis("tournament_id", tournament_id)
+        print(item)
         opponents_list = []
         for match in item:
-            opponents_list.append(match["player_two"])
-        for match in item_two:
-            opponents_list.append(match["player_one"])
+            print(match)
+            if match["player_one"] == player_id:
+                opponents_list.append(match["player_two"])
+            elif match["player_two"] == player_id:
+                opponents_list.append(match["player_one"])
         return opponents_list
+
 
     def round_match_list_definition(self, round_played, player_list):
         if int(round_played.count) == 1:

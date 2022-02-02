@@ -29,12 +29,13 @@ class Round:
             "round_name": self.name,
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
-            "start_time": self.end_time,
+            "start_time": str(self.start_time),
             "end_time": str(self.round_time_over())
         }
         return serialized_round
 
     def round_time_over(self):
+        self.status = self.round_check(self.matches_list)
         if self.status != "over":
             self.end_time = datetime. datetime. now()
         else:

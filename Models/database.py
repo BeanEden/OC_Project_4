@@ -21,11 +21,21 @@ class Database:
 
     def query_2(self, var_1, val_1, var_2, val_2):
         q = Query()
-        return self.db.search((q[var_1] == val_1) and (q[var_2] == val_2))
+        return self.db.search((q[str(var_1)] == str(val_1)) and (q[str(var_2)] == str(val_2)))
 
     def search_in_data_base(self, id_key):
         query = Query()
         item = self.db.search(query.id_key == str(id_key))
+        try:
+            item = item[-1]
+        except IndexError:
+            print("No such item in the database")
+            item = "item not found"
+        return item
+
+    def search_in_data_base_bis(self, value, id_key):
+        query = Query()
+        item = self.db.search(query[value] == str(id_key))
         try:
             item = item[-1]
         except IndexError:
