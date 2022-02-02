@@ -52,14 +52,6 @@ class Tournament:
         self.rounds_list.append(round_played.id)
         # db_tournament.database_item_insertion(self.serialized_form)
 
-    def tournament_last_round(self):
-        if len(self.rounds_list) != 0:
-            last_round = self.rounds_list[-1]
-            print(last_round)
-        else:
-            last_round = None
-        return last_round
-
 
 if __name__ == '__main__':
     print("tournament.py executed")

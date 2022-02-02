@@ -93,7 +93,6 @@ class ItemCreation:
         rank = dict_player["rank"]
         gender = dict_player["gender"]
         new_player = Player(family_name, first_name, age, gender, rank)
-        print(str(new_player) + "newplayer")
         return new_player
 
     def match_instance_creation_from_data_base(self, dict_match, round_of_the_match):
@@ -137,11 +136,8 @@ class ItemCreation:
         return match_list
 
     def player_score_generator(self, player, tournament):
-        query = Query()
-        # item = db_matches.search(query.player_one == str(player.id) and query.tournament_id == str(tournament.id))
-        item = db_matches.query_2("player_one", str(player.id),"tournament_id",str(tournament.id))
-        # item_two = db_matches.search(query.player_two == str(player.id) and query.tournament_id == str(tournament.id))
-        item_two = db_matches.query_2("player_two", str(player.id), "tournament_id", str(tournament.id))
+        item = db_matches.query_2("tournament_id",str(tournament.id),"player_one", str(player.id))
+        item_two = db_matches.query_2("tournament_id", str(tournament.id),"player_two", str(player.id))
         for match in item:
             if match["result"] == 1:
                 player.score += 1
@@ -160,12 +156,12 @@ class ItemCreation:
             player_one_creation = db_players.search_in_data_base(player)
             player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
             self.player_score_generator(player_one_instance, tournament)
-            player_list.append(player_one)
+            player_list.append(player_one_instance)
         return player_list
 
     def opponents_list_construction(self, player_id, tournament_id):
-        item = db_matches.query_2("player_one", player_id, "tournament_id", tournament_id)
-        item_two = db_matches.query_2("player_otwo", player_id, "tournament_id", tournament_id)
+        item = db_matches.query_2("tournament_id", tournament_id,"player_one", player_id)
+        item_two = db_matches.query_2("tournament_id", tournament_id, "player_otwo", player_id)
         opponents_list = []
         for match in item:
             opponents_list.append(match["player_two"])
@@ -190,19 +186,24 @@ class ItemCreation:
             player_one_instance = round_ranking[0]
             player_one_opponents_list = \
                 self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
+            print(player_one_opponents_list)
             player_two_rank = 1
             player_two_instance = round_ranking[player_two_rank]
+            print(player_two_instance)
             while player_two_instance.id in player_one_opponents_list:
                 player_two_rank += 1
                 player_two_instance = round_ranking[player_two_rank]
+                print(player_two_instance)
             round_ranking.remove(player_one_instance)
             round_ranking.remove(player_two_instance)
             match_count += 1
             match_name = "Match " + str(match_count)
-            match_i = Match(match_name, player_one, player_two, round_played, 0)
+            match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
+            print(match_i)
             db_matches.database_item_insertion(match_i.serialized_form)
             match_list.append(match_i)
         round_played.matches_list = match_list
+        print(match_list)
         return match_list
 
     def round_one_method(self, round_played, player_list_instances):

@@ -1,3 +1,5 @@
+import datetime
+
 from Controller.creation import ItemCreation
 from Views import View
 from operator import *
@@ -73,11 +75,11 @@ class Controller:
             tournament = db_tournament.search_in_data_base(user_input_load_tournament_menu)
             print(tournament)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
-        last_round = new_tournament.tournament_last_round()
-        if last_round is not None:
-            last_round = db_rounds.search_in_data_base(last_round)
-            round_count = last_round["round_name"]
-            round_count = round_count[-1]
+        # last_round = new_tournament.tournament_last_round()
+        if len(new_tournament.rounds_list) != 0:
+            last_round = new_tournament.rounds_list[-1]
+            round_count = last_round[1]
+            # last_round = db_rounds.search_in_data_base(last_round)
         else:
             round_count = 1
         self.tournament_round_start_menu(new_tournament, round_count)
@@ -199,15 +201,8 @@ class Controller:
                 except ValueError:
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 if user_input_tournament_round_start_menu == 1:
-                    if tournament_played.tournament_last_round() is None:
-                        print("last_round is none")
-                        round_one = self.creation.round_creation_run_function(round_count_number, tournament_played)
-                        tournament_played.tournament_append_round(round_one)
-                        db_tournament.database_item_insertion(tournament_played.serialized_form)
-                        self.creation.round_match_list_definition(round_one, player_list)
-                        self.round_menu(round_one, tournament_played)
-                    else:
-                        last_round = tournament_played.tournament_last_round()
+                    if len(tournament_played.rounds_list) != 0:
+                        last_round = tournament_played.rounds_list[-1]
                         last_round = db_rounds.search_in_data_base(last_round)
                         if last_round["end_time"] != "unfinished":
                             new_round = self.creation.round_creation_run_function(round_count_number, tournament_played)
@@ -220,6 +215,12 @@ class Controller:
                             continue_round = \
                                 self.creation.round_instance_creation_from_data_base(last_round, tournament_played)
                             self.round_menu(continue_round, tournament_played)
+                    else:
+                        round_one = self.creation.round_creation_run_function(round_count_number, tournament_played)
+                        tournament_played.tournament_append_round(round_one)
+                        db_tournament.database_item_insertion(tournament_played.serialized_form)
+                        self.creation.round_match_list_definition(round_one, player_list)
+                        self.round_menu(round_one, tournament_played)
                 elif user_input_tournament_round_start_menu == 2:
                     if round_count_number == 1:
                         self.view.print_player_list(player_list)
@@ -274,6 +275,7 @@ class Controller:
             elif user_input_round_menu == 4:
                 print("function not defined yet")
         if round_played.status == "complete":
+            round_played.end_time = datetime.datetime.now()
             db_rounds.database_item_insertion(round_played.serialized_form)
             self.view.print_round_complete(round_count_round_menu, matches_list)
             input()
@@ -302,7 +304,6 @@ class Controller:
                 self.enter_match_result(matches_list[2], round_played, tournament)
             elif user_input_select_a_match_for_result == 4:
                 self.enter_match_result(matches_list[3], round_played, tournament)
-        # db_matches.player_list_serialization(matches_list)
         self.round_menu(round_played, tournament)
 
     def enter_match_result(self, match, round_played, tournament):

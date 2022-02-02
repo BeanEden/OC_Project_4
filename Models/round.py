@@ -29,7 +29,7 @@ class Round:
             "round_name": self.name,
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
-            "start_time": str(self.start_time),
+            "start_time": self.end_time,
             "end_time": str(self.round_time_over())
         }
         return serialized_round
