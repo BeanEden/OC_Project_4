@@ -19,7 +19,11 @@ class Database:
         self.database_check_removal(serialized_item)
         self.db.insert(serialized_item)
 
-    def search_player_in_data_base(self, id_key):
+    def query_2(self, var_1, val_1, var_2, val_2):
+        q = Query()
+        return self.db.search((q[var_1] == val_1) and (q[var_2] == val_2))
+
+    def search_in_data_base(self, id_key):
         query = Query()
         item = self.db.search(query.id_key == str(id_key))
         try:
@@ -36,10 +40,17 @@ class Database:
     def get_all(self):
         return self.db.all()
 
+    def player_list_serialization(self, item_list):
+        print(item_list)
+        for item in item_list:
+            item = item.serialized_form
+            self.db.database_item_insertion(item)
+
 db_players = Database("db_players")
 db_tournament = Database("db_tournament")
 db_rounds = Database("db_rounds")
 db_matches = Database("db_matches")
+# db_tournament.clear_database()
 
 if __name__ == '__main__':
     print("database.py executed")

@@ -8,7 +8,11 @@ from Models.matches import *
 def print_data_base(data_base):
     for item in data_base:
         print(item)
-# clear_all_database(db_tournament)
+
+#
+# db_tournament.clear_database()
+# db_matches.clear_database()
+# db_rounds.clear_database()
 # clear_all_database(db_matches)
 # clear_all_database(db_rounds)
 
@@ -66,18 +70,26 @@ class Controller:
         tournament = "item not found"
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
-            tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
+            tournament = db_tournament.search_in_data_base(user_input_load_tournament_menu)
+            print(tournament)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
         last_round = new_tournament.tournament_last_round()
-        round_count = last_round["round_name"]
-        round_count = round_count[-1]
+        if last_round is not None:
+            last_round = db_rounds.search_in_data_base(last_round)
+            round_count = last_round["round_name"]
+            round_count = round_count[-1]
+        else:
+            round_count = 1
         self.tournament_round_start_menu(new_tournament, round_count)
 
     def consulting_menu(self):
         self.view.print_consulting_menu()
         user_input_consulting_menu = 0
-        while user_input_consulting_menu != 4:
-            user_input_consulting_menu = int(input())
+        while user_input_consulting_menu != 5:
+            try:
+                user_input_consulting_menu = int(input())
+            except ValueError:
+                self.consulting_menu()
             if user_input_consulting_menu == 1:
                 self.consulting_specific_menu("Player", db_players)
             elif user_input_consulting_menu == 2:
@@ -92,7 +104,10 @@ class Controller:
         self.view.print_consulting_tournament_menu()
         user_input_consulting_tournament_menu = 0
         while user_input_consulting_tournament_menu != 3:
-            user_input_consulting_tournament_menu = int(input())
+            try:
+                user_input_consulting_tournament_menu = int(input())
+            except ValueError:
+                self.consulting_tournament_menu()
             if user_input_consulting_tournament_menu == 1:
                 self.specific_tournament_load()
             elif user_input_consulting_tournament_menu == 2:
@@ -107,7 +122,7 @@ class Controller:
         tournament = "item not found"
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
-            tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
+            tournament = db_tournament.search_in_data_base(user_input_load_tournament_menu)
         print(tournament)
         print("Press a key to go back to round menu\n")
         input()
@@ -117,7 +132,10 @@ class Controller:
         self.view.print_consulting_item_menu(item)
         user_input_consulting_player_menu = 0
         while user_input_consulting_player_menu != 4:
-            user_input_consulting_player_menu = int(input())
+            try:
+                user_input_consulting_player_menu = int(input())
+            except ValueError:
+                self.consulting_specific_menu(item, database)
             if user_input_consulting_player_menu == 1:
                 self.specific_item_load(item, database)
             elif user_input_consulting_player_menu == 2:
@@ -126,7 +144,7 @@ class Controller:
                 else:
                     self.specific_tournament_item_load(database)
             elif user_input_consulting_player_menu == 3:
-                print_data_base(database)
+                print_data_base(database.get_all())
                 print("Press a key to go back to round menu\n")
                 input()
                 self.consulting_menu()
@@ -138,7 +156,7 @@ class Controller:
         item_searched = "item not found"
         while item_searched == "item not found":
             user_input_load_item = input()
-            specific_item = database.search_player_in_data_base(user_input_load_item)
+            specific_item = database.search_in_data_base(user_input_load_item)
             print(specific_item)
             print("Press a key to go back to round menu\n")
             input()
@@ -161,10 +179,10 @@ class Controller:
         tournament = "item not found"
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
-            tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
+            tournament = db_tournament.search_in_data_base(user_input_load_tournament_menu)
             tournament_players_list = tournament["tournament_player_dictionary"]
             for item in tournament_players_list.values():
-                print(db_players.search_player_in_data_base(item))
+                print(db_players.search_in_data_base(item))
         print("Press a key to go back to round menu\n")
         input()
         self.consulting_menu()
@@ -182,15 +200,19 @@ class Controller:
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 if user_input_tournament_round_start_menu == 1:
                     if tournament_played.tournament_last_round() is None:
+                        print("last_round is none")
                         round_one = self.creation.round_creation_run_function(round_count_number, tournament_played)
                         tournament_played.tournament_append_round(round_one)
+                        db_tournament.database_item_insertion(tournament_played.serialized_form)
                         self.creation.round_match_list_definition(round_one, player_list)
                         self.round_menu(round_one, tournament_played)
                     else:
                         last_round = tournament_played.tournament_last_round()
+                        last_round = db_rounds.search_in_data_base(last_round)
                         if last_round["end_time"] != "unfinished":
                             new_round = self.creation.round_creation_run_function(round_count_number, tournament_played)
                             tournament_played.tournament_append_round(new_round)
+                            db_tournament.database_item_insertion(tournament_played.serialized_form)
                             player_list = self.creation.player_list_score_generator(tournament_played)
                             self.creation.round_match_list_definition(new_round, player_list)
                             self.round_menu(new_round, tournament_played)
@@ -199,7 +221,7 @@ class Controller:
                                 self.creation.round_instance_creation_from_data_base(last_round, tournament_played)
                             self.round_menu(continue_round, tournament_played)
                 elif user_input_tournament_round_start_menu == 2:
-                    if round_count_number == 0:
+                    if round_count_number == 1:
                         self.view.print_player_list(player_list)
                         input()
                         self.tournament_round_start_menu(tournament_played, round_count_number)
@@ -239,7 +261,7 @@ class Controller:
             except ValueError:
                 self.round_menu(round_played, tournament_played)
             if user_input_round_menu == 1:
-                self.print_match_list(matches_list, round_count_round_menu)
+                self.view.print_match_list(matches_list, round_count_round_menu)
                 input()
                 self.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 2:
@@ -280,7 +302,7 @@ class Controller:
                 self.enter_match_result(matches_list[2], round_played, tournament)
             elif user_input_select_a_match_for_result == 4:
                 self.enter_match_result(matches_list[3], round_played, tournament)
-        db_matches.player_list_serialization(matches_list)
+        # db_matches.player_list_serialization(matches_list)
         self.round_menu(round_played, tournament)
 
     def enter_match_result(self, match, round_played, tournament):
@@ -303,7 +325,7 @@ class Controller:
                 match = Match(match.name, match.player_one, match.player_two, round_played, 3)
                 db_matches.database_item_insertion(match.serialized_form)
                 user_input_enter_match_result = 4
-        print_data_base(db_matches)
+        print_data_base(db_matches.get_all())
         self.select_a_match_for_result(round_played, tournament)
 
     def tournament_over_menu(self, tournament_played):
@@ -357,7 +379,7 @@ class Controller:
             if user_input_player_id_key == "exit()":
                 self.main_menu()
             else:
-                player = db_players.search_player_in_data_base(user_input_player_id_key)
+                player = db_players.search_in_data_base(user_input_player_id_key)
         self.player_update_field_menu(player)
 
     def player_update_field_menu(self, player_id):
@@ -388,7 +410,7 @@ class Controller:
 
     def print_all_round_complete(self, tournament):
         for rounds in tournament.rounds_list:
-            previous_round = db_rounds.search_player_in_data_base(rounds)
+            previous_round = db_rounds.search_in_data_base(rounds)
             previous_round = self.creation.round_instance_creation_from_data_base(previous_round, tournament)
             match_list = self.creation.match_list_generator
             round_count = previous_round.count

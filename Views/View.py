@@ -184,8 +184,8 @@ class View:
             "PLAYER LIST\n"
             "===================================\n")
         print("Player_name - id - rank - score")
-        for players in player_list:
-            print(players)
+        for i in player_list:
+            print(i)
         print("===================================\n"
               "Press a key to go back to round menu\n")
 

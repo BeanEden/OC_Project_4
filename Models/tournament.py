@@ -15,7 +15,7 @@ class Tournament:
         self.date = date
         self.turn_number = 4
         self.rounds_list = []
-        self.time_control = TIME_CONTROL[time_control]
+        self.time_control = time_control
         self.players_list = tournament_players_list
         self.description = description
         # self.last_round = self.tournament_last_round()
@@ -50,12 +50,12 @@ class Tournament:
 
     def tournament_append_round(self, round_played):
         self.rounds_list.append(round_played.id)
-        db_tournament.database_item_insertion(self.serialized_form)
+        # db_tournament.database_item_insertion(self.serialized_form)
 
     def tournament_last_round(self):
         if len(self.rounds_list) != 0:
             last_round = self.rounds_list[-1]
-            last_round = db_rounds.search_player_in_data_base(last_round)
+            print(last_round)
         else:
             last_round = None
         return last_round

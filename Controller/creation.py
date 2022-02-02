@@ -33,8 +33,8 @@ class ItemCreation:
                              "2 - blitz \n"
                              "3 - coup rapide\n")
         description = input("Enter tournament general description:\n")
-        # player_list = player_dictionary_select()
-        new_tournament = Tournament(name, place, date, time_control, description, players_dict)
+        player_list = self.player_dictionary_select()
+        new_tournament = Tournament(name, place, date, time_control, description, player_list)
         db_tournament.database_item_insertion(new_tournament.serialized_form)
         return new_tournament
 
@@ -45,7 +45,7 @@ class ItemCreation:
         first_name = input("Player's first name : \n")
         birth_date = input("Birth date (DD/MM/YYYY): \n")
         gender = input("Genre (F/H): \n")
-        rank = input("Rankin (positive number) : \n")
+        rank = input("Ranking (positive number) : \n")
         player = Player(family_name, first_name, birth_date, gender, rank)
         print(player.name + " registered. id = " + player.id)
         serialized_player = player.player_serialization()
@@ -63,10 +63,11 @@ class ItemCreation:
                     "Enter player " + str(player_count) + " id :\n"
                     "id = firstname + family_name[0] + birth_date[0:1]\n"
                     "example : Mark Zuck born on 09/03/1987 -> id = MarkZ09\n")
-                player = db_players.search_player_in_data_base(user_input_player_id_key)
+                player = db_players.search_in_data_base(user_input_player_id_key)
+                print(player)
             new_player = self.player_instance_creation_from_data_base(player)
             print("Player added to tournament : " + str(new_player))
-            player_list_tournament[player_count] = new_player.id
+            player_list_tournament["Player " + str(player_count)] = new_player.id
         return player_list_tournament
 
     def round_creation_run_function(self, round_count_number, tournament_played):
@@ -78,10 +79,11 @@ class ItemCreation:
 
     def players_list_round_creation(self, tournament_played):
         player_list = []
-        for player in tournament_played.players_list.values():
-            new_player = db_players.search_player_in_data_base(player)
-            player_list.append(self.player_instance_creation_from_data_base(new_player))
-        player_list = player_list
+        tournament_player_list = tournament_played.players_list
+        for player in tournament_player_list.values():
+            new_player = db_players.search_in_data_base(player)
+            player_instance = self.player_instance_creation_from_data_base(new_player)
+            player_list.append(player_instance)
         return player_list
 
     def player_instance_creation_from_data_base(self, dict_player):
@@ -91,15 +93,16 @@ class ItemCreation:
         rank = dict_player["rank"]
         gender = dict_player["gender"]
         new_player = Player(family_name, first_name, age, gender, rank)
+        print(str(new_player) + "newplayer")
         return new_player
 
     def match_instance_creation_from_data_base(self, dict_match, round_of_the_match):
         name = dict_match["match_name"]
         p_one_id = dict_match["player_one"]
-        player_one_creation = db_players.search_player_in_data_base(p_one_id)
+        player_one_creation = db_players.search_in_data_base(p_one_id)
         player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
         p_two_id = dict_match["player_two"]
-        player_two_creation = db_players.search_player_in_data_base(p_two_id)
+        player_two_creation = db_players.search_in_data_base(p_two_id)
         player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
         score = dict_match["result"]
         new_match = Match(name, player_one_instance, player_two_instance, round_of_the_match, score)
@@ -120,14 +123,13 @@ class ItemCreation:
         time_control = dict_tournament["tournament_time_control"]
         description = dict_tournament["tournament_description"]
         player_list = dict_tournament["tournament_player_dictionary"]
-        new_tournament = Tournament(name, place, date, time_control, player_list, description)
+        new_tournament = Tournament(name, place, date, time_control, description, player_list)
         return new_tournament
 
     def match_list_generator(self, tournament, round_played):
-        query = Query()
         match_list = []
-        item = db_matches.search(query.round_name == str(round_played.name)
-                                 and query.tournament_id == str(tournament.id))
+        item = db_matches.query_2("tournament_id", tournament.id, "round_name", round_played.name)
+        print(item)
         for match in item:
             match = self.match_instance_creation_from_data_base(match, round_played)
             match_list.append(match)
@@ -136,8 +138,10 @@ class ItemCreation:
 
     def player_score_generator(self, player, tournament):
         query = Query()
-        item = db_matches.search(query.player_one == str(player.id) and query.tournament_id == str(tournament.id))
-        item_two = db_matches.search(query.player_two == str(player.id) and query.tournament_id == str(tournament.id))
+        # item = db_matches.search(query.player_one == str(player.id) and query.tournament_id == str(tournament.id))
+        item = db_matches.query_2("player_one", str(player.id),"tournament_id",str(tournament.id))
+        # item_two = db_matches.search(query.player_two == str(player.id) and query.tournament_id == str(tournament.id))
+        item_two = db_matches.query_2("player_two", str(player.id), "tournament_id", str(tournament.id))
         for match in item:
             if match["result"] == 1:
                 player.score += 1
@@ -151,17 +155,17 @@ class ItemCreation:
 
     def player_list_score_generator(self, tournament):
         player_list = []
-        for player in tournament.players_list.values():
-            player_one_instance = \
-                self.player_instance_creation_from_data_base(db_players.search_player_in_data_base(player))
+        tournament_player_list = tournament.players_list
+        for player in tournament_player_list.values():
+            player_one_creation = db_players.search_in_data_base(player)
+            player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
             self.player_score_generator(player_one_instance, tournament)
             player_list.append(player_one)
         return player_list
 
     def opponents_list_construction(self, player_id, tournament_id):
-        query = Query()
-        item = db_matches.search(query.tournament_id == str(tournament_id) and (query.player_one == str(player_id)))
-        item_two = db_matches.search(query.tournament_id == str(tournament_id) and (query.player_two == str(player_id)))
+        item = db_matches.query_2("player_one", player_id, "tournament_id", tournament_id)
+        item_two = db_matches.query_2("player_otwo", player_id, "tournament_id", tournament_id)
         opponents_list = []
         for match in item:
             opponents_list.append(match["player_two"])
@@ -179,13 +183,14 @@ class ItemCreation:
     def secondary_rounds_method(self, round_played, player_list_instances):
         original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
         round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
+        print(round_ranking)
         match_list = []
         match_count = 0
         while match_count < round_played.matches_number:
             player_one_instance = round_ranking[0]
             player_one_opponents_list = \
                 self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
-            player_two_rank = round_ranking.index(player_one_instance) + 1
+            player_two_rank = 1
             player_two_instance = round_ranking[player_two_rank]
             while player_two_instance.id in player_one_opponents_list:
                 player_two_rank += 1
