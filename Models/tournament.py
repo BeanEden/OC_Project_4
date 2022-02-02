@@ -1,5 +1,5 @@
 
-from Models.creation import *
+from Controller.creation import *
 
 TIME_CONTROL = {
     1: "bullet",

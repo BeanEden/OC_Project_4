@@ -1,6 +1,3 @@
-from Models.database import *
-
-
 class Player:
 
     def __init__(self, family_name, first_name, birth_date, gender, rank):
@@ -14,7 +11,6 @@ class Player:
         self.score = 0
         self.id = self.first_name + self.family_name[0] + self.birth_date[0:2]
         self.serialized_form = self.player_serialization()
-        self.opponents_list = []
 
     def __repr__(self):
         return repr([self.name, self.id, self.rank, self.score])
