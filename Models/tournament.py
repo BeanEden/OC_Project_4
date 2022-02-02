@@ -1,4 +1,4 @@
-from Models.database import *
+
 from Models.creation import *
 
 TIME_CONTROL = {
@@ -9,14 +9,14 @@ TIME_CONTROL = {
 
 
 class Tournament:
-    def __init__(self, name, place, date, time_control, description, players_list):
+    def __init__(self, name, place, date, time_control, description, tournament_players_list):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
         self.rounds_list = []
-        self.time_control = time_control
-        self.players_list = players_list
+        self.time_control = TIME_CONTROL[time_control]
+        self.players_list = tournament_players_list
         self.description = description
         # self.last_round = self.tournament_last_round()
         self.id = self.name + self.date
@@ -34,10 +34,6 @@ class Tournament:
             self.id
         ])
 
-    def tournament_append_round(self, round_played):
-        self.rounds_list.append(round_played.id)
-        database_item_insertion(self.serialized_form, db_tournament)
-
     def tournament_serialization(self):
         serialized_tournament = {
             "id_key": self.id,
@@ -52,16 +48,20 @@ class Tournament:
         }
         return serialized_tournament
 
+    def tournament_append_round(self, round_played):
+        self.rounds_list.append(round_played.id)
+        db_tournament.database_item_insertion(self.serialized_form)
+
     def tournament_last_round(self):
         if len(self.rounds_list) != 0:
             last_round = self.rounds_list[-1]
-            last_round = search_player_in_data_base(last_round, db_rounds)
+            last_round = db_rounds.search_player_in_data_base(last_round)
         else:
             last_round = None
         return last_round
 
 
 if __name__ == '__main__':
-    print("database.py lancé")
+    print("tournament.py executed")
 else:
     pass

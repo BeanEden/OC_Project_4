@@ -1,9 +1,5 @@
-# from Models.players import Player
-from Models.matchs import Match
-from operator import *
-from Models.database import *
-from Models.creation import *
 import datetime
+
 
 class Round:
     def __init__(self, name, tournament):
@@ -46,7 +42,7 @@ class Round:
         return self.end_time
 
     def round_duration(self):
-        if self.end_time != "unfinished" :
+        if self.end_time != "unfinished":
             self.round_duration = int(self.end_time) - int(self.start_time)
         return self.round_duration
 
@@ -57,3 +53,9 @@ class Round:
             else:
                 self.status = "complete"
         return self.status
+
+
+if __name__ == '__main__':
+    print("round.py executed")
+else:
+    pass

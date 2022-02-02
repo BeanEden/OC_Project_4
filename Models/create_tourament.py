@@ -1,5 +1,5 @@
 from Models.database import *
-from Models.tournoi import *
+from Models.tournament import *
 
 
 def create_a_tournament():

@@ -1,6 +1,3 @@
-from Models.database import *
-
-
 class Match:
     def __init__(self, name, player_one, player_two, round_played, score):
         self.name = name
@@ -40,20 +37,8 @@ class Match:
             self.result = "match_nul"
         return self.result
 
-    # def score_attribution(self):
-    #     if self.score == 1:
-    #         self.player_one.score_add(1)
-    #     elif self.result == 2:
-    #         self.player_two.score_add(1)
-    #     elif self.score == 3:
-    #         self.player_one.score_add(0.5)
-    #         self.player_two.score_add(0.5)
-    #     self.player_one.opponent_add(self.player_two)
-    #     self.player_two.opponent_add(self.player_one)
-
-
 
 if __name__ == '__main__':
-    print("matchs.py exécuté")
+    print("matches.py executed")
 else:
     pass

@@ -39,6 +39,6 @@ class Player:
 
 
 if __name__ == '__main__':
-    print("players.py exécuté")
+    print("players.py executed")
 else:
     pass

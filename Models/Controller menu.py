@@ -2,16 +2,23 @@ from Models.View import *
 from Models.creation import *
 from operator import *
 
+
+def print_data_base(data_base):
+    for item in data_base:
+        print(item)
 # clear_all_database(db_tournament)
 # clear_all_database(db_matches)
 # clear_all_database(db_rounds)
-print_data_base(db_tournament)
+
+
+print_data_base(db_tournament.get_all())
 print()
-print_data_base(db_rounds)
+print_data_base(db_rounds.get_all())
 print()
-print_data_base(db_matches)
+print_data_base(db_matches.get_all())
 print()
-print_data_base(db_players)
+print_data_base(db_players.get_all())
+
 
 def main_menu():
     print_main_menu()
@@ -42,23 +49,24 @@ def tournament_menu():
             tournament_menu()
         if user_input_tournament_menu == 1:
             tournament_created_played = create_a_tournament()
-            tournament_round_start_menu(tournament_created_played,1)
-        elif user_input_tournament_menu == 2 :
+            tournament_round_start_menu(tournament_created_played, 1)
+        elif user_input_tournament_menu == 2:
             load_a_tournament_menu()
     main_menu()
 
+
 def load_a_tournament_menu():
     print_load_a_tournament()
-    user_input_load_tournament_menu = 0
-    tournament ="a"
-    while tournament == "a":
+    tournament = "item not found"
+    while tournament == "item not found":
         user_input_load_tournament_menu = input()
-        tournament = search_player_in_data_base(user_input_load_tournament_menu, db_tournament)
+        tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
     new_tournament = tournament_instance_creation_from_database(tournament)
     last_round = new_tournament.tournament_last_round()
     round_count = last_round["round_name"]
     round_count = round_count[-1]
     tournament_round_start_menu(new_tournament, round_count)
+
 
 def consulting_menu():
     print_consulting_menu()
@@ -74,8 +82,8 @@ def consulting_menu():
         elif user_input_consulting_menu == 4:
             consulting_specific_menu("Match", db_matches)
     main_menu()
-#
-#
+
+
 def consulting_tournament_menu():
     print_consulting_tournament_menu()
     user_input_consulting_tournament_menu = 0
@@ -86,19 +94,20 @@ def consulting_tournament_menu():
         elif user_input_consulting_tournament_menu == 2:
             print_data_base(db_tournament)
             print("Press a key to go back to round menu\n")
-            fake_input = input()
+            input()
             consulting_menu()
     consulting_menu()
 
+
 def specific_tournament_load():
     print_load_a_tournament()
-    tournament = "a"
-    while tournament == "a":
+    tournament = "item not found"
+    while tournament == "item not found":
         user_input_load_tournament_menu = input()
-        tournament = search_player_in_data_base(user_input_load_tournament_menu, db_tournament)
+        tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
     print(tournament)
     print("Press a key to go back to round menu\n")
-    fake_input = input()
+    input()
     consulting_menu()
 
 
@@ -117,68 +126,54 @@ def consulting_specific_menu(item, database):
         elif user_input_consulting_player_menu == 3:
             print_data_base(database)
             print("Press a key to go back to round menu\n")
-            fake_input = input()
+            input()
             consulting_menu()
 
     consulting_menu()
-#         print_consulting_menu()
-#     main_menu()
 
 
 def specific_item_load(item, database):
     print_load_specific_item(item)
-    item_searched = "a"
-    while item_searched == "a":
+    item_searched = "item not found"
+    while item_searched == "item not found":
         user_input_load_item = input()
-        specific_item = search_player_in_data_base(user_input_load_item, database)
+        specific_item = database.search_player_in_data_base(user_input_load_item)
         print(specific_item)
         print("Press a key to go back to round menu\n")
-        fake_input = input()
+        input()
         consulting_menu()
+
 
 def specific_tournament_item_load(database):
     print_load_a_tournament()
     query = Query()
-    tournament = "a"
-    while tournament == "a":
+    tournament = "item not found"
+    while tournament == "item not found":
         user_input_load_tournament_menu = input()
         item = database.search(query.tournament_id == str(user_input_load_tournament_menu))
         print_data_base(item)
         print("Press a key to go back to round menu\n")
-        fake_input = input()
+        input()
         consulting_menu()
+
 
 def specific_tournament_players_load():
     print_load_a_tournament()
-    tournament = "a"
-    while tournament == "a":
+    tournament = "item not found"
+    while tournament == "item not found":
         user_input_load_tournament_menu = input()
-        tournament = search_player_in_data_base(user_input_load_tournament_menu, db_tournament)
-        players_list = tournament["tournament_player_dictionary"]
-        for item in players_list.values():
-            print(search_player_in_data_base(item, db_players))
+        tournament = db_tournament.search_player_in_data_base(user_input_load_tournament_menu)
+        tournament_players_list = tournament["tournament_player_dictionary"]
+        for item in tournament_players_list.values():
+            print(db_players.search_player_in_data_base(item))
     print("Press a key to go back to round menu\n")
-    fake_input = input()
+    input()
     consulting_menu()
 
 
-#def consulting_load_a_tournament(item):
-# def consulting_match_menu():
-#     print_consulting_match_menu()
-#     user_input_consulting_match_menu = 0
-#     while user_input_consulting_match_menu != 4:
-#         user_input_consulting_match_menu = int(input())
-#         if user_input_consulting_match_menu == 1:
-#
-#         elif user_input_consulting_match_menu == 2:
-#
-#         elif user_input_consulting_match_menu == 3:
-#         print_consulting_menu()
-#     main_menu()
-
 def tournament_round_start_menu(tournament_played, round_count_number):
     while int(round_count_number) <= int(tournament_played.turn_number):
-        database_item_insertion(tournament_played.serialized_form, db_tournament)
+        db_tournament.database_item_insertion(tournament_played.serialized_form)
         print_tournament_round_start_menu(round_count_number)
         user_input_tournament_round_start_menu = 0
         player_list = players_list_round_creation(tournament_played)
@@ -204,17 +199,16 @@ def tournament_round_start_menu(tournament_played, round_count_number):
                     else:
                         continue_round = round_instance_creation_from_data_base(last_round, tournament_played)
                         round_menu(continue_round, tournament_played)
-
             elif user_input_tournament_round_start_menu == 2:
                 if round_count_number == 0:
                     print_player_list(player_list)
-                    fake_input = str(input())
+                    input()
                     tournament_round_start_menu(tournament_played, round_count_number)
                 else:
                     player_list = player_list_score_generator(tournament_played)
                     player_list = sorted(player_list, key=attrgetter('score'), reverse=True)
                     print_player_list(player_list)
-                    fake_input = str(input())
+                    input()
                     tournament_round_start_menu(tournament_played, round_count_number)
             elif user_input_tournament_round_start_menu == 3:
                 print(tournament_played)
@@ -223,7 +217,7 @@ def tournament_round_start_menu(tournament_played, round_count_number):
                 print(tournament_played)
                 tournament_round_start_menu(tournament_played, round_count_number)
         main_menu()
-    database_item_insertion(tournament_played.serialized_form, db_tournament)
+    db_tournament.database_item_insertion(tournament_played.serialized_form)
     tournament_over_menu(tournament_played)
 
 
@@ -237,8 +231,8 @@ def round_menu(round_played, tournament_played):
     round_status = round_played.round_check(matches_list)
     next_round_count = int(round_count_round_menu)+1
     if round_status == "complete":
-        print("!! Tous les résultats du round ont été saisis !! \n"
-            "exit to tournament menu to start round " + str(next_round_count))
+        print("!! All the round matches results are selected !! \n"
+              "Exit to tournament menu to continue to round " + str(next_round_count))
     else:
         pass
     while user_input_round_menu != 5:
@@ -248,39 +242,30 @@ def round_menu(round_played, tournament_played):
             round_menu(round_played, tournament_played)
         if user_input_round_menu == 1:
             print_match_list(matches_list, round_count_round_menu)
-            fake_input = str(input())
+            input()
             round_menu(round_played, tournament_played)
-
         elif user_input_round_menu == 2:
             select_a_match_for_result(round_played, tournament_played)
             round_menu(round_played, tournament_played)
-
         elif user_input_round_menu == 3:
             print_all_round_complete(tournament_played)
-            fake_input = str(input())
+            input()
             round_menu(round_played, tournament_played)
-
         elif user_input_round_menu == 4:
             print("function not defined yet")
-
-    if round_played.status == "complete" :
-        # next_round_count = str(int(round_count_round_menu) + 1)
-        # round_played.round_score_attribution()
-        # round_played.round_time_over()
-        database_item_insertion(round_played.serialized_form, db_rounds)
+    if round_played.status == "complete":
+        db_rounds.database_item_insertion(round_played.serialized_form)
         print_round_complete(round_count_round_menu, matches_list)
-        fake_input = str(input())
+        input()
         tournament_round_start_menu(tournament_played, next_round_count)
-
-
     else:
-        print("l'ensemble des résultats n'a pas été sélectionné\n"
-              " le round en cours continue\n")
+        print("Not all matches results have been selected\n"
+              "Round " + round_count_round_menu + " continues\n")
+        db_rounds.database_item_insertion(round_played.serialized_form)
         tournament_round_start_menu(tournament_played, round_count_round_menu)
-        database_item_insertion(round_played.serialized_form, db_rounds)
 
 
-def select_a_match_for_result(round_played,tournament):
+def select_a_match_for_result(round_played, tournament):
     round_count = round_played.count
     matches_list = match_list_generator(tournament, round_played)
     print_select_a_match_for_result(round_count, matches_list)
@@ -289,7 +274,7 @@ def select_a_match_for_result(round_played,tournament):
         try:
             user_input_select_a_match_for_result = int(input())
         except ValueError:
-            select_a_match_for_result(round_played,tournament)
+            select_a_match_for_result(round_played, tournament)
         if user_input_select_a_match_for_result == 1:
             enter_match_result(matches_list[0], round_played, tournament)
         elif user_input_select_a_match_for_result == 2:
@@ -298,7 +283,7 @@ def select_a_match_for_result(round_played,tournament):
             enter_match_result(matches_list[2], round_played, tournament)
         elif user_input_select_a_match_for_result == 4:
             enter_match_result(matches_list[3], round_played, tournament)
-    player_list_serialization(matches_list, db_matches)
+    db_matches.player_list_serialization(matches_list)
     round_menu(round_played, tournament)
 
 
@@ -306,21 +291,21 @@ def enter_match_result(match, round_played, tournament):
     print_enter_match_result(match)
     user_input_enter_match_result = 0
     while user_input_enter_match_result != 4:
-        try :
+        try:
             user_input_enter_match_result = int(input())
         except ValueError:
             enter_match_result(match, round_played, tournament)
         if user_input_enter_match_result == 1:
             match = Match(match.name, match.player_one, match.player_two, round_played, 1)
-            database_item_insertion(match.serialized_form, db_matches)
+            db_matches.database_item_insertion(match.serialized_form)
             user_input_enter_match_result = 4
         elif user_input_enter_match_result == 2:
             match = Match(match.name, match.player_one, match.player_two, round_played, 2)
-            database_item_insertion(match.serialized_form, db_matches)
+            db_matches.database_item_insertion(match.serialized_form)
             user_input_enter_match_result = 4
         elif user_input_enter_match_result == 3:
             match = Match(match.name, match.player_one, match.player_two, round_played, 3)
-            database_item_insertion(match.serialized_form, db_matches)
+            db_matches.database_item_insertion(match.serialized_form)
             user_input_enter_match_result = 4
     print_data_base(db_matches)
     select_a_match_for_result(round_played, tournament)
@@ -330,7 +315,7 @@ def tournament_over_menu(tournament_played):
     print_tournament_over_menu(tournament_played)
     user_input_tournament_over_menu = 0
     while user_input_tournament_over_menu != 6:
-        try :
+        try:
             user_input_tournament_over_menu = int(input())
         except ValueError:
             tournament_over_menu(tournament_played)
@@ -349,13 +334,16 @@ def tournament_over_menu(tournament_played):
 
     main_menu()
 
-def player_list_tournament_rank(players_list):
-    player_rank_order = sorted(players_list, key=attrgetter('rank'), reverse=True)
+
+def player_list_tournament_rank(tournament_players_list):
+    player_rank_order = sorted(tournament_players_list, key=attrgetter('rank'), reverse=True)
     return player_rank_order
 
-def player_list_tournament_alphabetical(players_list):
-    player_alphabetical_order = sorted(players_list, key=attrgetter('name'), reverse=False)
+
+def player_list_tournament_alphabetical(tournament_players_list):
+    player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=False)
     return player_alphabetical_order
+
 
 def player_list_order_select_menu(player_list, previous_select_menu):
     print_player_list_order_select()
@@ -368,19 +356,20 @@ def player_list_order_select_menu(player_list, previous_select_menu):
         elif user_input_player_list_order_select == 2:
             player_list_ordered = player_list_tournament_rank(player_list)
             print_player_list_by_order(player_list_ordered, "RANK ORDER")
-    back = previous_select_menu
+    previous_select_menu
+
 
 def update_player_select_menu():
     print_update_select()
-    player = "a"
-    user_input_player_id_key = 0
-    while player == "a":
+    player = "item not found"
+    while player == "item not found":
         user_input_player_id_key = input()
         if user_input_player_id_key == "exit()":
             main_menu()
         else:
-            player = search_player_in_data_base(user_input_player_id_key, db_players)
+            player = db_players.search_player_in_data_base(user_input_player_id_key)
     player_update_field_menu(player)
+
 
 def player_update_field_menu(player_id):
     print_update_player_menu()
@@ -399,16 +388,15 @@ def player_update_field_menu(player_id):
             player_field_update_screen("rank", player_id, "rank (positive number)")
     main_menu()
 
+
 def player_field_update_screen(field, player_id, field_detail):
-        print_update_field(field, field_detail)
-        user_input = str(input())
-        update_player_field(db_players, player_id, field, user_input)
-        print(str(player_id) + " " + field + " updated to " + user_input + "\n"
-                      "Enter a key to continue...")
-        print(player_id)
-        # player = search_player_in_data_base(str(player_id), db_players)
-        # print(player)
-        fake_input = input()
-        player_update_field_menu(player_id)
+    print_update_field(field, field_detail)
+    user_input = str(input())
+    db_players.update_player_field(player_id, field, user_input)
+    print(str(player_id) + " " + field + " updated to " + user_input + "\n"
+          "Press a key to continue...")
+    input()
+    player_update_field_menu(player_id)
+
 
 main_menu()
