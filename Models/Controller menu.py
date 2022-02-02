@@ -229,7 +229,9 @@ def tournament_round_start_menu(tournament_played, round_count_number):
 
 def round_menu(round_played, tournament_played):
     round_count_round_menu = round_played.count
+    print(round_played.matches_list)
     matches_list = match_list_generator(tournament_played, round_played)
+    print(matches_list)
     print_round_menu(round_count_round_menu)
     user_input_round_menu = 0
     round_status = round_played.round_check(matches_list)

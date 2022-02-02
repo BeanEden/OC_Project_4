@@ -128,7 +128,7 @@ def round_instance_creation_from_data_base(dict_round, tournament):
     new_round.start_time = dict_round["start_time"]
     if dict_round["end_time"] != "unifinished":
         new_round.end_time = dict_round["end_time"]
-        new_round.round_duration()
+        # new_round.round_duration()
     for match in dict_round["matches_list"]:
         new_round.matches_list.append(match_instance_creation_from_data_base(match, new_round))
     return new_round
@@ -152,8 +152,8 @@ def tournament_instance_creation_from_database(dict_tournament):
 def match_list_generator(tournament, round_played):
     query = Query()
     match_list = []
-    item = db_matches.search(query.tournament_id == str(tournament.id) and query.round_name == str(round_played.name))
-    for match in item :
+    item = db_matches.search(query.round_name == str(round_played.name) and query.tournament_id == str(tournament.id))
+    for match in item:
         match = match_instance_creation_from_data_base(match, round_played)
         match_list.append(match)
     match_list = sorted(match_list, key=attrgetter('name'), reverse=False)
@@ -231,10 +231,15 @@ def round_one_method(round_played, player_list_instances):
     top_half = original_classment[0:round_played.matches_number]
     bottom_half = original_classment[round_played.matches_number:round_played.player_number]
     match_list = []
-    for i in range(0, round_played.matches_number):
-        match_count = i+1
+    match_count = 0
+    while match_count < round_played.matches_number:
+        match_count += 1
         match_name = "Match " + str(match_count)
-        match_i = Match(match_name, top_half[i], bottom_half[i], round_played, 0)
+        top_player = top_half[0]
+        bottom_player = bottom_half[0]
+        match_i = Match(match_name, top_player, bottom_player, round_played, 0)
+        top_half.remove(top_player)
+        bottom_half.remove(bottom_player)
         database_item_insertion(match_i.serialized_form, db_matches)
         match_list.append(match_i)
     round_played.matches_list = match_list
