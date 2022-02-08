@@ -29,10 +29,6 @@ class Player:
     def score_add(self, value):
         self.score = self.score + value
 
-    def opponent_add(self, opponent):
-        self.opponents_list.append(opponent)
-        return self.opponents_list
-
 
 if __name__ == '__main__':
     print("players.py executed")

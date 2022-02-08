@@ -57,8 +57,8 @@ class ItemCreation:
         player_list_tournament = {}
         while player_count < 8:
             player_count += 1
-            player = "a"
-            while player == "a":
+            player = "item not found"
+            while player == "item not found":
                 user_input_player_id_key = input(
                     "Enter player " + str(player_count) + " id :\n"
                     "id = firstname + family_name[0] + birth_date[0:1]\n"
@@ -159,29 +159,29 @@ class ItemCreation:
             player_list.append(player_one_instance)
         return player_list
 
-    # def opponents_list_construction(self, player_id, tournament_id):
-    #     # item = db_matches.query_2("tournament_id", tournament_id, "player_one", player_id)
-    #     item = db_matches.query_2("player_one", player_id, "tournament_id", tournament_id)
-    #     # item_two = db_matches.query_2("tournament_id", tournament_id, "player_two", player_id)
-    #     item_two = db_matches.query_2("player_two", player_id, "tournament_id", tournament_id)
-    #     opponents_list = []
-    #     for match in item:
-    #         opponents_list.append(match["player_two"])
-    #     for match in item_two:
-    #         opponents_list.append(match["player_one"])
-    #     return opponents_list
-
     def opponents_list_construction(self, player_id, tournament_id):
-        item = db_matches.search_in_data_base_bis("tournament_id", tournament_id)
-        print(item)
+        # item = db_matches.query_2("tournament_id", tournament_id, "player_one", player_id)
+        item = db_matches.query_2("player_one", player_id, "tournament_id", tournament_id)
+        # item_two = db_matches.query_2("tournament_id", tournament_id, "player_two", player_id)
+        item_two = db_matches.query_2("player_two", player_id, "tournament_id", tournament_id)
         opponents_list = []
         for match in item:
-            print(match)
-            if match["player_one"] == player_id:
-                opponents_list.append(match["player_two"])
-            elif match["player_two"] == player_id:
-                opponents_list.append(match["player_one"])
+            opponents_list.append(match["player_two"])
+        for match in item_two:
+            opponents_list.append(match["player_one"])
         return opponents_list
+
+    # def opponents_list_construction(self, player_id, tournament_id):
+    #     item = db_matches.search_in_data_base_bis("tournament_id", tournament_id)
+    #     print(item)
+    #     opponents_list = []
+    #     for match in item:
+    #         print(match)
+    #         if match["player_one"] == player_id:
+    #             opponents_list.append(match["player_two"])
+    #         elif match["player_two"] == player_id:
+    #             opponents_list.append(match["player_one"])
+    #     return opponents_list
 
 
     def round_match_list_definition(self, round_played, player_list):

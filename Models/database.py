@@ -21,7 +21,7 @@ class Database:
 
     def query_2(self, var_1, val_1, var_2, val_2):
         q = Query()
-        return self.db.search((q[str(var_1)] == str(val_1)) and (q[str(var_2)] == str(val_2)))
+        return self.db.search((q[str(var_1)] == str(val_1)) & (q[str(var_2)] == str(val_2)))
 
     def search_in_data_base(self, id_key):
         query = Query()
