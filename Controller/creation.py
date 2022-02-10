@@ -197,35 +197,35 @@ class ItemCreation:
             round_played.matches_list = self.secondary_rounds_method(round_played, player_list)
         return round_played.matches_list
 
-    def secondary_rounds_method(self, round_played, player_list_instances):
-        original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
-        round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
-        print(round_ranking)
-        match_list = []
-        match_count = 0
-        while match_count < round_played.matches_number:
-            player_one_instance = round_ranking[0]
-            player_one_opponents_list = \
-                self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
-            print(player_one_opponents_list)
-            player_two_rank = 1
-            player_two_instance = round_ranking[player_two_rank]
-            print(player_two_instance)
-            while player_two_instance.id in player_one_opponents_list:
-                player_two_rank += 1
-                player_two_instance = round_ranking[player_two_rank]
-                print(player_two_instance)
-            round_ranking.remove(player_one_instance)
-            round_ranking.remove(player_two_instance)
-            match_count += 1
-            match_name = "Match " + str(match_count)
-            match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
-            print(match_i)
-            self.database.database_item_insertion("Match", match_i.serialized_form)
-            match_list.append(match_i)
-        round_played.matches_list = match_list
-        print(match_list)
-        return match_list
+    # def secondary_rounds_method(self, round_played, player_list_instances):
+    #     original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+    #     round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
+    #     print(round_ranking)
+    #     match_list = []
+    #     match_count = 0
+    #     while match_count < round_played.matches_number:
+    #         player_one_instance = round_ranking[0]
+    #         player_one_opponents_list = \
+    #             self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
+    #         print(player_one_opponents_list)
+    #         player_two_rank = 1
+    #         player_two_instance = round_ranking[player_two_rank]
+    #         print(player_two_instance)
+    #         while player_two_instance.id in player_one_opponents_list:
+    #             player_two_rank += 1
+    #             player_two_instance = round_ranking[player_two_rank]
+    #             print(player_two_instance)
+    #         round_ranking.remove(player_one_instance)
+    #         round_ranking.remove(player_two_instance)
+    #         match_count += 1
+    #         match_name = "Match " + str(match_count)
+    #         match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
+    #         print(match_i)
+    #         self.database.database_item_insertion("Match", match_i.serialized_form)
+    #         match_list.append(match_i)
+    #     round_played.matches_list = match_list
+    #     print(match_list)
+    #     return match_list
 
     def possible_opponents_list(self, player, ranked_list, round_played):
             player_opponents_list = \
@@ -237,54 +237,36 @@ class ItemCreation:
             return list_difference
 
 
-    # def secondary_rounds_method(self, round_played, player_list_instances):
-    #     original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
-    #     round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
-    #     bis_list = round_ranking
-    #     match_list = []
-    #     match_count = 0
-    #     while match_count < round_played.matches_number:
-    #         try :
-    #             player_one_instance = bis_list[0]
-    #             player_one_opponents_list = \
-    #                 self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
-    #             player_two_rank = 1
-    #             player_two_instance = bis_list[player_two_rank]
-    #             while player_two_instance.id in player_one_opponents_list:
-    #                     player_two_rank += 1
-    #                     player_two_instance = bis_list[player_two_rank]
-    #                 bis_list.remove(player_one_instance)
-    #                 bis_list.remove(player_two_instance)
-    #                 match_count += 1
-    #                 match_name = "Match " + str(match_count)
-    #                 match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
-    #                 self.database.database_item_insertion("Match", match_i.serialized_form)
-    #                 match_list.append(match_i)
-    #         except IndexError :
-    #             match_count -= 1
-    #             previous_match = match_list[-1]
-    #             bis_list.append(previous_match.player_two)
-    #             match_list.pop
+    def secondary_rounds_method(self, round_played, player_list_instances):
+        original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+        round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
+        match_list = []
+        match_count = 0
+        players_list = []
+        for i in round_ranking :
+            players_list.append(i.id)
+        pairs = self.possible_pairs(round_played.tournament_name, players_list)
+        match_up_list = self.list_comb(pairs)
+        for j in match_up_list:
+            match_count += 1
+            match_name = "Match " + str(match_count)
+            player_one_creation = self.database.search_in_data_base("Player", j[0])
+            player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
+            player_two_creation = self.database.search_in_data_base("Player", j[1])
+            player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
+            match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
+            print(match_i)
+            self.database.database_item_insertion("Match", match_i.serialized_form)
+            match_list.append(match_i)
+        round_played.matches_list = match_list
+        print(match_list)
+        return match_list
 
-    # def tournament_pairs(self, tournament_played_id):
-    #     match_list = self.database.list_match_pairs(tournament_played_id)
-    #     print(match_list)
-    #     pairs_list = []
-    #     for i in match_list :
-    #         p_one_id = i[0]
-    #         player_one_creation = self.database.search_in_data_base("Player", p_one_id)
-    #         player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
-    #         p_two_id = i[1]
-    #         player_two_creation = self.database.search_in_data_base("Player", p_two_id)
-    #         player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
-    #         list.append([player_one_instance, player_two_instance])
-    #     return list
-
-    def possible_pairs(self, tournament):
-        players = []
-        for i in tournament.players_list.values():
-            players.append(i)
-        pairs = self.database.list_match_pairs(tournament.id)
+    def possible_pairs(self, tournament_id, players_list):
+        players = players_list
+        # for i in tournament.players_list.values():
+        #     players.append(i)
+        pairs = self.database.list_match_pairs(tournament_id)
         possible_match_ups = []
         for i in range(8):
             for j in range(i+1, 8):
@@ -319,8 +301,6 @@ class ItemCreation:
                                     list2.append(list_comb[l])
                                     return list2
         return -1
-
-        list_comb(d2)
         # for i in range(len(round_ranking)) :
         #     list = self.possible_opponents_list(round_ranking[i], round_ranking, round_played)
         #     if len(list)>0:
