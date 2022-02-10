@@ -1,12 +1,13 @@
 from Controller.menu import Controller
 from Controller.creation import ItemCreation
 from Views.View import View
+from Models.database import Database
 
-
+db_test = Database("db_test")
 
 def main():
     view = View()
-    creation = ItemCreation()
+    creation = ItemCreation(db_test)
     program = Controller(view, creation)
     program.main_menu()
 

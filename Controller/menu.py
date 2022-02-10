@@ -245,9 +245,7 @@ class Controller:
 
     def round_menu(self, round_played, tournament_played):
         round_count_round_menu = round_played.count
-        # print(round_played.matches_list)
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
-        # print(matches_list)
         self.view.print_round_menu(round_count_round_menu)
         user_input_round_menu = 0
         round_status = round_played.round_check(matches_list)
@@ -327,7 +325,6 @@ class Controller:
                 match = Match(match.name, match.player_one, match.player_two, round_played, 3)
                 self.database.database_item_insertion("Match", match.serialized_form)
                 user_input_enter_match_result = 4
-        print_data_base(self.database.table("Match").get_all())
         self.select_a_match_for_result(round_played, tournament)
 
     def tournament_over_menu(self, tournament_played):

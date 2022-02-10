@@ -57,8 +57,12 @@ class Database:
         for item in item_list:
             item = item.serialized_form
             self.database_item_insertion(table, item)
-    #
-    #
+
+    def list_match_pairs(self, tournament):
+        query = Query()
+        return list(map(lambda x: [x["player_one"], x["player_two"]], self.search_in_data_base_bis("Match", "tournament_id", tournament)))
+        # return self.query_2("match","turn_id",turn,"tournament_id",tournament)
+
     # def get_list_id(self, object_):
     #     return list(map(lambda x: x["id"], db('db2').get_all(object_)))
     #
@@ -68,17 +72,6 @@ class Database:
     #
     # def get_list_players_by_tournament(self, tournament_id):
     #     return list(self.query_1("tournament", "id", tournament_id)[0]["players"].split(";"))
-
-    def list_match_pairs(self, tournament):
-        query = Query()
-        return list(map(lambda x: [x["player_one"], x["player_two"]], self.search_in_data_base_bis("Match", "tournament_id", tournament)))
-        # return self.query_2("match","turn_id",turn,"tournament_id",tournament)
-# db_players = Database("db_players")
-# db_tournament = Database("db_tournament")
-# db_rounds = Database("db_rounds")
-# db_matches = Database("db_matches")
-# db_tournament.clear_database()
-
 
 if __name__ == '__main__':
     print("database.py executed")
