@@ -196,10 +196,40 @@ class ItemCreation:
             round_played.matches_list = self.secondary_rounds_method(round_played, player_list)
         return round_played.matches_list
 
+    # def secondary_rounds_method(self, round_played, player_list_instances):
+    #     original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+    #     round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
+    #     print(round_ranking)
+    #     match_list = []
+    #     match_count = 0
+    #     while match_count < round_played.matches_number:
+    #         player_one_instance = round_ranking[0]
+    #         player_one_opponents_list = \
+    #             self.opponents_list_construction(player_one_instance.id, round_played.tournament_name)
+    #         print(player_one_opponents_list)
+    #         player_two_rank = 1
+    #         player_two_instance = round_ranking[player_two_rank]
+    #         print(player_two_instance)
+    #         while player_two_instance.id in player_one_opponents_list:
+    #             player_two_rank += 1
+    #             player_two_instance = round_ranking[player_two_rank]
+    #             print(player_two_instance)
+    #         round_ranking.remove(player_one_instance)
+    #         round_ranking.remove(player_two_instance)
+    #         match_count += 1
+    #         match_name = "Match " + str(match_count)
+    #         match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
+    #         print(match_i)
+    #         self.database.database_item_insertion("Match", match_i.serialized_form)
+    #         match_list.append(match_i)
+    #     round_played.matches_list = match_list
+    #     print(match_list)
+    #     return match_list
+
+
     def secondary_rounds_method(self, round_played, player_list_instances):
         original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
         round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
-        print(round_ranking)
         match_list = []
         match_count = 0
         while match_count < round_played.matches_number:
@@ -225,6 +255,8 @@ class ItemCreation:
         round_played.matches_list = match_list
         print(match_list)
         return match_list
+
+
 
     def round_one_method(self, round_played, player_list_instances):
         original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)

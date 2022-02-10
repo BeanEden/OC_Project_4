@@ -140,7 +140,7 @@ class Controller:
             except ValueError:
                 self.consulting_specific_menu(item)
             if user_input_consulting_player_menu == 1:
-                self.specific_item_load(item, item)
+                self.specific_item_load(item)
             elif user_input_consulting_player_menu == 2:
                 if item == "Player":
                     self.specific_tournament_players_load()
@@ -245,9 +245,9 @@ class Controller:
 
     def round_menu(self, round_played, tournament_played):
         round_count_round_menu = round_played.count
-        print(round_played.matches_list)
+        # print(round_played.matches_list)
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
-        print(matches_list)
+        # print(matches_list)
         self.view.print_round_menu(round_count_round_menu)
         user_input_round_menu = 0
         round_status = round_played.round_check(matches_list)
@@ -317,15 +317,15 @@ class Controller:
                 self.enter_match_result(match, round_played, tournament)
             if user_input_enter_match_result == 1:
                 match = Match(match.name, match.player_one, match.player_two, round_played, 1)
-                self.database.database_item_insertion("Match",match.serialized_form)
+                self.database.database_item_insertion("Match", match.serialized_form)
                 user_input_enter_match_result = 4
             elif user_input_enter_match_result == 2:
                 match = Match(match.name, match.player_one, match.player_two, round_played, 2)
-                self.database.database_item_insertion("Match",match.serialized_form)
+                self.database.database_item_insertion("Match", match.serialized_form)
                 user_input_enter_match_result = 4
             elif user_input_enter_match_result == 3:
                 match = Match(match.name, match.player_one, match.player_two, round_played, 3)
-                self.database.database_item_insertion("Match",match.serialized_form)
+                self.database.database_item_insertion("Match", match.serialized_form)
                 user_input_enter_match_result = 4
         print_data_base(self.database.table("Match").get_all())
         self.select_a_match_for_result(round_played, tournament)
