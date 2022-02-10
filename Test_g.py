@@ -5,6 +5,7 @@ from Controller.creation import ItemCreation
 from Controller.creation import *
 from Views.View import *
 
+
 player_one = Player("p1","p1","01/05/2014","gender","1")
 player_two = Player("p2","p2","02/05/2014","gender","2")
 player_three = Player("p3","p3","03/05/2014","gender","3")
@@ -22,43 +23,48 @@ creation = ItemCreation(db_test)
 menu = Controller(view, creation)
 
 db_test.player_list_serialization("Player", players_list)
-# print_data_base(db_test.get_all("Player"))
+# print_data_base(db_test.get_all("Tournament"))
 #
 # print_data_base(db_test.get_all("Match"))
-item = db_test.query_2("Match", "player_one", "p6p06", "tournament_id", "t11")
-item_two = db_test.query_2("Match", "player_two", "p6p06", "tournament_id", "t11")
+# item = db_test.query_2("Match", "player_one", "p6p06", "tournament_id", "t11")
+# item_two = db_test.query_2("Match", "player_two", "p6p06", "tournament_id", "t11")
+#
+# partial_item = db_test.search_in_data_base_bis("Match", "player_one", "p6p06")
+# partial_item_two = db_test.search_in_data_base_bis("Match", "player_two", "p6p06")
 
-partial_item = db_test.search_in_data_base("Match", "p6p06")
-
-print_data_base(item)
-print_data_base(item_two)
-# tournament = menu.database.search_in_data_base("Tournament", "t22")
-# new_tournament = menu.creation.tournament_instance_creation_from_database(tournament)
-# creation.create_a_tournament()
+# print_data_base(item)
+# print_data_base(item_two)
+# print(partial_item)
+# # print(partial_item_two)
+tournament = menu.database.search_in_data_base("Tournament", "t22")
+new_tournament = menu.creation.tournament_instance_creation_from_database(tournament)
+# # creation.create_a_tournament()
 # player_list = creation.players_list_round_creation(new_tournament)
 # round_one = creation.round_creation_run_function(1, new_tournament)
-# new_tournament.tournament_append_round(round_one)
 # creation.round_match_list_definition(round_one, player_list)
 # matches_list = creation.match_list_generator(new_tournament, round_one)
-#
+# #
 # round_two = creation.round_creation_run_function(2, new_tournament)
-# new_tournament.tournament_append_round(round_two)
 # creation.round_match_list_definition(round_two, player_list)
 # matches_list_two = creation.match_list_generator(new_tournament, round_two)
 #
 # round_three = creation.round_creation_run_function(3, new_tournament)
-# new_tournament.tournament_append_round(round_three)
 # creation.round_match_list_definition(round_three, player_list)
 # matches_list_three = creation.match_list_generator(new_tournament, round_three)
 #
 # round_four = creation.round_creation_run_function(4, new_tournament)
-# new_tournament.tournament_append_round(round_four)
 # creation.round_match_list_definition(round_four, player_list)
 # matches_list_four = creation.match_list_generator(new_tournament, round_four)
-# #
 #
 #
-#
+# item = db_test.table("Match").search(query.tournament_id == "t22")
+
+
+list = creation.possible_pairs(new_tournament)
+print_data_base(list)
+combed_list = creation.list_comb(list)
+print(combed_list)
+# print(db_test.search_in_data_base_bis("Match", "tournament_id", "t22"))
 # print(str(round_two) + "\n")
 # print(str(round_three) + "\n")
 # print(str(round_four) + "\n")

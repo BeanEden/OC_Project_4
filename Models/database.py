@@ -38,9 +38,8 @@ class Database:
 
     def search_in_data_base_bis(self, table, variable, value):
         query = Query()
-        item = self.db.table(table).search(query[variable] == str(value))
         try:
-            item = item[-1]
+            item = self.db.table(table).search(query[variable] == str(value))
         except IndexError:
             print("No such item in the database")
             item = "item not found"
@@ -54,11 +53,26 @@ class Database:
         return self.db.table(table).all()
 
     def player_list_serialization(self, table, item_list):
-        print(item_list)
+        # print(item_list)
         for item in item_list:
             item = item.serialized_form
             self.database_item_insertion(table, item)
+    #
+    #
+    # def get_list_id(self, object_):
+    #     return list(map(lambda x: x["id"], db('db2').get_all(object_)))
+    #
+    # def get_list_turns_all(self):
+    #     return list(list(i.split(":")) for i in
+    #                 set(map(lambda x: str(x["turn_id"]) + ":" + str(x["tournament_id"]), self.get_all("match"))))
+    #
+    # def get_list_players_by_tournament(self, tournament_id):
+    #     return list(self.query_1("tournament", "id", tournament_id)[0]["players"].split(";"))
 
+    def list_match_pairs(self, tournament):
+        query = Query()
+        return list(map(lambda x: [x["player_one"], x["player_two"]], self.search_in_data_base_bis("Match", "tournament_id", tournament)))
+        # return self.query_2("match","turn_id",turn,"tournament_id",tournament)
 # db_players = Database("db_players")
 # db_tournament = Database("db_tournament")
 # db_rounds = Database("db_rounds")
