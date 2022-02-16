@@ -55,8 +55,7 @@ class ItemCreation:
                 player = self.database.search_in_data_base("Player", user_input_player_id_key)
                 # print(player)
             new_player = self.player_instance_creation_from_data_base(player)
-            print("Player added to tournament : " + str(new_player) + "\n"
-                  + "\n")
+            print("Player added to tournament : " + str(new_player) + "\n")
             player_list_tournament["Player " + str(player_count)] = new_player.id
         return player_list_tournament
 

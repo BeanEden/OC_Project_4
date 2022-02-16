@@ -78,6 +78,7 @@ class Controller:
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
         # last_round = new_tournament.tournament_last_round()
         round_count = self.round_deciding_menu(new_tournament)
+        print(round_count)
         # if len(new_tournament.rounds_list) > 0:
         #     last_round = new_tournament.rounds_list[-1]
         #     print(last_round)
@@ -225,7 +226,10 @@ class Controller:
                 if user_input_tournament_round_start_menu == 1:
                     if len(tournament_played.rounds_list) > 0:
                         last_round = tournament_played.rounds_list[-1]
+                        print(tournament_played.rounds_list)
                         last_round = self.database.search_in_data_base("Round", last_round)
+                        print(last_round)
+                        print(last_round["end_time"])
                         if last_round["end_time"] != "unfinished":
                             new_round = self.creation.round_creation_run_function(round_count_number, tournament_played)
                             tournament_played.tournament_append_round(new_round)
@@ -299,7 +303,9 @@ class Controller:
                 print("function not defined yet")
         if round_played.status == 0:
             round_played.end_time = datetime.datetime.now()
-            self.database.database_item_insertion("Round", round_played.serialized_form)
+            serialized = round_played.serialized_form
+            serialized["end_time"] = str(datetime.datetime.now())
+            self.database.database_item_insertion("Round", serialized)
             self.creation.player_list_score_generator(tournament_played)
             self.view.print_round_complete(round_played, matches_list)
             input()
@@ -362,7 +368,7 @@ class Controller:
             except ValueError:
                 self.tournament_over_menu(tournament_played)
             if user_input_tournament_over_menu == 1:
-                player_list_argument = tournament_played.player_list_tournament
+                player_list_argument = tournament_played.players_list
                 previous_tournament_argument = self.tournament_over_menu(tournament_played)
                 self.player_list_order_select_menu(player_list_argument, previous_tournament_argument)
             elif user_input_tournament_over_menu == 2:
@@ -438,5 +444,6 @@ class Controller:
             previous_round = self.database.search_in_data_base("Round", rounds)
             previous_round = self.creation.round_instance_creation_from_data_base(previous_round, tournament)
             match_list = self.creation.match_list_generator
+            print(match_list)
             round_count = previous_round.count
             self.view.print_round_complete(round_count, match_list)

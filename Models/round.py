@@ -5,6 +5,7 @@ class Round:
     date_time = datetime.datetime.now()
     start_time = date_time
     status = 1
+    end_time = "unfinished"
 
     def __init__(self, name, tournament):
         self.name = name
@@ -12,7 +13,6 @@ class Round:
         self.player_list = self.tournament.players_list
         self.player_number = len(self.player_list)
         self.matches_number = int(self.player_number / 2)
-        self.end_time = "unfinished"
         self.round_duration = ""
         self.count = name[-1]
         self.tournament_name = tournament.id
@@ -32,17 +32,17 @@ class Round:
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
             "start_time": str(self.start_time),
-            "end_time": str(self.end_time),
-            "status": self.status
+            "end_time": str(self.end_time)
+            # "status": self.status
         }
         return serialized_round
 
-    # def round_time_over(self):
-    #     if self.status == 0:
-    #         end_time = datetime. datetime. now()
-    #     else:
-    #         end_time = "unfinished"
-    #     return end_time
+    def round_time_over(self):
+        if self.status == 0:
+            end_time = datetime. datetime. now()
+        else:
+            end_time = "unfinished"
+        return end_time
 
     def round_duration(self):
         if self.end_time != "unfinished":
