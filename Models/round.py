@@ -5,9 +5,9 @@ class Round:
     date_time = datetime.datetime.now()
     start_time = date_time
     status = 1
-    end_time = "unfinished"
 
-    def __init__(self, name, tournament):
+
+    def __init__(self, name, tournament, start_time = "", end_time ="unfinished"):
         self.name = name
         self.tournament = tournament
         self.player_list = self.tournament.players_list
@@ -16,6 +16,7 @@ class Round:
         self.round_duration = ""
         self.count = name[-1]
         self.tournament_name = tournament.id
+        self.end_time = end_time
         self.matches_list = []
         self.id = self.name[0] + self.count + " " + tournament.id
         self.matches_list_serialized = []

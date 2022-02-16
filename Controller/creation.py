@@ -99,10 +99,9 @@ class ItemCreation:
 
     def round_instance_creation_from_data_base(self, dict_round, tournament):
         name = dict_round["round_name"]
-        new_round = Round(name, tournament)
-        new_round.start_time = dict_round["start_time"]
-        if dict_round["end_time"] != "unfinished":
-            new_round.end_time = dict_round["end_time"]
+        end_time = dict_round["end_time"]
+        start_time = dict_round["start_time"]
+        new_round = Round(name, tournament, start_time, end_time)
         return new_round
 
     def tournament_instance_creation_from_database(self, dict_tournament):

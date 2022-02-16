@@ -264,7 +264,6 @@ class Controller:
                     self.view.print_tournament_info(tournament_played.serialized_form)
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 elif user_input_tournament_round_start_menu == 4:
-                    print(tournament_played)
                     self.tournament_round_start_menu(tournament_played, round_count_number)
             self.main_menu()
         self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
@@ -279,8 +278,8 @@ class Controller:
         round_status = round_played.round_check(matches_list)
         next_round_count = int(round_count_round_menu)+1
         if round_status == 0:
-            print("!! All the round matches results are selected !! \n"
-                  "Exit to tournament menu to continue to round " + str(next_round_count))
+            print("!! All the round matches results are selected !!\n"
+                  "Exit to tournament menu to continue to the next step")
         else:
             pass
         while user_input_round_menu != 5:
@@ -441,9 +440,12 @@ class Controller:
 
     def print_all_round_complete(self, tournament):
         for rounds in tournament.rounds_list:
-            previous_round = self.database.search_in_data_base("Round", rounds)
-            previous_round = self.creation.round_instance_creation_from_data_base(previous_round, tournament)
-            match_list = self.creation.match_list_generator
+            previous_round_data = self.database.search_in_data_base("Round", rounds)
+            previous_round = self.creation.round_instance_creation_from_data_base(previous_round_data, tournament)
+            previous_round.start_time = previous_round_data["start_time"]
+            previous_round.end_time = previous_round_data["end_time"]
+            print(previous_round.serialized_form)
+            match_list = self.creation.match_list_generator(tournament, previous_round)
             print(match_list)
             round_count = previous_round.count
             self.view.print_round_complete(round_count, match_list)
