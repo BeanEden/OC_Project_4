@@ -2,8 +2,6 @@ import datetime
 
 
 class Round:
-    date_time = datetime.datetime.now()
-    start_time = date_time
     status = 1
 
 
@@ -16,6 +14,7 @@ class Round:
         self.round_duration = ""
         self.count = name[-1]
         self.tournament_name = tournament.id
+        self.start_time = start_time
         self.end_time = end_time
         self.matches_list = []
         self.id = self.name[0] + self.count + " " + tournament.id

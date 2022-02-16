@@ -1,3 +1,4 @@
+import datetime
 
 from Models.tournament import Tournament
 from Models.round import Round
@@ -62,7 +63,8 @@ class ItemCreation:
     def round_creation_run_function(self, round_count_number, tournament_played):
         round_name = "Round " + str(round_count_number)
         print(round_name + " started...")
-        round_one = Round(round_name, tournament_played)
+        start_time = datetime.datetime.now()
+        round_one = Round(round_name, tournament_played, start_time)
         tournament_played.tournament_append_round(round_one)
         self.database.database_item_insertion("Round", round_one.serialized_form)
         return round_one
@@ -85,22 +87,24 @@ class ItemCreation:
         new_player = Player(family_name, first_name, age, gender, rank)
         return new_player
 
-    def match_instance_creation_from_data_base(self, dict_match, round_of_the_match):
+    def match_instance_creation_from_data_base(self, dict_match, round_of_the_match, tournament):
         name = dict_match["match_name"]
         p_one_id = dict_match["player_one"]
         player_one_creation = self.database.search_in_data_base("Player", p_one_id)
         player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
+        self.player_score_generator_round(player_one_instance, tournament, round_of_the_match.id)
         p_two_id = dict_match["player_two"]
         player_two_creation = self.database.search_in_data_base("Player", p_two_id)
         player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
+        self.player_score_generator_round(player_two_instance, tournament, round_of_the_match.id)
         score = dict_match["result"]
         new_match = Match(name, player_one_instance, player_two_instance, round_of_the_match, score)
         return new_match
 
     def round_instance_creation_from_data_base(self, dict_round, tournament):
         name = dict_round["round_name"]
-        end_time = dict_round["end_time"]
         start_time = dict_round["start_time"]
+        end_time = dict_round["end_time"]
         new_round = Round(name, tournament, start_time, end_time)
         return new_round
 
@@ -113,7 +117,6 @@ class ItemCreation:
         rounds_list = dict_tournament["tournament_rounds"]
         player_list = dict_tournament["tournament_player_dictionary"]
         new_tournament = Tournament(name, place, date, time_control, description, player_list, rounds_list)
-
         return new_tournament
 
     def match_list_generator(self, tournament, round_played):
@@ -121,33 +124,62 @@ class ItemCreation:
         item = self.database.query_2("Match", "tournament_id", tournament.id, "round_id", round_played.id)
         # print(item)
         for match in item:
-            match = self.match_instance_creation_from_data_base(match, round_played)
-            score = self.player_list_score_generator(tournament)
+            match = self.match_instance_creation_from_data_base(match, round_played, tournament)
             match_list.append(match)
         match_list = sorted(match_list, key=attrgetter('name'), reverse=False)
         return match_list
 
-    def player_score_generator(self, player, tournament):
-        item = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_one", str(player.id))
-        item_two = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_two", str(player.id))
-        for match in item:
+    # def player_score_generator(self, player, tournament, id_round_of_the_match):
+    #     item = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_one", str(player.id))
+    #     item_two = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_two", str(player.id))
+    #     for match in item:
+    #         if match["result"] == 1:
+    #             player.score += 1
+    #         elif match["result"] == 3:
+    #             player.score += 0.5
+    #     for match in item_two:
+    #         if match["result"] == 2:
+    #             player.score += 1
+    #         elif match["result"] == 3:
+    #             player.score += 0.5
+
+    def player_score_generator_round(self, player, tournament, id_round_of_the_match):
+        item_full = []
+        item_two_full = []
+        round_list = tournament.rounds_list
+        check_list = round_list.index(id_round_of_the_match)+1
+        for round in range(0, check_list):
+            round_id = round_list[round]
+            try :
+                item = self.database.query_2("Match", "round_id", round_id, "player_one", str(player.id))
+                item_full.append(item[-1])
+            except IndexError :
+                pass
+            try :
+                item_two = self.database.query_2("Match", "round_id", round_id, "player_two", str(player.id))
+                item_two_full.append(item_two[-1])
+            except IndexError :
+                pass
+        for match in item_full:
             if match["result"] == 1:
                 player.score += 1
             elif match["result"] == 3:
                 player.score += 0.5
-        for match in item_two:
+        for match in item_two_full:
             if match["result"] == 2:
                 player.score += 1
             elif match["result"] == 3:
                 player.score += 0.5
+        return player.score
 
     def player_list_score_generator(self, tournament):
         player_list = []
         tournament_player_list = tournament.players_list
+        last_round = tournament.rounds_list[-1]
         for player in tournament_player_list.values():
             player_one_creation = self.database.search_in_data_base("Player", player)
             player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
-            self.player_score_generator(player_one_instance, tournament)
+            self.player_score_generator_round(player_one_instance, tournament, last_round)
             player_list.append(player_one_instance)
         return player_list
 
@@ -199,8 +231,10 @@ class ItemCreation:
             match_name = "Match " + str(match_count)
             player_one_creation = self.database.search_in_data_base("Player", j[0])
             player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
+            self.player_score_generator(player_one_instance, tournament_played)
             player_two_creation = self.database.search_in_data_base("Player", j[1])
             player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
+            self.player_score_generator(player_two_instance, tournament_played)
             match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
             print(match_i)
             self.database.database_item_insertion("Match", match_i.serialized_form)
@@ -252,20 +286,19 @@ class ItemCreation:
         return -1
 
     def round_one_method(self, round_played, player_list_instances):
-        original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
+        original_ranking = self.player_list_sorting(player_list_instances, True)
         top_half = original_ranking[0:round_played.matches_number]
         bottom_half = original_ranking[round_played.matches_number:round_played.player_number]
         match_list = []
         match_count = 0
         while match_count < round_played.matches_number:
+            top_player = top_half[match_count]
+            bottom_player = bottom_half[match_count]
             match_count += 1
             match_name = "Match " + str(match_count)
-            top_player = top_half[0]
-            bottom_player = bottom_half[0]
             match_i = Match(match_name, top_player, bottom_player, round_played, 0)
-            top_half.remove(top_player)
-            bottom_half.remove(bottom_player)
             self.database.database_item_insertion("Match", match_i.serialized_form)
+            print(match_i)
             match_list.append(match_i)
         round_played.matches_list = match_list
         return match_list

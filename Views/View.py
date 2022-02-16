@@ -268,5 +268,6 @@ class View:
               "Enter exit() to go back :\n")
 
     def print_tournament_info(self, tournament):
+
         for key, value in tournament.items():
             print(str(key) + " : " + str(value))
