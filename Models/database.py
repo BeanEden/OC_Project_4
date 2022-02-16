@@ -60,7 +60,13 @@ class Database:
 
     def list_match_pairs(self, tournament):
         query = Query()
-        return list(map(lambda x: [x["player_one"], x["player_two"]], self.search_in_data_base_bis("Match", "tournament_id", tournament)))
+        return list(map(lambda x: [x["player_one"], x["player_two"]],
+                        self.search_in_data_base_bis("Match", "tournament_id", tournament)))
+
+    def list_query_one(self, table, var_1, val_1):
+        query = Query()
+        return list(map(lambda x: print(x),
+                        self.search_in_data_base_bis(table, var_1, val_1)))
         # return self.query_2("match","turn_id",turn,"tournament_id",tournament)
 
     # def get_list_id(self, object_):

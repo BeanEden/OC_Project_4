@@ -117,7 +117,7 @@ class ItemCreation:
     def match_list_generator(self, tournament, round_played):
         match_list = []
         item = self.database.query_2("Match", "tournament_id", tournament.id, "round_id", round_played.id)
-        print(item)
+        # print(item)
         for match in item:
             match = self.match_instance_creation_from_data_base(match, round_played)
             match_list.append(match)
@@ -176,9 +176,13 @@ class ItemCreation:
                     list_difference.append(item)
             return list_difference
 
+    def player_list_sorting(self, player_list_instances, boolean_order=True):
+        player_list_instances = sorted(player_list_instances, key=attrgetter('rank'), reverse=boolean_order)
+        player_list_instances = sorted(player_list_instances, key=attrgetter('score'), reverse=boolean_order)
+        return player_list_instances
+
     def secondary_rounds_method(self, round_played, player_list_instances):
-        original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
-        round_ranking = sorted(original_ranking, key=attrgetter('score'), reverse=True)
+        round_ranking = self.player_list_sorting(player_list_instances,False)
         match_list = []
         match_count = 0
         players_list = []
@@ -198,7 +202,7 @@ class ItemCreation:
             self.database.database_item_insertion("Match", match_i.serialized_form)
             match_list.append(match_i)
         round_played.matches_list = match_list
-        print(match_list)
+        # print(match_list)
         return match_list
 
     def possible_pairs(self, tournament_id, players_list):
@@ -211,7 +215,6 @@ class ItemCreation:
             for j in range(i+1, 8):
                 if [players[i], players[j]] not in pairs:
                     possible_match_ups.append([players[i], players[j], i+j])
-
         possible_match_ups.sort(key=lambda x: x[2], reverse=True)
         return possible_match_ups
 
@@ -238,8 +241,56 @@ class ItemCreation:
                                 if (len(list2) > 3): list2.pop()
                                 if self.check_player_exist(list2, list_comb[l]):
                                     list2.append(list_comb[l])
+                                    for i in list2:
+                                        print(i)
                                     return list2
         return -1
+
+    # def list_comb_check(self, list_comb):
+    #     list2 = []
+    #     for i in range(len(list_comb)):
+    #         if len(list2) > 0: list2.pop()
+    #         list2.append(list_comb[i])
+    #         for j in range(i + 1, len(list_comb)):
+    #             if (len(list2) > 1): list2.pop()
+    #             if self.check_player_exist(list2, list_comb[j]):
+    #                 list2.append(list_comb[j])
+    #                 for k in range(j + 1, len(list_comb)):
+    #                     if (len(list2) > 2): list2.pop()
+    #                     if self.check_player_exist(list2, list_comb[k]):
+    #                         list2.append(list_comb[k])
+    #                         for l in range(k + 1, len(list_comb)):
+    #                             if (len(list2) > 3): list2.pop()
+    #                             if self.check_player_exist(list2, list_comb[l]):
+    #                                 list2.append(list_comb[l])
+    #                                 print(list2)
+    #                                 return list2
+    #
+    #     return -1
+
+    def try_recursive(self, list_comb, list2, i, count_number):
+        for i in range(i + 1, len(list_comb)):
+            if (len(list2) > count_number) : list2.pop()
+            if self.check_player_exist(list2, list_comb[i]):
+                list2.append(list_comb[i])
+                count_number += 1
+                return self.try_recursive(list_comb, list2, i+1, count_number)
+
+    def list_comb_recursive(self, list_comb):
+        list2 = []
+        count_number = 0
+        for i in range(len(list_comb)):
+            if len(list2) > count_number : list2.pop()
+            list2.append(list_comb[i])
+            count_number += 1
+            i += 1
+            self.try_recursive(list_comb, list2, i, count_number)
+            for i in list2:
+                print(i)
+            # print(list2)
+            return list2
+        return -1
+
 
     def round_one_method(self, round_played, player_list_instances):
         original_ranking = sorted(player_list_instances, key=attrgetter('rank'), reverse=True)
