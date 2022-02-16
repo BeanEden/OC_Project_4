@@ -133,15 +133,17 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_round_complete(self, round_count, matches_list):
+    def print_round_complete(self, round_played, matches_list):
         print(
             "===================================\n"
-            "ROUND " + str(round_count) + " COMPLETE\n"
+            "ROUND " + str(round_played.count) + " COMPLETE\n"
             "===================================\n"
             + str(matches_list[0]) + "\n"
             + str(matches_list[1]) + "\n"
             + str(matches_list[2]) + "\n"
             + str(matches_list[3]) + "\n"
+            "Start time : " + str(round_played.start_time) + "\n"
+            "End time : " + str(round_played.end_time) + "\n"
             "===================================\n"
             "Press a key to continue")
 
@@ -182,8 +184,8 @@ class View:
         print(
             "===================================\n"
             "PLAYER LIST\n"
-            "===================================\n")
-        print("Player_name - id - rank - score")
+            "===================================\n"
+            "Player_name - id - rank - score")
         for i in player_list:
             print(i)
         print("===================================\n"
@@ -264,3 +266,7 @@ class View:
               "===================================\n"
               "Enter " + item + " id and press enter :\n"
               "Enter exit() to go back :\n")
+
+    def print_tournament_info(self, tournament):
+        for key, value in tournament.items():
+            print(str(key) + " : " + str(value))

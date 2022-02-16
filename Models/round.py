@@ -2,16 +2,18 @@ import datetime
 
 
 class Round:
+    date_time = datetime.datetime.now()
+    start_time = date_time
+    status = 1
+
     def __init__(self, name, tournament):
         self.name = name
         self.tournament = tournament
         self.player_list = self.tournament.players_list
         self.player_number = len(self.player_list)
         self.matches_number = int(self.player_number / 2)
-        self.start_time = datetime. datetime. now()
         self.end_time = "unfinished"
         self.round_duration = ""
-        self.status = "open"
         self.count = name[-1]
         self.tournament_name = tournament.id
         self.matches_list = []
@@ -30,17 +32,17 @@ class Round:
             # "matches_list": self.matches_list,
             # "players_list": player_list_serialization(self.player_list, "Player ", db_players),
             "start_time": str(self.start_time),
-            "end_time": str(self.round_time_over())
+            "end_time": str(self.end_time),
+            "status": self.status
         }
         return serialized_round
 
-    def round_time_over(self):
-        self.status = self.round_check(self.matches_list)
-        if self.status != "over":
-            self.end_time = datetime. datetime. now()
-        else:
-            self.end_time = "unfinished"
-        return self.end_time
+    # def round_time_over(self):
+    #     if self.status == 0:
+    #         end_time = datetime. datetime. now()
+    #     else:
+    #         end_time = "unfinished"
+    #     return end_time
 
     def round_duration(self):
         if self.end_time != "unfinished":
@@ -50,11 +52,13 @@ class Round:
     def round_check(self, matches_list):
         for match in matches_list:
             if match.result == "result not defined yet":
-                self.status = "open"
+                self.status = 1
             else:
-                self.status = "complete"
+                self.status = 0
         return self.status
 
+    def close_round(self):
+        self.status = 0
 
 if __name__ == '__main__':
     print("round.py executed")

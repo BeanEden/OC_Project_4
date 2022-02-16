@@ -74,16 +74,37 @@ class Controller:
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-            print(tournament)
+            self.view.print_tournament_info(tournament)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
         # last_round = new_tournament.tournament_last_round()
-        if len(new_tournament.rounds_list) != 0:
+        round_count = self.round_deciding_menu(new_tournament)
+        # if len(new_tournament.rounds_list) > 0:
+        #     last_round = new_tournament.rounds_list[-1]
+        #     print(last_round)
+        #     previous_round = self.database.search_in_data_base("Round", last_round)
+        #     previous_round = self.creation.round_instance_creation_from_data_base(previous_round, new_tournament)
+        #     if previous_round.status == 1:
+        #         round_count = int(previous_round.count)
+        #     else :
+        #         round_count = int(previous_round.count) + 1
+        #     # last_round = db_rounds.search_in_data_base(last_round)
+        # else:
+        #     round_count = 1
+        self.tournament_round_start_menu(new_tournament, round_count)
+
+    def round_deciding_menu(self, new_tournament):
+        if len(new_tournament.rounds_list) > 0:
             last_round = new_tournament.rounds_list[-1]
-            round_count = last_round[1]
-            # last_round = db_rounds.search_in_data_base(last_round)
+            print(last_round)
+            previous_round = self.database.search_in_data_base("Round", last_round)
+            previous_round = self.creation.round_instance_creation_from_data_base(previous_round, new_tournament)
+            if previous_round.status == 1:
+                round_count = int(previous_round.count)
+            else :
+                round_count = int(previous_round.count) + 1
         else:
             round_count = 1
-        self.tournament_round_start_menu(new_tournament, round_count)
+        return round_count
 
     def consulting_menu(self):
         self.view.print_consulting_menu()
@@ -202,7 +223,7 @@ class Controller:
                 except ValueError:
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 if user_input_tournament_round_start_menu == 1:
-                    if len(tournament_played.rounds_list) != 0:
+                    if len(tournament_played.rounds_list) > 0:
                         last_round = tournament_played.rounds_list[-1]
                         last_round = self.database.search_in_data_base("Round", last_round)
                         if last_round["end_time"] != "unfinished":
@@ -210,7 +231,8 @@ class Controller:
                             tournament_played.tournament_append_round(new_round)
                             self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
                             player_list = self.creation.player_list_score_generator(tournament_played)
-                            self.creation.round_match_list_definition(new_round, player_list)
+                            player_list = self.creation.player_list_sorting(player_list, False)
+                            self.creation.round_match_list_definition(new_round, player_list, tournament_played)
                             self.round_menu(new_round, tournament_played)
                         else:
                             continue_round = \
@@ -220,21 +242,22 @@ class Controller:
                         round_one = self.creation.round_creation_run_function(round_count_number, tournament_played)
                         tournament_played.tournament_append_round(round_one)
                         self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
-                        self.creation.round_match_list_definition(round_one, player_list)
+                        self.creation.round_match_list_definition(round_one, player_list, tournament_played)
                         self.round_menu(round_one, tournament_played)
                 elif user_input_tournament_round_start_menu == 2:
                     if round_count_number == 1:
+                        player_list = self.creation.player_list_sorting(player_list)
                         self.view.print_player_list(player_list)
                         input()
                         self.tournament_round_start_menu(tournament_played, round_count_number)
                     else:
                         player_list = self.creation.player_list_score_generator(tournament_played)
-                        player_list = sorted(player_list, key=attrgetter('score'), reverse=True)
+                        player_list = self.creation.player_list_sorting(player_list)
                         self.view.print_player_list(player_list)
                         input()
                         self.tournament_round_start_menu(tournament_played, round_count_number)
                 elif user_input_tournament_round_start_menu == 3:
-                    print(tournament_played)
+                    self.view.print_tournament_info(tournament_played.serialized_form)
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 elif user_input_tournament_round_start_menu == 4:
                     print(tournament_played)
@@ -245,12 +268,13 @@ class Controller:
 
     def round_menu(self, round_played, tournament_played):
         round_count_round_menu = round_played.count
+        player_list = self.creation.player_list_score_generator(tournament_played)
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
         self.view.print_round_menu(round_count_round_menu)
         user_input_round_menu = 0
         round_status = round_played.round_check(matches_list)
         next_round_count = int(round_count_round_menu)+1
-        if round_status == "complete":
+        if round_status == 0:
             print("!! All the round matches results are selected !! \n"
                   "Exit to tournament menu to continue to round " + str(next_round_count))
         else:
@@ -268,15 +292,16 @@ class Controller:
                 self.select_a_match_for_result(round_played, tournament_played)
                 self.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 3:
-                self.creation.print_all_round_complete(tournament_played)
+                self.print_all_round_complete(tournament_played)
                 input()
                 self.view.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 4:
                 print("function not defined yet")
-        if round_played.status == "complete":
+        if round_played.status == 0:
             round_played.end_time = datetime.datetime.now()
             self.database.database_item_insertion("Round", round_played.serialized_form)
-            self.view.print_round_complete(round_count_round_menu, matches_list)
+            self.creation.player_list_score_generator(tournament_played)
+            self.view.print_round_complete(round_played, matches_list)
             input()
             self.tournament_round_start_menu(tournament_played, next_round_count)
         else:
@@ -328,6 +353,7 @@ class Controller:
         self.select_a_match_for_result(round_played, tournament)
 
     def tournament_over_menu(self, tournament_played):
+        tournament_played.close_tournament()
         self.view.print_tournament_over_menu(tournament_played)
         user_input_tournament_over_menu = 0
         while user_input_tournament_over_menu != 6:

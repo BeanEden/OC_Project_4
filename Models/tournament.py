@@ -7,14 +7,15 @@ TIME_CONTROL = {
     3: "coup rapide"
 }
 
-
 class Tournament:
-    def __init__(self, name, place, date, time_control, description, tournament_players_list):
+    status = 1
+
+    def __init__(self, name, place, date, time_control, description, tournament_players_list, rounds_list = []):
         self.name = name
         self.place = place
         self.date = date
         self.turn_number = 4
-        self.rounds_list = []
+        self.rounds_list = rounds_list
         self.time_control = time_control
         self.players_list = tournament_players_list
         self.description = description
@@ -45,14 +46,18 @@ class Tournament:
             "tournament_time_control": self.time_control,
             "tournament_description": self.description,
             "tournament_player_dictionary": self.players_list,
+            "tournament_status": self.status
         }
         return serialized_tournament
 
     def tournament_append_round(self, round_played):
         if round_played.id in self.rounds_list:
             pass
-        else :
+        else:
             self.rounds_list.append(round_played.id)
+
+    def close_tournament(self):
+        self.status = 0
 
 if __name__ == '__main__':
     print("tournament.py executed")

@@ -99,7 +99,7 @@ match4t2 = Match("Match 4", player_five, player_one,round_one_t2,1)
 
 round_two_t1 = creation.round_creation_run_function(2, tournament_test_1)
 pairs_t1 = menu.creation.possible_pairs(tournament_test_2.id, players_list)
-match_up_list_t1 = menu.creation.list_comb(pairs_t1)
+# match_up_list_t1 = menu.creation.list_comb(pairs_t1)
 
 round_two_2 = creation.round_creation_run_function(2, tournament_test_2)
 pairs = menu.creation.possible_pairs(tournament_test_2.id, players_list)
