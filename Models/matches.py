@@ -5,7 +5,11 @@ class Match:
         self.player_two = player_two
         self.score = score
         self.result = self.result_attribution()
-        self.opponents = str(self.name + " : " + self.player_one.name + " vs " + self.player_two.name)
+        self.opponents = str(
+            self.name + " : " +
+            self.player_one.name + " vs " +
+            self.player_two.name
+        )
         self.round = round_played.id
         self.tournament_name = round_played.tournament_name
         self.id = self.name[0] + self.name[-1] + "R" + str(round_played.count) + " " + self.tournament_name

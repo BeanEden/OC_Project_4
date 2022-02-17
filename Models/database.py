@@ -14,7 +14,8 @@ class Database:
     def database_check_removal(self, table, serialized_item):
         query = Query()
         try:
-            self.db.table(table).remove(query.id_key == serialized_item["id_key"])
+            self.db.table(table).remove(
+                query.id_key == serialized_item["id_key"])
         except IndexError:
             print("item_id not found in the database")
 
@@ -24,7 +25,8 @@ class Database:
 
     def query_2(self, table, var_1, val_1, var_2, val_2):
         q = Query()
-        return self.db.table(table).search((q[str(var_1)] == str(val_1)) & (q[str(var_2)] == str(val_2)))
+        return self.db.table(table).search(
+            (q[str(var_1)] == str(val_1)) & (q[str(var_2)] == str(val_2)))
 
     def search_in_data_base(self, table, id_key):
         query = Query()
@@ -47,7 +49,8 @@ class Database:
 
     def update_player_field(self, table, player_id, field_changed, new_input):
         query = Query()
-        self.db.table(table).update({field_changed: new_input}, query.id_key == str(player_id))
+        self.db.table(table).update(
+            {field_changed: new_input}, query.id_key == str(player_id))
 
     def get_all(self, table):
         return self.db.table(table).all()
@@ -58,8 +61,9 @@ class Database:
             self.database_item_insertion(table, item)
 
     def list_match_pairs(self, tournament):
-        return list(map(lambda x: [x["player_one"], x["player_two"]],
-                        self.search_in_data_base_bis("Match", "tournament_id", tournament)))
+        return list(map(
+            lambda x: [x["player_one"], x["player_two"]],
+            self.search_in_data_base_bis("Match", "tournament_id", tournament)))
 
     def list_query_one(self, table, var_1, val_1):
         return list(map(lambda x: print(x),

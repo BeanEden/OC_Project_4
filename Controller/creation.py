@@ -140,20 +140,6 @@ class ItemCreation:
         match_list = sorted(match_list, key=attrgetter('name'), reverse=False)
         return match_list
 
-    # def player_score_generator(self, player, tournament, id_round_of_the_match):
-    #     item = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_one", str(player.id))
-    #     item_two = self.database.query_2("Match", "tournament_id", str(tournament.id), "player_two", str(player.id))
-    #     for match in item:
-    #         if match["result"] == 1:
-    #             player.score += 1
-    #         elif match["result"] == 3:
-    #             player.score += 0.5
-    #     for match in item_two:
-    #         if match["result"] == 2:
-    #             player.score += 1
-    #         elif match["result"] == 3:
-    #             player.score += 0.5
-
     def player_score_generator_round(self, player, tournament, id_round_of_the_match):
         item_full = []
         item_two_full = []
@@ -195,9 +181,7 @@ class ItemCreation:
         return player_list
 
     def opponents_list_construction(self, player_id, tournament_id):
-        # item = db_matches.query_2("tournament_id", tournament_id, "player_one", player_id)
         item = self.database.query_2("Match", "player_one", player_id, "tournament_id", tournament_id)
-        # item_two = db_matches.query_2("tournament_id", tournament_id, "player_two", player_id)
         item_two = self.database.query_2("Match", "player_two", player_id, "tournament_id", tournament_id)
         opponents_list = []
         for match in item:
@@ -290,9 +274,6 @@ class ItemCreation:
             count_number += 1
             i += 1
             self.try_recursive(list_comb, list2, i, count_number)
-            # for i in list2:
-            #     print(i)
-            # print(list2)
             return list2
         return -1
 

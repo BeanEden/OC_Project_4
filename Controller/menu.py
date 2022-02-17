@@ -113,7 +113,7 @@ class Controller:
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
         self.view.print_tournament_info(tournament)
-        tournament_instance =self.creation.tournament_instance_creation_from_database(tournament)
+        tournament_instance = self.creation.tournament_instance_creation_from_database(tournament)
         self.tournament_over_menu(tournament_instance)
 
     def consulting_specific_menu(self, item):
@@ -166,7 +166,6 @@ class Controller:
             self.consulting_specific_menu(item)
         self.consulting_specific_menu(item)
 
-
     def specific_item_load(self, item):
         self.view.print_load_specific_item(item)
         item_searched = "item not found"
@@ -178,7 +177,7 @@ class Controller:
             input()
             self.consulting_menu()
 
-    def specific_tournament_item_load(self, item, user_input_load_tournament_menu = ""):
+    def specific_tournament_item_load(self, item, user_input_load_tournament_menu=""):
         self.view.print_load_a_tournament()
         tournament = "item not found"
         while tournament == "item not found":
@@ -201,7 +200,6 @@ class Controller:
                 print(self.database.search_in_data_base("Player", item))
         self.player_list_order_select_menu(user_input_load_tournament_menu)
         self.consulting_menu()
-
 
     def tournament_round_start_menu(self, tournament_played, round_count_number):
         while int(round_count_number) <= int(tournament_played.turn_number):
@@ -390,7 +388,7 @@ class Controller:
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 2:
                 choice = self.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_tournament_rank(player_list, choice)
+                player_list_ordered = self.player_list_tournament_rank(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "RANK ORDER")
                 input()
                 self.player_list_order_select_menu(tournament_id)
@@ -401,8 +399,6 @@ class Controller:
                 input()
                 self.player_list_order_select_menu(tournament_id)
             self.tournament_over_menu(new_tournament)
-
-
 
     def boolean_choice_menu(self):
         user_choice = input("Order :"
