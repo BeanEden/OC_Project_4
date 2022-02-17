@@ -45,39 +45,26 @@ class Database:
             item = "item not found"
         return item
 
-    def update_player_field(self, player_id, field_changed, new_input):
+    def update_player_field(self, table, player_id, field_changed, new_input):
         query = Query()
-        self.db.update({field_changed: new_input}, query.id_key == str(player_id))
+        self.db.table(table).update({field_changed: new_input}, query.id_key == str(player_id))
 
     def get_all(self, table):
         return self.db.table(table).all()
 
     def player_list_serialization(self, table, item_list):
-        # print(item_list)
         for item in item_list:
             item = item.serialized_form
             self.database_item_insertion(table, item)
 
     def list_match_pairs(self, tournament):
-        query = Query()
         return list(map(lambda x: [x["player_one"], x["player_two"]],
                         self.search_in_data_base_bis("Match", "tournament_id", tournament)))
 
     def list_query_one(self, table, var_1, val_1):
-        query = Query()
         return list(map(lambda x: print(x),
                         self.search_in_data_base_bis(table, var_1, val_1)))
-        # return self.query_2("match","turn_id",turn,"tournament_id",tournament)
 
-    # def get_list_id(self, object_):
-    #     return list(map(lambda x: x["id"], db('db2').get_all(object_)))
-    #
-    # def get_list_turns_all(self):
-    #     return list(list(i.split(":")) for i in
-    #                 set(map(lambda x: str(x["turn_id"]) + ":" + str(x["tournament_id"]), self.get_all("match"))))
-    #
-    # def get_list_players_by_tournament(self, tournament_id):
-    #     return list(self.query_1("tournament", "id", tournament_id)[0]["players"].split(";"))
 
 if __name__ == '__main__':
     print("database.py executed")

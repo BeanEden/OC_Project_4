@@ -4,7 +4,6 @@ from Models.tournament import Tournament
 from Models.round import Round
 from Models.players import Player
 from Models.matches import Match
-from Models.database import *
 from operator import *
 
 
@@ -18,15 +17,27 @@ class ItemCreation:
         name = input("Enter the tournament name :\n")
         place = input("Enter tournament place : \n")
         date = input("Enter tournament date (DD/MM/YYYY) : \n")
-        time_control = input("Select time control mode :\n" +
-                             "1 - bullet \n"
-                             "2 - blitz \n"
-                             "3 - coup rapide\n")
+        time_control = self.time_control_definition()
         description = input("Enter tournament general description:\n")
         player_list = self.player_dictionary_select()
         new_tournament = Tournament(name, place, date, time_control, description, player_list)
         self.database.database_item_insertion("Tournament", new_tournament.serialized_form)
         return new_tournament
+
+    def time_control_definition(self):
+        time_control = int(input("Select time control mode :\n"
+                                 "1 - bullet \n"
+                                 "2 - blitz \n"
+                                 "3 - coup rapide\n"))
+        if time_control == 1:
+            time_control = "bullet"
+        elif time_control == 2:
+            time_control = "blitz"
+        elif time_control == 3:
+            time_control = "coup rapide"
+        else:
+            self.time_control_definition()
+        return time_control
 
     def add_a_player(self):
         """Prompt for adding a player."""
@@ -148,17 +159,17 @@ class ItemCreation:
         item_two_full = []
         round_list = tournament.rounds_list
         check_list = round_list.index(id_round_of_the_match)+1
-        for round in range(0, check_list):
-            round_id = round_list[round]
-            try :
+        for round_number in range(0, check_list):
+            round_id = round_list[round_number]
+            try:
                 item = self.database.query_2("Match", "round_id", round_id, "player_one", str(player.id))
                 item_full.append(item[-1])
-            except IndexError :
+            except IndexError:
                 pass
-            try :
+            try:
                 item_two = self.database.query_2("Match", "round_id", round_id, "player_two", str(player.id))
                 item_two_full.append(item_two[-1])
-            except IndexError :
+            except IndexError:
                 pass
         for match in item_full:
             if match["result"] == 1:
@@ -231,10 +242,10 @@ class ItemCreation:
             match_name = "Match " + str(match_count)
             player_one_creation = self.database.search_in_data_base("Player", j[0])
             player_one_instance = self.player_instance_creation_from_data_base(player_one_creation)
-            self.player_score_generator(player_one_instance, tournament_played)
+            self.player_score_generator_round(player_one_instance, tournament_played, round_played.id)
             player_two_creation = self.database.search_in_data_base("Player", j[1])
             player_two_instance = self.player_instance_creation_from_data_base(player_two_creation)
-            self.player_score_generator(player_two_instance, tournament_played)
+            self.player_score_generator_round(player_two_instance, tournament_played, round_played.id)
             match_i = Match(match_name, player_one_instance, player_two_instance, round_played, 0)
             print(match_i)
             self.database.database_item_insertion("Match", match_i.serialized_form)
@@ -254,15 +265,15 @@ class ItemCreation:
         possible_match_ups.sort(key=lambda x: x[2], reverse=True)
         return possible_match_ups
 
-    def check_player_exist(self, list_matchs, match):
-        for i in list_matchs:
+    def check_player_exist(self, list_matches, match):
+        for i in list_matches:
             if match[0] == i[0] or match[0] == i[1] or match[1] == i[0] or match[1] == i[1]:
                 return False
         return True
 
     def try_recursive(self, list_comb, list2, i, count_number):
         for i in range(i + 1, len(list_comb)):
-            if (len(list2) > count_number):
+            if len(list2) > count_number:
                 list2.pop()
             if self.check_player_exist(list2, list_comb[i]):
                 list2.append(list_comb[i])

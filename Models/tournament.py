@@ -1,16 +1,6 @@
-
-from Controller.creation import *
-
-TIME_CONTROL = {
-    1: "bullet",
-    2: "blitz",
-    3: "coup rapide"
-}
-
 class Tournament:
-    status = 1
 
-    def __init__(self, name, place, date, time_control, description, tournament_players_list, rounds_list = []):
+    def __init__(self, name, place, date, time_control, description, tournament_players_list, rounds_list=[], status=1):
         self.name = name
         self.place = place
         self.date = date
@@ -19,7 +9,7 @@ class Tournament:
         self.time_control = time_control
         self.players_list = tournament_players_list
         self.description = description
-        # self.last_round = self.tournament_last_round()
+        self.status = status
         self.id = self.name + self.date
         self.serialized_form = self.tournament_serialization()
 
@@ -58,6 +48,7 @@ class Tournament:
 
     def close_tournament(self):
         self.status = 0
+
 
 if __name__ == '__main__':
     print("tournament.py executed")

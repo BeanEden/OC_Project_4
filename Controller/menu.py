@@ -1,31 +1,6 @@
 import datetime
-
-from Controller.creation import ItemCreation
-from Views import View
 from operator import *
-from Models.database import *
 from Models.matches import *
-
-
-def print_data_base(data_base):
-    for item in data_base:
-        print(item)
-
-#
-# db_tournament.clear_database()
-# db_matches.clear_database()
-# db_rounds.clear_database()
-# clear_all_database(db_matches)
-# clear_all_database(db_rounds)
-
-#
-# print_data_base(db_tournament.get_all())
-# print()
-# print_data_base(db_rounds.get_all())
-# print()
-# print_data_base(db_matches.get_all())
-# print()
-# print_data_base(db_players.get_all())
 
 
 class Controller:
@@ -76,7 +51,6 @@ class Controller:
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
             self.view.print_tournament_info(tournament)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
-        # last_round = new_tournament.tournament_last_round()
         round_count = self.round_deciding_menu(new_tournament)
         if round_count < new_tournament.turn_number:
             self.tournament_round_start_menu(new_tournament, round_count)
@@ -91,7 +65,7 @@ class Controller:
             previous_round = self.creation.round_instance_creation_from_data_base(previous_round, new_tournament)
             if previous_round.status == 1:
                 round_count = int(previous_round.count)
-            else :
+            else:
                 round_count = int(previous_round.count) + 1
         else:
             round_count = 1
@@ -126,7 +100,7 @@ class Controller:
             if user_input_consulting_tournament_menu == 1:
                 self.specific_tournament_load()
             elif user_input_consulting_tournament_menu == 2:
-                print_data_base(self.database.table("Tournament").get_all())
+                self.view.print_data_base(self.database.get_all("Tournament"))
                 print("Press a key to go back to round menu\n")
                 input()
                 self.consulting_menu()
@@ -138,7 +112,7 @@ class Controller:
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-        print(tournament)
+        self.view.print_tournament_info(tournament)
         print("Press a key to go back to round menu\n")
         input()
         self.consulting_menu()
@@ -159,7 +133,7 @@ class Controller:
                 else:
                     self.specific_tournament_item_load(item)
             elif user_input_consulting_player_menu == 3:
-                print_data_base(self.database.table("item").get_all())
+                self.view.print_data_base(self.database.get_all(item))
                 print("Press a key to go back to round menu\n")
                 input()
                 self.consulting_menu()
@@ -172,34 +146,33 @@ class Controller:
         while item_searched == "item not found":
             user_input_load_item = input()
             specific_item = self.database.search_in_data_base(item, user_input_load_item)
-            print(specific_item)
+            self.view.print_tournament_info(specific_item)
             print("Press a key to go back to round menu\n")
             input()
             self.consulting_menu()
 
     def specific_tournament_item_load(self, item):
         self.view.print_load_a_tournament()
-        query = Query()
         tournament = "item not found"
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
-            item = self.database.table(item).search(query.tournament_id == str(user_input_load_tournament_menu))
-            print_data_base(item)
+            item = self.database.search_in_data_base_bis(item, "tournament_id", user_input_load_tournament_menu)
+            self.view.print_data_base(item)
             print("Press a key to go back to round menu\n")
             input()
             self.consulting_menu()
 
-    def specific_tournament_players_load(self,):
+    def specific_tournament_players_load(self):
         self.view.print_load_a_tournament()
         tournament = "item not found"
+        user_input_load_tournament_menu = ""
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
             tournament_players_list = tournament["tournament_player_dictionary"]
             for item in tournament_players_list.values():
                 print(self.database.search_in_data_base("Player", item))
-        print("Press a key to go back to round menu\n")
-        input()
+        self.player_list_order_select_menu(user_input_load_tournament_menu)
         self.consulting_menu()
 
     def tournament_round_start_menu(self, tournament_played, round_count_number):
@@ -216,10 +189,7 @@ class Controller:
                 if user_input_tournament_round_start_menu == 1:
                     if len(tournament_played.rounds_list) > 0:
                         last_round = tournament_played.rounds_list[-1]
-                        print(tournament_played.rounds_list)
                         last_round = self.database.search_in_data_base("Round", last_round)
-                        print(last_round)
-                        print(last_round["end_time"])
                         if last_round["end_time"] != "unfinished":
                             new_round = self.creation.round_creation_run_function(round_count_number, tournament_played)
                             tournament_played.tournament_append_round(new_round)
@@ -254,14 +224,14 @@ class Controller:
                     self.view.print_tournament_info(tournament_played.serialized_form)
                     self.tournament_round_start_menu(tournament_played, round_count_number)
                 elif user_input_tournament_round_start_menu == 4:
-                    self.tournament_round_start_menu(tournament_played, round_count_number)
+                    self.update_player_select_menu()
             self.main_menu()
         self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
         self.tournament_over_menu(tournament_played)
 
     def round_menu(self, round_played, tournament_played):
         round_count_round_menu = round_played.count
-        player_list = self.creation.player_list_score_generator(tournament_played)
+        # player_list = self.creation.player_list_score_generator(tournament_played)
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
         self.view.print_round_menu(round_count_round_menu)
         user_input_round_menu = 0
@@ -289,7 +259,7 @@ class Controller:
                 input()
                 self.view.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 4:
-                print("function not defined yet")
+                self.update_player_select_menu()
         if round_played.status == 0:
             round_played.end_time = datetime.datetime.now()
             serialized = round_played.serialized_form
@@ -369,29 +339,49 @@ class Controller:
             elif user_input_tournament_over_menu == 4:
                 self.view.print_tournament_info(tournament_played.serialized_form)
             elif user_input_tournament_over_menu == 5:
-                print("Executing menu item 3")
+                self.update_player_select_menu()
         self.main_menu()
 
-    def player_list_tournament_rank(self, tournament_players_list):
-        player_rank_order = sorted(tournament_players_list, key=attrgetter('rank'), reverse=True)
+    def player_list_tournament_rank(self, tournament_players_list, boolean_choice=True):
+        player_rank_order = sorted(tournament_players_list, key=attrgetter('rank'), reverse=boolean_choice)
         return player_rank_order
 
-    def player_list_tournament_alphabetical(self, tournament_players_list):
-        player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=False)
+    def player_list_tournament_alphabetical(self, tournament_players_list, boolean_choice=False):
+        player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=boolean_choice)
         return player_alphabetical_order
 
-    def player_list_order_select_menu(self, player_list, previous_select_menu):
+    def player_list_order_select_menu(self, tournament_id):
+        tournament = self.database.search_in_data_base("Tournament", tournament_id)
+        new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
+        player_list = self.creation.player_list_score_generator(new_tournament)
         self.view.print_player_list_order_select()
         user_input_player_list_order_select = 0
-        while user_input_player_list_order_select != 4:
+        while user_input_player_list_order_select != 3:
             user_input_player_list_order_select = int(input())
             if user_input_player_list_order_select == 1:
-                player_list_ordered = self.player_list_tournament_alphabetical(player_list)
+                choice = self.boolean_choice_menu()
+                player_list_ordered = self.player_list_tournament_alphabetical(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
+                input()
+                self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 2:
-                player_list_ordered = self.player_list_tournament_rank(player_list)
+                choice = self.boolean_choice_menu()
+                player_list_ordered = self.creation.player_list_sorting(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "RANK ORDER")
-        previous_select_menu
+                input()
+                self.player_list_order_select_menu(tournament_id)
+        self.consulting_menu()
+
+    def boolean_choice_menu(self):
+        user_choice = input("Order :"
+                            "0 = Ascending\n"
+                            "1 = Descending \n")
+        if int(user_choice) == 0:
+            return False
+        elif int(user_choice) == 1:
+            return True
+        else:
+            self.boolean_choice_menu()
 
     def update_player_select_menu(self):
         self.view.print_update_select()
@@ -404,31 +394,33 @@ class Controller:
                 player = self.database.search_in_data_base("Player", user_input_player_id_key)
         self.player_update_field_menu(player)
 
-    def player_update_field_menu(self, player_id):
+    def player_update_field_menu(self, player):
+        self.view.print_tournament_info(player)
         self.view.print_update_player_menu()
         user_input = 0
         while user_input != 6:
             user_input = int(input())
             if user_input == 1:
-                self.player_field_update_screen("family_name", player_id, "family_name")
+                self.player_field_update_screen("family_name", player, "family_name")
             elif user_input == 2:
-                self.player_field_update_screen("first_name", player_id, "first_name")
+                self.player_field_update_screen("first_name", player, "first_name")
             elif user_input == 3:
-                self.player_field_update_screen("birth_date", player_id, "birth_date (DD/MM/YYYY)")
+                self.player_field_update_screen("birth_date", player, "birth_date (DD/MM/YYYY)")
             elif user_input == 4:
-                self.player_field_update_screen("gender", player_id, "gender (F/H)")
+                self.player_field_update_screen("gender", player, "gender (F/H)")
             elif user_input == 5:
-                self.player_field_update_screen("rank", player_id, "rank (positive number)")
+                self.player_field_update_screen("rank", player, "rank (positive number)")
         self.main_menu()
 
-    def player_field_update_screen(self, field, player_id, field_detail):
+    def player_field_update_screen(self, field, player, field_detail):
+        player_id = player["id_key"]
         self.view.print_update_field(field, field_detail)
         user_input = str(input())
         self.database.update_player_field("Player", player_id, field, user_input)
         print(str(player_id) + " " + field + " updated to " + user_input + "\n"
               "Press a key to continue...")
         input()
-        self.player_update_field_menu(player_id)
+        self.player_update_field_menu(player)
 
     def print_all_round_complete(self, tournament):
         for rounds in tournament.rounds_list:
