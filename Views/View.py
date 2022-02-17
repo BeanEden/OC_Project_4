@@ -212,8 +212,19 @@ class View:
             "===================================\n"
             "1 - Alphabetical order player list (on family_name)\n"
             "2 - Rank order\n"
-            "3 - Score order (= rank order if out of a tournament)\n"
+            "3 - Score order\n"
             "4 - Go back to previous menu\n"
+            "===================================\n"
+            "Enter an available choice and press enter :\n")
+
+    def print_database_order_select(self):
+        print(
+            "===================================\n"
+            "PLAYERS LIST ORDER CHOICE\n"
+            "===================================\n"
+            "1 - Alphabetical order player list (on family_name)\n"
+            "2 - Rank order\n"
+            "3 - Go back to previous menu\n"
             "===================================\n"
             "Enter an available choice and press enter :\n")
 
@@ -275,3 +286,7 @@ class View:
     def print_data_base(self, database):
         for i in database:
             print(i)
+
+    def print_sorted_database(self, instance_list):
+        for i in instance_list:
+            print(i.serialized_form)
