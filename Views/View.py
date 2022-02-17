@@ -90,7 +90,7 @@ class View:
               + item.upper() + " CONSULTING MENU\n"
               "===================================\n"
               " 1 - Consult a specific " + item + "\n"
-              " 2 - Consult a specific tournament " + item + " database\n"                                    
+              " 2 - Consult a specific tournament " + item + " database\n"
               " 3 - Whole " + item + " database\n"
               " 4 - Exit to main menu\n"
               "===================================\n"
@@ -128,7 +128,7 @@ class View:
             " 1 - " + str(matches_list[0].opponents) + " - " + str(matches_list[0].result) + "\n"
             " 2 - " + str(matches_list[1].opponents) + " - " + str(matches_list[1].result) + "\n"
             " 3 - " + str(matches_list[2].opponents) + " - " + str(matches_list[2].result) + "\n"
-            " 4 - " + str(matches_list[3].opponents) + " - " + str(matches_list[3].result) + "\n"                                     
+            " 4 - " + str(matches_list[3].opponents) + " - " + str(matches_list[3].result) + "\n"        
             " 5 - Exit to round_menu\n"
             "===================================\n"
             "Enter a choice and press enter :\n")
@@ -155,7 +155,7 @@ class View:
         if match.result != "result not defined yet":
             print(
                 "!!!! Result already defined previously !!!! \n"
-                "Previous result selected : " + str(match.result) + "\n"      
+                "Previous result selected : " + str(match.result) + "\n"
                 "Selecting a new result will overwrite the previous one\n")
 
         print(
@@ -176,7 +176,7 @@ class View:
             " 1 - " + str(matches_list[0]) + "\n"
             " 2 - " + str(matches_list[1]) + "\n"
             " 3 - " + str(matches_list[2]) + "\n"
-            " 4 - " + str(matches_list[3]) + "\n"                                     
+            " 4 - " + str(matches_list[3]) + "\n"
             "===================================\n"
             "Press a key to go back to round menu\n")
 
@@ -212,7 +212,8 @@ class View:
             "===================================\n"
             "1 - Alphabetical order player list (on family_name)\n"
             "2 - Rank order\n"
-            "3 - Go back to previous menu\n"
+            "3 - Score order (= rank order if out of a tournament)\n"
+            "4 - Go back to previous menu\n"
             "===================================\n"
             "Enter an available choice and press enter :\n")
 

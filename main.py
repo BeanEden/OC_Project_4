@@ -5,6 +5,7 @@ from Models.database import Database
 
 db_test = Database("db_test")
 
+
 def main():
     view = View()
     creation = ItemCreation(db_test)

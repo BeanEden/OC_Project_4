@@ -1,6 +1,6 @@
 import datetime
 from operator import *
-from Models.matches import *
+from Models.matches import Match
 
 
 class Controller:
@@ -113,9 +113,8 @@ class Controller:
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
         self.view.print_tournament_info(tournament)
-        print("Press a key to go back to round menu\n")
-        input()
-        self.consulting_menu()
+        tournament_instance =self.creation.tournament_instance_creation_from_database(tournament)
+        self.tournament_over_menu(tournament_instance)
 
     def consulting_specific_menu(self, item):
         self.view.print_consulting_item_menu(item)
@@ -151,7 +150,7 @@ class Controller:
             input()
             self.consulting_menu()
 
-    def specific_tournament_item_load(self, item):
+    def specific_tournament_item_load(self, item, user_input_load_tournament_menu = ""):
         self.view.print_load_a_tournament()
         tournament = "item not found"
         while tournament == "item not found":
@@ -174,6 +173,7 @@ class Controller:
                 print(self.database.search_in_data_base("Player", item))
         self.player_list_order_select_menu(user_input_load_tournament_menu)
         self.consulting_menu()
+
 
     def tournament_round_start_menu(self, tournament_played, round_count_number):
         while int(round_count_number) <= int(tournament_played.turn_number):
@@ -327,11 +327,7 @@ class Controller:
             except ValueError:
                 self.tournament_over_menu(tournament_played)
             if user_input_tournament_over_menu == 1:
-                player_list = self.creation.player_list_score_generator(tournament_played)
-                player_list = self.creation.player_list_sorting(player_list)
-                self.view.print_player_list(player_list)
-                input()
-                self.tournament_over_menu(tournament_played)
+                self.player_list_order_select_menu(tournament_played.id,0)
             elif user_input_tournament_over_menu == 2:
                 self.print_all_round_complete(tournament_played)
             elif user_input_tournament_over_menu == 3:
@@ -350,13 +346,13 @@ class Controller:
         player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=boolean_choice)
         return player_alphabetical_order
 
-    def player_list_order_select_menu(self, tournament_id):
+    def player_list_order_select_menu(self, tournament_id, menu=1):
         tournament = self.database.search_in_data_base("Tournament", tournament_id)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
         player_list = self.creation.player_list_score_generator(new_tournament)
         self.view.print_player_list_order_select()
         user_input_player_list_order_select = 0
-        while user_input_player_list_order_select != 3:
+        while user_input_player_list_order_select != 4:
             user_input_player_list_order_select = int(input())
             if user_input_player_list_order_select == 1:
                 choice = self.boolean_choice_menu()
@@ -366,11 +362,20 @@ class Controller:
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 2:
                 choice = self.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_sorting(player_list, choice)
+                player_list_ordered = self.creation.player_list_tournament_rank(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "RANK ORDER")
                 input()
                 self.player_list_order_select_menu(tournament_id)
-        self.consulting_menu()
+            elif user_input_player_list_order_select == 3:
+                choice = self.boolean_choice_menu()
+                player_list_ordered = self.creation.player_list_sorting(player_list, choice)
+                self.view.print_player_list_by_order(player_list_ordered, "SCORE ORDER")
+                input()
+                self.player_list_order_select_menu(tournament_id)
+        if menu == 1:
+            self.consulting_menu()
+        else:
+            self.tournament_over_menu(new_tournament)
 
     def boolean_choice_menu(self):
         user_choice = input("Order :"

@@ -10,7 +10,7 @@ class Tournament:
         self.players_list = tournament_players_list
         self.description = description
         self.status = status
-        self.id = self.name + self.date
+        self.id = self.name + self.date[0:1]
         self.serialized_form = self.tournament_serialization()
 
     def __repr__(self):
