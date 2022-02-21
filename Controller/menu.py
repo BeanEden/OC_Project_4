@@ -250,6 +250,7 @@ class Controller:
                 elif user_input_tournament_round_start_menu == 4:
                     self.update_player_select_menu()
             self.main_menu()
+        tournament_played.close_tournament()
         self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
         self.tournament_over_menu(tournament_played)
 
@@ -342,7 +343,6 @@ class Controller:
         self.select_a_match_for_result(round_played, tournament)
 
     def tournament_over_menu(self, tournament_played):
-        tournament_played.close_tournament()
         self.view.print_tournament_over_menu(tournament_played)
         user_input_tournament_over_menu = 0
         while user_input_tournament_over_menu != 6:
