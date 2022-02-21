@@ -1,10 +1,9 @@
 import datetime
-
 from Models.tournament import Tournament
 from Models.round import Round
 from Models.players import Player
 from Models.matches import Match
-from operator import *
+from operator import attrgetter
 
 
 class ItemCreation:

@@ -149,7 +149,10 @@ class Controller:
         self.view.print_database_order_select()
         user_input_player_list_order_select = 0
         while user_input_player_list_order_select != 3:
-            user_input_player_list_order_select = int(input())
+            try:
+                user_input_player_list_order_select = int(input())
+            except ValueError:
+                self.player_database_select_menu(item)
             if user_input_player_list_order_select == 1:
                 choice = self.boolean_choice_menu()
                 player_list_ordered = self.player_list_tournament_alphabetical(player_instance_list, choice)
