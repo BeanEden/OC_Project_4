@@ -1,7 +1,8 @@
 
 class View:
 
-    def print_main_menu(self):
+    @staticmethod
+    def print_main_menu():
         print(
             "===================================\n"
             "MAIN MENU\n"
@@ -14,7 +15,8 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_update_select(self):
+    @staticmethod
+    def print_update_select():
         print(
             "===================================\n"
             "UPDATE PLAYER SELECT\n"
@@ -22,7 +24,8 @@ class View:
             "Enter a player id and press enter :\n"
             "Enter exit() to go back :\n")
 
-    def print_update_player_menu(self):
+    @staticmethod
+    def print_update_player_menu():
         print(
             "===================================\n"
             "UPDATE PLAYER MENU\n"
@@ -37,13 +40,15 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_update_field(self, field, field_detail):
+    @staticmethod
+    def print_update_field(field, field_detail):
         print("===================================\n"
               "UPDATE PLAYER " + field + " MENU\n"
               "===================================\n"
               "Enter the new " + field_detail + " and press enter :\n")
 
-    def print_tournament_menu(self):
+    @staticmethod
+    def print_tournament_menu():
         print(
             "===================================\n"
             "TOURNAMENT MENU\n"
@@ -54,7 +59,8 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_load_a_tournament(self):
+    @staticmethod
+    def print_load_a_tournament():
         print(
             "===================================\n"
             "LOAD A TOURNAMENT\n"
@@ -62,7 +68,8 @@ class View:
             "Enter a tournament id and press enter :\n"
             "Enter exit() to go back :\n")
 
-    def print_consulting_menu(self):
+    @staticmethod
+    def print_consulting_menu():
         print(
             "===================================\n"
             "CONSULTING MENU\n"
@@ -75,7 +82,8 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_consulting_tournament_menu(self):
+    @staticmethod
+    def print_consulting_tournament_menu():
         print("===================================\n"
               "TOURNAMENT CONSULTING MENU\n"
               "===================================\n"
@@ -85,7 +93,8 @@ class View:
               "===================================\n"
               "Enter a choice and press enter :\n")
 
-    def print_consulting_item_menu(self, item):
+    @staticmethod
+    def print_consulting_item_menu(item):
         print("===================================\n"
               + item.upper() + " CONSULTING MENU\n"
               "===================================\n"
@@ -96,7 +105,8 @@ class View:
               "===================================\n"
               "Enter a choice and press enter :\n")
 
-    def print_tournament_round_start_menu(self, round_count):
+    @staticmethod
+    def print_tournament_round_start_menu(round_count):
         print("===================================\n"
               "TOURNAMENT MENU - ROUND " + str(round_count) + "\n"
               "===================================\n"
@@ -108,7 +118,8 @@ class View:
               "===================================\n"
               "Enter a choice and press enter :\n")
 
-    def print_round_menu(self, round_count):
+    @staticmethod
+    def print_round_menu(round_count):
         print("===================================\n"
               "ROUND " + str(round_count) + " MENU\n"
               "===================================\n"
@@ -120,7 +131,8 @@ class View:
               "===================================\n"
               "Enter a choice and press enter :\n")
 
-    def print_select_a_match_for_result(self, round_count, matches_list):
+    @staticmethod
+    def print_select_a_match_for_result(round_count, matches_list):
         print(
             "===================================\n"
             "ROUND " + str(round_count) + " RESULTS\n"
@@ -137,7 +149,8 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_round_complete(self, round_played, matches_list):
+    @staticmethod
+    def print_round_complete(round_played, matches_list):
         print(
             "===================================\n"
             "ROUND " + str(round_played.count) + " COMPLETE\n"
@@ -150,18 +163,19 @@ class View:
             "End time : " + str(round_played.end_time) + "\n"
             "===================================\n"
             "Press a key to continue")
+        input()
 
-    def print_enter_match_result(self, match):
+    @staticmethod
+    def print_enter_match_result(match):
         print(
             "===================================\n"
             + match.name + "\n"
-            "===================================\n")
+            "===================================")
         if match.result != "result not defined yet":
             print(
                 "!!!! Result already defined previously !!!! \n"
                 "Previous result selected : " + str(match.result) + "\n"
-                "Selecting a new result will overwrite the previous one\n")
-
+                "Selecting a new result will overwrite the previous one")
         print(
             "Enter results :\n"
             "   1 - " + match.player_one.name + " wins \n"
@@ -171,7 +185,8 @@ class View:
             "===================================\n"
             "Enter a choice and press enter :\n")
 
-    def print_match_list(self, matches_list, round_count):
+    @staticmethod
+    def print_match_list(matches_list, round_count):
         print(
             "===================================\n"
             "ROUND " + str(round_count) + " MATCHES\n"
@@ -183,8 +198,10 @@ class View:
             " 4 - " + str(matches_list[3]) + "\n"
             "===================================\n"
             "Press a key to go back to round menu\n")
+        input()
 
-    def print_player_list(self, player_list):
+    @staticmethod
+    def print_player_list(player_list):
         print(
             "===================================\n"
             "PLAYER LIST\n"
@@ -194,8 +211,10 @@ class View:
             print(i)
         print("===================================\n"
               "Press a key to go back to round menu\n")
+        input()
 
-    def print_tournament_over_menu(self, tournament_played):
+    @staticmethod
+    def print_tournament_over_menu(tournament_played):
         print(
             "===================================\n"
             "TOURNAMENT " + tournament_played.name + " OVER\n"
@@ -209,7 +228,8 @@ class View:
             "===================================\n"
             "Enter an available choice and press enter :\n")
 
-    def print_player_list_order_select(self):
+    @staticmethod
+    def print_player_list_order_select():
         print(
             "===================================\n"
             "PLAYERS LIST ORDER CHOICE\n"
@@ -221,7 +241,8 @@ class View:
             "===================================\n"
             "Enter an available choice and press enter :\n")
 
-    def print_database_order_select(self):
+    @staticmethod
+    def print_database_order_select():
         print(
             "===================================\n"
             "PLAYERS LIST ORDER CHOICE\n"
@@ -232,18 +253,21 @@ class View:
             "===================================\n"
             "Enter an available choice and press enter :\n")
 
-    def print_player_list_by_order(self, players_list, order_choice):
+    @staticmethod
+    def print_player_list_by_order(players_list, order_choice):
         print(
             "===================================\n"
             "PLAYERS LIST " + order_choice + "\n"
-            "===================================\n")
+            "===================================")
         for player in players_list:
             print(player)
         print(
             "===================================\n"
             "Press a key to go back to tournament consulting menu\n")
+        input()
 
-    def print_tournament_list_database(self, tournament_list):
+    @staticmethod
+    def print_tournament_list_database(tournament_list):
         print(
             "===================================\n"
             "TOURNAMENT LIST\n"
@@ -253,8 +277,10 @@ class View:
             print(tournament)
         print("===================================\n"
               "Press a key to go back to round menu\n")
+        input()
 
-    def print_match_list_database(self, match_list):
+    @staticmethod
+    def print_match_list_database(match_list):
         print(
             "===================================\n"
             "MATCH LIST\n"
@@ -264,8 +290,10 @@ class View:
             print(match)
         print("===================================\n"
               "Press a key to go back to round menu\n")
+        input()
 
-    def print_round_list_database(self, round_list):
+    @staticmethod
+    def print_round_list_database(round_list):
         print(
             "===================================\n"
             "ROUND LIST\n"
@@ -275,22 +303,27 @@ class View:
             print(round_item)
         print("===================================\n"
               "Press a key to go back to round menu\n")
+        input()
 
-    def print_load_specific_item(self, item):
+    @staticmethod
+    def print_load_specific_item(item):
         print("===================================\n"
               + item.upper() + " LOAD\n"
               "===================================\n"
               "Enter " + item + " id and press enter :\n"
               "Enter exit() to go back :\n")
 
-    def print_tournament_info(self, tournament):
+    @staticmethod
+    def print_tournament_info(tournament):
         for key, value in tournament.items():
             print(str(key) + " : " + str(value))
 
-    def print_data_base(self, database):
+    @staticmethod
+    def print_data_base(database):
         for i in database:
             print(i)
 
-    def print_sorted_database(self, instance_list):
+    @staticmethod
+    def print_sorted_database(instance_list):
         for i in instance_list:
             print(i.serialized_form)

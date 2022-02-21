@@ -88,7 +88,8 @@ class ItemCreation:
             player_list.append(player_instance)
         return player_list
 
-    def player_instance_creation_from_data_base(self, dict_player):
+    @staticmethod
+    def player_instance_creation_from_data_base(dict_player):
         family_name = dict_player["family_name"]
         first_name = dict_player["first_name"]
         age = dict_player["birth_date"]
@@ -111,14 +112,16 @@ class ItemCreation:
         new_match = Match(name, player_one_instance, player_two_instance, round_of_the_match, score)
         return new_match
 
-    def round_instance_creation_from_data_base(self, dict_round, tournament):
+    @staticmethod
+    def round_instance_creation_from_data_base(dict_round, tournament):
         name = dict_round["round_name"]
         start_time = dict_round["start_time"]
         end_time = dict_round["end_time"]
         new_round = Round(name, tournament, start_time, end_time)
         return new_round
 
-    def tournament_instance_creation_from_database(self, dict_tournament):
+    @staticmethod
+    def tournament_instance_creation_from_database(dict_tournament):
         name = dict_tournament["tournament_name"]
         place = dict_tournament["tournament_place"]
         date = dict_tournament["tournament_date"]
@@ -205,10 +208,21 @@ class ItemCreation:
                 list_difference.append(item)
         return list_difference
 
-    def player_list_sorting(self, player_list_instances, boolean_order=True):
+    @staticmethod
+    def player_list_sorting(player_list_instances, boolean_order=True):
         player_list_instances = sorted(player_list_instances, key=attrgetter('rank'), reverse=boolean_order)
         player_list_instances = sorted(player_list_instances, key=attrgetter('score'), reverse=boolean_order)
         return player_list_instances
+
+    @staticmethod
+    def player_list_tournament_rank(tournament_players_list, boolean_choice=True):
+        player_rank_order = sorted(tournament_players_list, key=attrgetter('rank'), reverse=boolean_choice)
+        return player_rank_order
+
+    @staticmethod
+    def player_list_tournament_alphabetical(tournament_players_list, boolean_choice=False):
+        player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=boolean_choice)
+        return player_alphabetical_order
 
     def secondary_rounds_method(self, round_played, tournament_played):
         player_list = self.player_list_score_generator(tournament_played)
@@ -248,7 +262,8 @@ class ItemCreation:
         possible_match_ups.sort(key=lambda x: x[2], reverse=True)
         return possible_match_ups
 
-    def check_player_exist(self, list_matches, match):
+    @staticmethod
+    def check_player_exist(list_matches, match):
         for i in list_matches:
             if match[0] == i[0] or match[0] == i[1] or match[1] == i[0] or match[1] == i[1]:
                 return False
@@ -293,3 +308,19 @@ class ItemCreation:
             match_list.append(match_i)
         round_played.matches_list = match_list
         return match_list
+
+    def boolean_choice_menu(self):
+        user_choice = input("Order :"
+                            "0 = Ascending\n"
+                            "1 = Descending \n")
+        if int(user_choice) == 0:
+            return False
+        elif int(user_choice) == 1:
+            return True
+        else:
+            self.boolean_choice_menu()
+
+    def player_list_score_and_sorting(self, tournament_played):
+        player_list = self.player_list_score_generator(tournament_played)
+        player_list = self.player_list_sorting(player_list, False)
+        return player_list
