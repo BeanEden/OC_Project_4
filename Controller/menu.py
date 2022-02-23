@@ -26,6 +26,7 @@ class Controller:
                 self.update_player_select_menu()
             elif user_input == 4:
                 self.consulting_menu()
+        pass
 
     def tournament_menu(self):
         self.view.print_tournament_menu()
@@ -48,10 +49,10 @@ class Controller:
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-            self.view.print_tournament_info(tournament)
+        self.view.print_tournament_info(tournament)
         new_tournament = self.creation.tournament_instance_creation_from_database(tournament)
         round_count = self.round_deciding_menu(new_tournament)
-        if round_count < new_tournament.turn_number:
+        if round_count <= new_tournament.turn_number:
             self.tournament_round_start_menu(new_tournament, round_count)
         else:
             self.tournament_over_menu(new_tournament)
@@ -59,13 +60,11 @@ class Controller:
     def round_deciding_menu(self, new_tournament):
         if len(new_tournament.rounds_list) > 0:
             last_round = new_tournament.rounds_list[-1]
-            print(last_round)
             previous_round = self.database.search_in_data_base("Round", last_round)
-            previous_round = self.creation.round_instance_creation_from_data_base(previous_round, new_tournament)
-            if previous_round.status == 1:
-                round_count = int(previous_round.count)
+            if previous_round["end_time"] != "unfinished":
+                round_count = int(last_round[1]) + 1
             else:
-                round_count = int(previous_round.count) + 1
+                round_count = int(last_round[1])
         else:
             round_count = 1
         return round_count
@@ -111,8 +110,8 @@ class Controller:
         while tournament == "item not found":
             user_input_load_tournament_menu = input()
             tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-        self.view.print_tournament_info(tournament)
         tournament_instance = self.creation.tournament_instance_creation_from_database(tournament)
+        self.view.print_tournament_info(tournament)
         self.tournament_over_menu(tournament_instance)
 
     def consulting_specific_menu(self, item):
@@ -219,7 +218,7 @@ class Controller:
                         last_round = tournament_played.rounds_list[-1]
                         last_round = self.database.search_in_data_base("Round", last_round)
                         if last_round["end_time"] != "unfinished":
-                            new_round = self.creation.round_creation_run_function(round_count_number, tournament_played)
+                            new_round = self.creation.round_create_function(round_count_number, tournament_played)
                             tournament_played.tournament_append_round(new_round)
                             self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
                             player_list = self.creation.player_list_score_and_sorting(tournament_played)
@@ -230,7 +229,7 @@ class Controller:
                                 self.creation.round_instance_creation_from_data_base(last_round, tournament_played)
                             self.round_menu(continue_round, tournament_played)
                     else:
-                        round_one = self.creation.round_creation_run_function(round_count_number, tournament_played)
+                        round_one = self.creation.round_create_function(round_count_number, tournament_played)
                         tournament_played.tournament_append_round(round_one)
                         self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
                         self.creation.round_match_list_definition(round_one, player_list, tournament_played)
@@ -274,15 +273,13 @@ class Controller:
                 self.round_menu(round_played, tournament_played)
             if user_input_round_menu == 1:
                 self.view.print_match_list(matches_list, round_count_round_menu)
-                input()
                 self.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 2:
                 self.select_a_match_for_result(round_played, tournament_played)
                 self.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 3:
                 self.print_all_round_complete(tournament_played)
-                input()
-                self.view.round_menu(round_played, tournament_played)
+                self.round_menu(round_played, tournament_played)
             elif user_input_round_menu == 4:
                 self.update_player_select_menu()
         if round_played.status == 0:
@@ -292,7 +289,6 @@ class Controller:
             self.database.database_item_insertion("Round", serialized)
             self.creation.player_list_score_generator(tournament_played)
             self.view.print_round_complete(round_played, matches_list)
-            input()
             self.tournament_round_start_menu(tournament_played, next_round_count)
         else:
             print("Not all matches results have been selected\n"
@@ -377,19 +373,16 @@ class Controller:
                 choice = self.creation.boolean_choice_menu()
                 player_list_ordered = self.creation.player_list_tournament_alphabetical(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
-                input()
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 2:
                 choice = self.creation.boolean_choice_menu()
                 player_list_ordered = self.creation.player_list_tournament_rank(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "RANK ORDER")
-                input()
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 3:
                 choice = self.creation.boolean_choice_menu()
                 player_list_ordered = self.creation.player_list_sorting(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "SCORE ORDER")
-                input()
                 self.player_list_order_select_menu(tournament_id)
             self.tournament_over_menu(new_tournament)
 

@@ -151,9 +151,14 @@ class View:
 
     @staticmethod
     def print_round_complete(round_played, matches_list):
+        status = ""
+        if str(round_played.end_time) == "unfinished":
+            status = " - ONGOING"
+        else :
+            status = " - COMPLETE"
         print(
             "===================================\n"
-            "ROUND " + str(round_played.count) + " COMPLETE\n"
+            "ROUND " + str(round_played.count) + status + "\n"
             "===================================\n"
             + str(matches_list[0]) + "\n"
             + str(matches_list[1]) + "\n"

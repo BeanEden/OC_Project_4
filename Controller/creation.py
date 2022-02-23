@@ -24,15 +24,15 @@ class ItemCreation:
         return new_tournament
 
     def time_control_definition(self):
-        time_control = int(input("Select time control mode :\n"
+        time_control = input("Select time control mode :\n"
                                  "1 - bullet \n"
                                  "2 - blitz \n"
-                                 "3 - coup rapide\n"))
-        if time_control == 1:
+                                 "3 - coup rapide\n")
+        if time_control == "1":
             time_control = "bullet"
-        elif time_control == 2:
+        elif time_control == "2":
             time_control = "blitz"
-        elif time_control == 3:
+        elif time_control == "3":
             time_control = "coup rapide"
         else:
             self.time_control_definition()
@@ -70,7 +70,7 @@ class ItemCreation:
             player_list_tournament["Player " + str(player_count)] = new_player.id
         return player_list_tournament
 
-    def round_creation_run_function(self, round_count_number, tournament_played):
+    def round_create_function(self, round_count_number, tournament_played):
         round_name = "Round " + str(round_count_number)
         print(round_name + " started...")
         start_time = datetime.datetime.now()
@@ -248,7 +248,6 @@ class ItemCreation:
             self.database.database_item_insertion("Match", match_i.serialized_form)
             match_list.append(match_i)
         round_played.matches_list = match_list
-        # print(match_list)
         return match_list
 
     def possible_pairs(self, tournament_id, players_list):
@@ -281,14 +280,14 @@ class ItemCreation:
     def list_comb_recursive(self, list_comb):
         list2 = []
         count_number = 0
-        for i in range(len(list_comb)):
-            if len(list2) > count_number:
-                list2.pop()
-            list2.append(list_comb[i])
-            count_number += 1
-            i += 1
-            self.try_recursive(list_comb, list2, i, count_number)
-            return list2
+            for i in range(len(list_comb)):
+                if len(list2) > count_number:
+                    list2.pop()
+                list2.append(list_comb[i])
+                count_number += 1
+                i += 1
+                self.try_recursive(list_comb, list2, i, count_number)
+                return list2
         return -1
 
     def round_one_method(self, round_played, player_list_instances):
