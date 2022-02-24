@@ -255,7 +255,6 @@ class Controller:
 
     def round_menu(self, round_played, tournament_played):
         round_count_round_menu = round_played.count
-        # player_list = self.creation.player_list_score_generator(tournament_played)
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
         self.view.print_round_menu(round_count_round_menu)
         user_input_round_menu = 0

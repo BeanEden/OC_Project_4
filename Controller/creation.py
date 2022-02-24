@@ -129,7 +129,8 @@ class ItemCreation:
         description = dict_tournament["tournament_description"]
         rounds_list = dict_tournament["tournament_rounds"]
         player_list = dict_tournament["tournament_player_dictionary"]
-        new_tournament = Tournament(name, place, date, time_control, description, player_list, rounds_list)
+        status = dict_tournament["tournament_status"]
+        new_tournament = Tournament(name, place, date, time_control, description, player_list, rounds_list, status)
         return new_tournament
 
     def match_list_generator(self, tournament, round_played):
@@ -268,27 +269,47 @@ class ItemCreation:
                 return False
         return True
 
+    # def try_recursive(self, list_comb, list2, i, count_number):
+    #         for i in range(i + 1, len(list_comb)):
+    #             if len(list2) > count_number:
+    #                 list2.pop()
+    #             if self.check_player_exist(list2, list_comb[i]):
+    #                 list2.append(list_comb[i])
+    #                 count_number += 1
+    #                 return self.try_recursive(list_comb, list2, i+1, count_number)
+
     def try_recursive(self, list_comb, list2, i, count_number):
-        for i in range(i + 1, len(list_comb)):
+        for i in range(i, len(list_comb)):
             if len(list2) > count_number:
                 list2.pop()
             if self.check_player_exist(list2, list_comb[i]):
                 list2.append(list_comb[i])
                 count_number += 1
-                return self.try_recursive(list_comb, list2, i+1, count_number)
+                j = i+1
+                return self.try_recursive(list_comb, list2, j, count_number)
+
 
     def list_comb_recursive(self, list_comb):
         list2 = []
         count_number = 0
-            for i in range(len(list_comb)):
-                if len(list2) > count_number:
-                    list2.pop()
-                list2.append(list_comb[i])
-                count_number += 1
-                i += 1
-                self.try_recursive(list_comb, list2, i, count_number)
-                return list2
-        return -1
+        i = 0
+        self.try_recursive(list_comb, list2, i, count_number)
+        return list2
+
+
+    # def list_comb_recursive(self, list_comb):
+    #     list2 = []
+    #     count_number = 0
+    #     for i in range(len(list_comb)):
+    #         if len(list2) > count_number:
+    #             list2.pop()
+    #         list2.append(list_comb[i])
+    #         count_number += 1
+    #         i += 1
+    #         self.try_recursive(list_comb, list2, i, count_number)
+    #         return list2
+    #     return -1
+
 
     def round_one_method(self, round_played, player_list_instances):
         original_ranking = self.player_list_sorting(player_list_instances, True)

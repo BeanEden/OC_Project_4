@@ -47,9 +47,6 @@ class Tournament:
         else:
             self.rounds_list.append(round_played.id)
 
-    def close_tournament(self):
-        self.status = 0
-
 
 if __name__ == '__main__':
     print("tournament.py executed")
