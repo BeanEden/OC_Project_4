@@ -153,14 +153,14 @@ class Controller:
                 self.player_database_select_menu(item)
             if user_input_player_list_order_select == 1:
                 choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_tournament_alphabetical(player_instance_list, choice)
+                player_list_ordered = self.creation.player_list_sorting_alphabetical(player_instance_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
                 self.view.print_sorted_database(player_list_ordered)
                 input()
                 self.consulting_specific_menu(item)
             elif user_input_player_list_order_select == 2:
                 choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_tournament_rank(player_instance_list, choice)
+                player_list_ordered = self.creation.player_list_sorting_rank(player_instance_list, choice)
                 self.view.print_sorted_database(player_list_ordered, "RANK ORDER")
                 input()
                 self.consulting_specific_menu(item)
@@ -236,7 +236,7 @@ class Controller:
                         self.round_menu(round_one, tournament_played)
                 elif user_input_tournament_round_start_menu == 2:
                     if round_count_number == 1:
-                        player_list = self.creation.player_list_sorting(player_list)
+                        player_list = self.creation.player_list_sorting_score(player_list)
                         self.view.print_player_list(player_list)
                         self.tournament_round_start_menu(tournament_played, round_count_number)
                     else:
@@ -370,17 +370,17 @@ class Controller:
                 self.player_list_order_select_menu(tournament_id)
             if user_input_player_list_order_select == 1:
                 choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_tournament_alphabetical(player_list, choice)
+                player_list_ordered = self.creation.player_list_sorting_alphabetical(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 2:
                 choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_tournament_rank(player_list, choice)
+                player_list_ordered = self.creation.player_list_sorting_rank(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "RANK ORDER")
                 self.player_list_order_select_menu(tournament_id)
             elif user_input_player_list_order_select == 3:
                 choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_sorting(player_list, choice)
+                player_list_ordered = self.creation.player_list_sorting_score(player_list, choice)
                 self.view.print_player_list_by_order(player_list_ordered, "SCORE ORDER")
                 self.player_list_order_select_menu(tournament_id)
             self.tournament_over_menu(new_tournament)

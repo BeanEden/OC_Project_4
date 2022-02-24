@@ -12,6 +12,7 @@ class ItemCreation:
         self.database = database
 
     def create_a_tournament(self):
+        """Create a new tournament"""
         input("Creating a new tournament, press a key to continue :\n")
         name = input("Enter the tournament name :\n")
         place = input("Enter tournament place : \n")
@@ -24,10 +25,11 @@ class ItemCreation:
         return new_tournament
 
     def time_control_definition(self):
+        """Select the time control upon the input entered"""
         time_control = input("Select time control mode :\n"
-                                 "1 - bullet \n"
-                                 "2 - blitz \n"
-                                 "3 - coup rapide\n")
+                             "1 - bullet \n"
+                             "2 - blitz \n"
+                             "3 - coup rapide\n")
         if time_control == "1":
             time_control = "bullet"
         elif time_control == "2":
@@ -39,7 +41,7 @@ class ItemCreation:
         return time_control
 
     def add_a_player(self):
-        """Prompt for adding a player."""
+        """Prompt for adding a player to the database"""
         print("Creating a new player...\n")
         family_name = input("Player's family name : \n")
         first_name = input("Player's first name : \n")
@@ -53,6 +55,9 @@ class ItemCreation:
         return serialized_player
 
     def player_dictionary_select(self):
+        """Player list selection for at a tournament start (by id)
+        Generates players instances from database extraction
+        Return a serialized player_list"""
         player_count = 0
         player_list_tournament = {}
         while player_count < 8:
@@ -64,13 +69,14 @@ class ItemCreation:
                     "id = firstname + family_name[0] + birth_date[0:1]\n"
                     "example : Mark Zuck born on 09/03/1987 -> id = MarkZ09\n")
                 player = self.database.search_in_data_base("Player", user_input_player_id_key)
-                # print(player)
             new_player = self.player_instance_creation_from_data_base(player)
             print("Player added to tournament : " + str(new_player) + "\n")
             player_list_tournament["Player " + str(player_count)] = new_player.id
         return player_list_tournament
 
     def round_create_function(self, round_count_number, tournament_played):
+        """Generates a new round instance
+        Args : round_number (1,2,3,4), tournament instance"""
         round_name = "Round " + str(round_count_number)
         print(round_name + " started...")
         start_time = datetime.datetime.now()
@@ -80,6 +86,8 @@ class ItemCreation:
         return round_one
 
     def players_list_round_creation(self, tournament_played):
+        """Generates the player_list (players instances) of a tournament
+        Arg : tournament instance"""
         player_list = []
         tournament_player_list = tournament_played.players_list
         for player in tournament_player_list.values():
@@ -90,6 +98,8 @@ class ItemCreation:
 
     @staticmethod
     def player_instance_creation_from_data_base(dict_player):
+        """Create a player instance from a serialized form (usually extracted from .JSON database)
+        Args : player serialized_form"""
         family_name = dict_player["family_name"]
         first_name = dict_player["first_name"]
         age = dict_player["birth_date"]
@@ -99,6 +109,9 @@ class ItemCreation:
         return new_player
 
     def match_instance_creation_from_data_base(self, dict_match, round_of_the_match, tournament):
+        """Create a match instance from a serialized form (usually extracted from .JSON database)
+        and generates its players
+        Args : match serialized_form, round instance, tournament id"""
         name = dict_match["match_name"]
         p_one_id = dict_match["player_one"]
         player_one_creation = self.database.search_in_data_base("Player", p_one_id)
@@ -114,6 +127,8 @@ class ItemCreation:
 
     @staticmethod
     def round_instance_creation_from_data_base(dict_round, tournament):
+        """Create a round instance from a serialized form (usually extracted from .JSON database)
+        Args : round serialized_form, tournament id"""
         name = dict_round["round_name"]
         start_time = dict_round["start_time"]
         end_time = dict_round["end_time"]
@@ -122,6 +137,8 @@ class ItemCreation:
 
     @staticmethod
     def tournament_instance_creation_from_database(dict_tournament):
+        """Create a tournament instance from a serialized form (usually extracted from .JSON database)
+        Args : tournament serialized_form"""
         name = dict_tournament["tournament_name"]
         place = dict_tournament["tournament_place"]
         date = dict_tournament["tournament_date"]
@@ -134,9 +151,10 @@ class ItemCreation:
         return new_tournament
 
     def match_list_generator(self, tournament, round_played):
+        """Generates a match list for the present round
+        Args : tournament instance, round instance"""
         match_list = []
         item = self.database.query_2("Match", "tournament_id", tournament.id, "round_id", round_played.id)
-        # print(item)
         for match in item:
             match = self.match_instance_creation_from_data_base(match, round_played, tournament)
             match_list.append(match)
@@ -144,6 +162,8 @@ class ItemCreation:
         return match_list
 
     def player_score_generator_round(self, player, tournament, id_round_of_the_match):
+        """Generates a player score up until the selected round
+        Args : player instance, tournament instance, round_id"""
         item_full = []
         item_two_full = []
         round_list = tournament.rounds_list
@@ -173,6 +193,8 @@ class ItemCreation:
         return player.score
 
     def player_list_score_generator(self, tournament):
+        """Generates all players scores up until the last round played of the tournament
+        Arg : tournament instance"""
         player_list = []
         tournament_player_list = tournament.players_list
         last_round = tournament.rounds_list[-1]
@@ -183,51 +205,77 @@ class ItemCreation:
             player_list.append(player_one_instance)
         return player_list
 
-    def opponents_list_construction(self, player_id, tournament_id):
-        item = self.database.query_2("Match", "player_one", player_id, "tournament_id", tournament_id)
-        item_two = self.database.query_2("Match", "player_two", player_id, "tournament_id", tournament_id)
-        opponents_list = []
-        for match in item:
-            opponents_list.append(match["player_two"])
-        for match in item_two:
-            opponents_list.append(match["player_one"])
-        return opponents_list
-
     def round_match_list_definition(self, round_played, player_list, tournament_played):
+        """Defines the type of player sorting for this round matches
+        Args : round instance, player_list instances, tournament instance"""
         if int(round_played.count) == 1:
             round_played.matches_list = self.round_one_method(round_played, player_list)
         else:
             round_played.matches_list = self.secondary_rounds_method(round_played, tournament_played)
         return round_played.matches_list
 
-    def possible_opponents_list(self, player, ranked_list, round_played):
-        player_opponents_list = \
-            self.opponents_list_construction(player.id, round_played.tournament_name)
-        list_difference = []
-        for item in ranked_list:
-            if item not in player_opponents_list:
-                list_difference.append(item)
-        return list_difference
-
     @staticmethod
-    def player_list_sorting(player_list_instances, boolean_order=True):
+    def player_list_sorting_score(player_list_instances, boolean_order=True):
+        """Sort a player instances list by score"""
         player_list_instances = sorted(player_list_instances, key=attrgetter('rank'), reverse=boolean_order)
         player_list_instances = sorted(player_list_instances, key=attrgetter('score'), reverse=boolean_order)
         return player_list_instances
 
+    def player_list_score_and_sorting(self, tournament_played):
+        """Generates players sores and sort them"""
+        player_list = self.player_list_score_generator(tournament_played)
+        player_list = self.player_list_sorting_score(player_list, True)
+        return player_list
+
     @staticmethod
-    def player_list_tournament_rank(tournament_players_list, boolean_choice=True):
+    def player_list_sorting_rank(tournament_players_list, boolean_choice=True):
+        """Sort a player instances list by rank"""
         player_rank_order = sorted(tournament_players_list, key=attrgetter('rank'), reverse=boolean_choice)
         return player_rank_order
 
     @staticmethod
-    def player_list_tournament_alphabetical(tournament_players_list, boolean_choice=False):
+    def player_list_sorting_alphabetical(tournament_players_list, boolean_choice=False):
+        """Sort a player instances list by alphabet"""
         player_alphabetical_order = sorted(tournament_players_list, key=attrgetter('name'), reverse=boolean_choice)
         return player_alphabetical_order
 
+    def boolean_choice_menu(self):
+        """Boolean input prompt for sorting"""
+        user_choice = input("Order :"
+                            "0 = Ascending\n"
+                            "1 = Descending \n")
+        if int(user_choice) == 0:
+            return False
+        elif int(user_choice) == 1:
+            return True
+        else:
+            self.boolean_choice_menu()
+
+    def round_one_method(self, round_played, player_list_instances):
+        """Generates a round 1 matches list
+        Args : round instance, player list instances"""
+        original_ranking = self.player_list_sorting_score(player_list_instances, True)
+        top_half = original_ranking[0:round_played.matches_number]
+        bottom_half = original_ranking[round_played.matches_number:round_played.player_number]
+        match_list = []
+        match_count = 0
+        while match_count < round_played.matches_number:
+            top_player = top_half[match_count]
+            bottom_player = bottom_half[match_count]
+            match_count += 1
+            match_name = "Match " + str(match_count)
+            match_i = Match(match_name, top_player, bottom_player, round_played, 0)
+            self.database.database_item_insertion("Match", match_i.serialized_form)
+            print(match_i)
+            match_list.append(match_i)
+        round_played.matches_list = match_list
+        return match_list
+
     def secondary_rounds_method(self, round_played, tournament_played):
+        """Generates a round 2,3,4 matches list without redundancy with the previous match_ups
+        Args : round instance, tournament instance"""
         player_list = self.player_list_score_generator(tournament_played)
-        round_ranking = self.player_list_sorting(player_list, False)
+        round_ranking = self.player_list_sorting_score(player_list, False)
         match_list = []
         match_count = 0
         players_list = []
@@ -252,6 +300,8 @@ class ItemCreation:
         return match_list
 
     def possible_pairs(self, tournament_id, players_list):
+        """ Defines all the possible match_up pairs (including already played
+        Args: tournament id, player_list_instances"""
         players = players_list
         pairs = self.database.list_match_pairs(tournament_id)
         possible_match_ups = []
@@ -264,21 +314,15 @@ class ItemCreation:
 
     @staticmethod
     def check_player_exist(list_matches, match):
+        """Check if a match_up pair has already be played"""
         for i in list_matches:
             if match[0] == i[0] or match[0] == i[1] or match[1] == i[0] or match[1] == i[1]:
                 return False
         return True
 
-    # def try_recursive(self, list_comb, list2, i, count_number):
-    #         for i in range(i + 1, len(list_comb)):
-    #             if len(list2) > count_number:
-    #                 list2.pop()
-    #             if self.check_player_exist(list2, list_comb[i]):
-    #                 list2.append(list_comb[i])
-    #                 count_number += 1
-    #                 return self.try_recursive(list_comb, list2, i+1, count_number)
-
     def try_recursive(self, list_comb, list2, i, count_number):
+        """Recursive match creation (up until 4)
+        Try to append all matches and check if they have already been played"""
         for i in range(i, len(list_comb)):
             if len(list2) > count_number:
                 list2.pop()
@@ -288,14 +332,23 @@ class ItemCreation:
                 j = i+1
                 return self.try_recursive(list_comb, list2, j, count_number)
 
-
     def list_comb_recursive(self, list_comb):
+        """Launch function for the recursive
+        Arg : possible match-ups list"""
         list2 = []
         count_number = 0
         i = 0
         self.try_recursive(list_comb, list2, i, count_number)
         return list2
 
+    # def try_recursive(self, list_comb, list2, i, count_number):
+    #         for i in range(i + 1, len(list_comb)):
+    #             if len(list2) > count_number:
+    #                 list2.pop()
+    #             if self.check_player_exist(list2, list_comb[i]):
+    #                 list2.append(list_comb[i])
+    #                 count_number += 1
+    #                 return self.try_recursive(list_comb, list2, i+1, count_number)
 
     # def list_comb_recursive(self, list_comb):
     #     list2 = []
@@ -310,37 +363,21 @@ class ItemCreation:
     #         return list2
     #     return -1
 
+    # def opponents_list_construction(self, player_id, tournament_id):
+    #     item = self.database.query_2("Match", "player_one", player_id, "tournament_id", tournament_id)
+    #     item_two = self.database.query_2("Match", "player_two", player_id, "tournament_id", tournament_id)
+    #     opponents_list = []
+    #     for match in item:
+    #         opponents_list.append(match["player_two"])
+    #     for match in item_two:
+    #         opponents_list.append(match["player_one"])
+    #     return opponents_list
 
-    def round_one_method(self, round_played, player_list_instances):
-        original_ranking = self.player_list_sorting(player_list_instances, True)
-        top_half = original_ranking[0:round_played.matches_number]
-        bottom_half = original_ranking[round_played.matches_number:round_played.player_number]
-        match_list = []
-        match_count = 0
-        while match_count < round_played.matches_number:
-            top_player = top_half[match_count]
-            bottom_player = bottom_half[match_count]
-            match_count += 1
-            match_name = "Match " + str(match_count)
-            match_i = Match(match_name, top_player, bottom_player, round_played, 0)
-            self.database.database_item_insertion("Match", match_i.serialized_form)
-            print(match_i)
-            match_list.append(match_i)
-        round_played.matches_list = match_list
-        return match_list
-
-    def boolean_choice_menu(self):
-        user_choice = input("Order :"
-                            "0 = Ascending\n"
-                            "1 = Descending \n")
-        if int(user_choice) == 0:
-            return False
-        elif int(user_choice) == 1:
-            return True
-        else:
-            self.boolean_choice_menu()
-
-    def player_list_score_and_sorting(self, tournament_played):
-        player_list = self.player_list_score_generator(tournament_played)
-        player_list = self.player_list_sorting(player_list, False)
-        return player_list
+    # def possible_opponents_list(self, player, ranked_list, round_played):
+    #     player_opponents_list = \
+    #         self.opponents_list_construction(player.id, round_played.tournament_name)
+    #     list_difference = []
+    #     for item in ranked_list:
+    #         if item not in player_opponents_list:
+    #             list_difference.append(item)
+    #     return list_difference
