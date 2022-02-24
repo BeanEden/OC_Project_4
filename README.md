@@ -25,7 +25,7 @@ Les différentes instances sont stockées par table (une table "Tournament" pour
 
 Importez dans votre environnement virtuel les packages nécessaires au script (tinydb, datetime), tels que présents dans le fichier requirements.txt
 Il est possible d'utiliser la ligne de commande "pip install -r requirements.txt",
-ou d'installer les packages un par un : "pip install requests"
+ou d'installer les packages un par un : "pip install tinydb"
 
 ### 3 - Lancez l'application : 
 * Commande terminal : `python main.py`
