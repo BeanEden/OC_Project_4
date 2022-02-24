@@ -10,6 +10,7 @@ class Controller:
         self.database = creation.database
 
     def main_menu(self):
+        """First and main menu"""
         self.view.print_main_menu()
         user_input = 0
         while user_input != 5:
@@ -29,6 +30,7 @@ class Controller:
         pass
 
     def tournament_menu(self):
+        """Choose if you want to create a new tournament (1) or load an existing one(2)"""
         self.view.print_tournament_menu()
         user_input_tournament_menu = 0
         while user_input_tournament_menu != 3:
@@ -44,6 +46,7 @@ class Controller:
         self.main_menu()
 
     def load_a_tournament_menu(self):
+        """Enter id to load an existing tournament, continue from last round"""
         self.view.print_load_a_tournament()
         tournament = "item not found"
         while tournament == "item not found":
@@ -58,6 +61,7 @@ class Controller:
             self.tournament_over_menu(new_tournament)
 
     def round_deciding_menu(self, new_tournament):
+        """Check the last_round of the tournament"""
         if len(new_tournament.rounds_list) > 0:
             last_round = new_tournament.rounds_list[-1]
             previous_round = self.database.search_in_data_base("Round", last_round)
@@ -69,140 +73,8 @@ class Controller:
             round_count = 1
         return round_count
 
-    def consulting_menu(self):
-        self.view.print_consulting_menu()
-        user_input_consulting_menu = 0
-        while user_input_consulting_menu != 5:
-            try:
-                user_input_consulting_menu = int(input())
-            except ValueError:
-                self.consulting_menu()
-            if user_input_consulting_menu == 1:
-                self.consulting_specific_menu("Player")
-            elif user_input_consulting_menu == 2:
-                self.consulting_tournament_menu()
-            elif user_input_consulting_menu == 3:
-                self.consulting_specific_menu("Round")
-            elif user_input_consulting_menu == 4:
-                self.consulting_specific_menu("Match")
-        self.main_menu()
-
-    def consulting_tournament_menu(self):
-        self.view.print_consulting_tournament_menu()
-        user_input_consulting_tournament_menu = 0
-        while user_input_consulting_tournament_menu != 3:
-            try:
-                user_input_consulting_tournament_menu = int(input())
-            except ValueError:
-                self.consulting_tournament_menu()
-            if user_input_consulting_tournament_menu == 1:
-                self.specific_tournament_load()
-            elif user_input_consulting_tournament_menu == 2:
-                self.view.print_data_base(self.database.get_all("Tournament"))
-                print("Press a key to go back to round menu\n")
-                input()
-                self.consulting_menu()
-        self.consulting_menu()
-
-    def specific_tournament_load(self):
-        self.view.print_load_a_tournament()
-        tournament = "item not found"
-        while tournament == "item not found":
-            user_input_load_tournament_menu = input()
-            tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-        tournament_instance = self.creation.tournament_instance_creation_from_database(tournament)
-        self.view.print_tournament_info(tournament)
-        self.tournament_over_menu(tournament_instance)
-
-    def consulting_specific_menu(self, item):
-        self.view.print_consulting_item_menu(item)
-        user_input_consulting_player_menu = 0
-        while user_input_consulting_player_menu != 4:
-            try:
-                user_input_consulting_player_menu = int(input())
-            except ValueError:
-                self.consulting_specific_menu(item)
-            if user_input_consulting_player_menu == 1:
-                self.specific_item_load(item)
-            elif user_input_consulting_player_menu == 2:
-                if item == "Player":
-                    self.specific_tournament_players_load()
-                else:
-                    self.specific_tournament_item_load(item)
-            elif user_input_consulting_player_menu == 3:
-                if item == "Player":
-                    self.player_database_select_menu(item)
-                else:
-                    self.view.print_data_base(self.database.get_all(item))
-                    print("Press a key to go back to round menu\n")
-                    input()
-                    self.consulting_menu()
-        self.consulting_menu()
-
-    def player_database_select_menu(self, item):
-        player_list = self.database.get_all(item)
-        player_instance_list = []
-        for i in player_list:
-            player_instance_list.append(self.creation.player_instance_creation_from_data_base(i))
-        self.view.print_database_order_select()
-        user_input_player_list_order_select = 0
-        while user_input_player_list_order_select != 3:
-            try:
-                user_input_player_list_order_select = int(input())
-            except ValueError:
-                self.player_database_select_menu(item)
-            if user_input_player_list_order_select == 1:
-                choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_sorting_alphabetical(player_instance_list, choice)
-                self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
-                self.view.print_sorted_database(player_list_ordered)
-                input()
-                self.consulting_specific_menu(item)
-            elif user_input_player_list_order_select == 2:
-                choice = self.creation.boolean_choice_menu()
-                player_list_ordered = self.creation.player_list_sorting_rank(player_instance_list, choice)
-                self.view.print_sorted_database(player_list_ordered, "RANK ORDER")
-                input()
-                self.consulting_specific_menu(item)
-            self.consulting_specific_menu(item)
-        self.consulting_specific_menu(item)
-
-    def specific_item_load(self, item):
-        self.view.print_load_specific_item(item)
-        item_searched = "item not found"
-        while item_searched == "item not found":
-            user_input_load_item = input()
-            specific_item = self.database.search_in_data_base(item, user_input_load_item)
-            self.view.print_tournament_info(specific_item)
-            print("Press a key to go back to round menu\n")
-            input()
-            self.consulting_menu()
-
-    def specific_tournament_item_load(self, item):
-        self.view.print_load_a_tournament()
-        tournament = "item not found"
-        while tournament == "item not found":
-            user_input_load_tournament_menu = input()
-            item = self.database.search_in_data_base_bis(item, "tournament_id", user_input_load_tournament_menu)
-            self.view.print_data_base(item)
-            print("Press a key to go back to round menu\n")
-            input()
-            self.consulting_menu()
-
-    def specific_tournament_players_load(self):
-        self.view.print_load_a_tournament()
-        tournament = "item not found"
-        user_input_load_tournament_menu = ""
-        while tournament == "item not found":
-            user_input_load_tournament_menu = input()
-            tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
-            tournament_players_list = tournament["tournament_player_dictionary"]
-            for item in tournament_players_list.values():
-                print(self.database.search_in_data_base("Player", item))
-        self.player_list_order_select_menu(user_input_load_tournament_menu)
-        self.consulting_menu()
-
     def tournament_round_start_menu(self, tournament_played, round_count_number):
+        """Tournament, round pre-start menu (the matches of the round haven't been generated yet"""
         while int(round_count_number) <= int(tournament_played.turn_number):
             self.database.database_item_insertion("Tournament", tournament_played.serialized_form)
             self.view.print_tournament_round_start_menu(round_count_number)
@@ -254,6 +126,7 @@ class Controller:
         self.tournament_over_menu(tournament_played)
 
     def round_menu(self, round_played, tournament_played):
+        """Round menu after matches creation"""
         round_count_round_menu = round_played.count
         matches_list = self.creation.match_list_generator(tournament_played, round_played)
         self.view.print_round_menu(round_count_round_menu)
@@ -296,6 +169,8 @@ class Controller:
             self.tournament_round_start_menu(tournament_played, round_count_round_menu)
 
     def select_a_match_for_result(self, round_played, tournament):
+        """Select the match you want to enter the result of
+        (1 to 4 input corresponding to match 1 to 4)"""
         round_count = round_played.count
         matches_list = self.creation.match_list_generator(tournament, round_played)
         self.view.print_select_a_match_for_result(round_count, matches_list)
@@ -316,6 +191,7 @@ class Controller:
         self.round_menu(round_played, tournament)
 
     def enter_match_result(self, match, round_played, tournament):
+        """Select a result: (1- p1 wins, 2- p2 win, 3- match nul)"""
         self.view.print_enter_match_result(match)
         user_input_enter_match_result = 0
         while user_input_enter_match_result != 4:
@@ -338,6 +214,7 @@ class Controller:
         self.select_a_match_for_result(round_played, tournament)
 
     def tournament_over_menu(self, tournament_played):
+        """End menu of a the tournament, allows to consult all available information"""
         self.view.print_tournament_over_menu(tournament_played)
         user_input_tournament_over_menu = 0
         while user_input_tournament_over_menu != 6:
@@ -386,6 +263,7 @@ class Controller:
             self.tournament_over_menu(new_tournament)
 
     def update_player_select_menu(self):
+        """Enter the id of the player to be updated"""
         self.view.print_update_select()
         player = "item not found"
         while player == "item not found":
@@ -397,6 +275,7 @@ class Controller:
         self.player_update_field_menu(player)
 
     def player_update_field_menu(self, player):
+        """Select the player field to be updated"""
         self.view.print_tournament_info(player)
         self.view.print_update_player_menu()
         user_input = 0
@@ -418,6 +297,7 @@ class Controller:
         self.main_menu()
 
     def player_field_update_screen(self, field, player, field_detail):
+        """Enter the new updated value of the field"""
         player_id = player["id_key"]
         self.view.print_update_field(field, field_detail)
         user_input = str(input())
@@ -428,8 +308,151 @@ class Controller:
         self.player_update_field_menu(player)
 
     def print_all_round_complete(self, tournament):
+        """Print all round played and ongoing results"""
         for rounds in tournament.rounds_list:
             previous_round_data = self.database.search_in_data_base("Round", rounds)
             previous_round = self.creation.round_instance_creation_from_data_base(previous_round_data, tournament)
             match_list = self.creation.match_list_generator(tournament, previous_round)
             self.view.print_round_complete(previous_round, match_list)
+
+    def consulting_menu(self):
+        """Select if you want to consult player, tournament, round, match"""
+        self.view.print_consulting_menu()
+        user_input_consulting_menu = 0
+        while user_input_consulting_menu != 5:
+            try:
+                user_input_consulting_menu = int(input())
+            except ValueError:
+                self.consulting_menu()
+            if user_input_consulting_menu == 1:
+                self.consulting_specific_menu("Player")
+            elif user_input_consulting_menu == 2:
+                self.consulting_tournament_menu()
+            elif user_input_consulting_menu == 3:
+                self.consulting_specific_menu("Round")
+            elif user_input_consulting_menu == 4:
+                self.consulting_specific_menu("Match")
+        self.main_menu()
+
+    def consulting_tournament_menu(self):
+        """Consult a tournament information"""
+        self.view.print_consulting_tournament_menu()
+        user_input_consulting_tournament_menu = 0
+        while user_input_consulting_tournament_menu != 3:
+            try:
+                user_input_consulting_tournament_menu = int(input())
+            except ValueError:
+                self.consulting_tournament_menu()
+            if user_input_consulting_tournament_menu == 1:
+                self.specific_tournament_load()
+            elif user_input_consulting_tournament_menu == 2:
+                self.view.print_data_base(self.database.get_all("Tournament"))
+                print("Press a key to go back to round menu\n")
+                input()
+                self.consulting_menu()
+        self.consulting_menu()
+
+    def specific_tournament_load(self):
+        """Load a specific tournament by its id"""
+        self.view.print_load_a_tournament()
+        tournament = "item not found"
+        while tournament == "item not found":
+            user_input_load_tournament_menu = input()
+            tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
+        tournament_instance = self.creation.tournament_instance_creation_from_database(tournament)
+        self.view.print_tournament_info(tournament)
+        self.tournament_over_menu(tournament_instance)
+
+    def consulting_specific_menu(self, item):
+        """Select an action for an item (round, match, player
+        Print 1, print all from one tournament, print whole database"""
+        self.view.print_consulting_item_menu(item)
+        user_input_consulting_player_menu = 0
+        while user_input_consulting_player_menu != 4:
+            try:
+                user_input_consulting_player_menu = int(input())
+            except ValueError:
+                self.consulting_specific_menu(item)
+            if user_input_consulting_player_menu == 1:
+                self.specific_item_load(item)
+            elif user_input_consulting_player_menu == 2:
+                if item == "Player":
+                    self.specific_tournament_players_load()
+                else:
+                    self.specific_tournament_item_load(item)
+            elif user_input_consulting_player_menu == 3:
+                if item == "Player":
+                    self.player_database_select_menu(item)
+                else:
+                    self.view.print_data_base(self.database.get_all(item))
+                    print("Press a key to go back to round menu\n")
+                    input()
+                    self.consulting_menu()
+        self.consulting_menu()
+
+    def player_database_select_menu(self, item):
+        """Sort player list and print"""
+        player_list = self.database.get_all(item)
+        player_instance_list = []
+        for i in player_list:
+            player_instance_list.append(self.creation.player_instance_creation_from_data_base(i))
+        self.view.print_database_order_select()
+        user_input_player_list_order_select = 0
+        while user_input_player_list_order_select != 3:
+            try:
+                user_input_player_list_order_select = int(input())
+            except ValueError:
+                self.player_database_select_menu(item)
+            if user_input_player_list_order_select == 1:
+                choice = self.creation.boolean_choice_menu()
+                player_list_ordered = self.creation.player_list_sorting_alphabetical(player_instance_list, choice)
+                self.view.print_player_list_by_order(player_list_ordered, "ALPHABETICAL ORDER")
+                self.view.print_sorted_database(player_list_ordered)
+                input()
+                self.consulting_specific_menu(item)
+            elif user_input_player_list_order_select == 2:
+                choice = self.creation.boolean_choice_menu()
+                player_list_ordered = self.creation.player_list_sorting_rank(player_instance_list, choice)
+                self.view.print_sorted_database(player_list_ordered, "RANK ORDER")
+                input()
+                self.consulting_specific_menu(item)
+            self.consulting_specific_menu(item)
+        self.consulting_specific_menu(item)
+
+    def specific_item_load(self, item):
+        """Search an item (round, match) by an id in its database"""
+        self.view.print_load_specific_item(item)
+        item_searched = "item not found"
+        while item_searched == "item not found":
+            user_input_load_item = input()
+            specific_item = self.database.search_in_data_base(item, user_input_load_item)
+            self.view.print_tournament_info(specific_item)
+            print("Press a key to go back to round menu\n")
+            input()
+            self.consulting_menu()
+
+    def specific_tournament_item_load(self, item):
+        """Select rounds or matches of a specific tournament to be printed"""
+        self.view.print_load_a_tournament()
+        tournament = "item not found"
+        while tournament == "item not found":
+            user_input_load_tournament_menu = input()
+            item = self.database.search_in_data_base_bis(item, "tournament_id", user_input_load_tournament_menu)
+            self.view.print_data_base(item)
+            print("Press a key to go back to round menu\n")
+            input()
+            self.consulting_menu()
+
+    def specific_tournament_players_load(self):
+        """Select the player list of a specific tournament to be printed"""
+        self.view.print_load_a_tournament()
+        tournament = "item not found"
+        user_input_load_tournament_menu = ""
+        while tournament == "item not found":
+            user_input_load_tournament_menu = input()
+            tournament = self.database.search_in_data_base("Tournament", user_input_load_tournament_menu)
+            tournament_players_list = tournament["tournament_player_dictionary"]
+            for item in tournament_players_list.values():
+                print(self.database.search_in_data_base("Player", item))
+        self.player_list_order_select_menu(user_input_load_tournament_menu)
+        self.consulting_menu()
