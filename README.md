@@ -80,7 +80,7 @@ Les fonctions et méthodes sont documentées via docstrings avec leurs utilisati
 ## Générer un report flake8:
 Installez flake8
 
-* Commande terminal : `pip install pip install flake8-html`
+* Commande terminal : `pip install flake8-html`
 
 Lancez le report flake8 avec une longueur de ligne de 119 caractères.
 * Commande terminal :`flake8 --max-line-length=119 --format=html --htmldir=flake-report`
